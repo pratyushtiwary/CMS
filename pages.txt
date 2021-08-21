@@ -1,0 +1,24 @@
+Pages for CMS
+
+- Employees :-
+	- Login/Register,
+	- Dashboard,
+	- Track complaint,
+	- View All Complaints,
+	- Register new complaint,
+	- View Complaint Status
+
+- Vendor :-
+	- Login/Register,
+	- Dashboard,
+	- View All Alloted Complaints,
+	- Change Complain Status
+
+- Admin :-
+	- Login,
+	- Dashboard,
+	- View all employees,
+	- View all managers,
+	- Add employees/managers,
+	- View all complaints,
+	- Complaint Allotment

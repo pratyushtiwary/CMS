@@ -1,0 +1,108 @@
+.cont{
+	position: fixed;
+	width: 100vw;
+	display: grid;
+	justify-items: center;
+	align-items: center;
+	height: 100vh;
+	overflow-y: auto;
+}
+
+.cont .bg{
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-image: url("../assets/register/bg.jpg");
+	background-size: cover;
+	background-position: 50% 50%;
+	background-repeat: no-repeat;
+	z-index: -1;
+}
+
+.cont .opacity{
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,0.5);
+	backdrop-filter: blur(5px);
+	transition: 1s ease-in-out;
+	z-index: 1;
+}
+
+.cont .opacity:hover{
+	backdrop-filter: blur(0px);
+}
+
+.cont .main{
+	position: relative;
+	padding: 0 10px 10px 10px;
+}
+
+.cont .mainCont .title{
+	text-align: center;
+	width: 100%;
+	margin-bottom: 10px;
+	padding-top: 5px;
+}
+
+.cont .mainCont .subtitle{
+	margin: 10px 0;
+	width: 100%;
+	text-align: center;
+}
+
+.cont .main .input{
+	width: 100%;
+	margin: 5px 0;
+}
+
+.cont .main .reg{
+	width: 100%;
+	margin-top: 10px;
+	padding: 10px;
+}
+
+
+.cont .main .userType{
+	position: relative;
+	width: 100%;
+}
+
+.cont .main .userType .userSelection{
+	position: absolute;
+}
+
+.cont .main.hidden{
+	opacity: 0;
+	pointer-events: none;
+	display: none;
+}
+
+.cont .mainCont{
+	background: #ffffff;
+	width: 92.5%;
+	z-index: 2;
+	border-radius: 2.5px;
+	max-width: 400px;
+}
+
+.cont .mainCont .main .btns{
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	margin-top: 10px;
+	position: relative;
+}
+
+.cont .mainCont .main .btns .reg,
+.cont .mainCont .main .btns .back{
+	margin-top: 0px;
+	padding: 10px;
+	width: 95%;
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+}

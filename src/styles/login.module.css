@@ -1,0 +1,83 @@
+.cont{
+	position: fixed;
+	width: 100vw;
+	height: 100vh;
+	display: grid;
+	justify-items: center;
+	align-items: center;
+	overflow-y: auto;
+}
+
+.cont .bg{
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-image: url("../assets/login/bg.jpg");
+	background-size: cover;
+	background-repeat: no-repeat;
+	background-position: 50% 50%;
+	z-index: -1;
+}
+
+.cont .overlay{
+	position: fixed;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	background-color: rgba(0,0,0,0.5);
+	backdrop-filter: blur(5px);
+	transition: 0.5s linear;
+	z-index: 1;
+}
+
+.cont .overlay:hover{
+	backdrop-filter: blur(0px);
+}
+
+
+.cont .main{
+	border-radius: 5px;
+	position: relative;
+	background: #ffffff;
+	box-shadow: 0 0 2px #eee;
+	padding: 10px 20px;
+	width: 80%;
+	max-width: 350px;
+	z-index: 2;
+}
+
+.cont .main .title,
+.cont .main .subtitle{
+	text-align: center;
+	margin-bottom: 5px;
+}
+
+.cont .main .input{
+	margin: 10px 0;
+	width: 100%;
+}
+
+
+.cont .main .pwd{
+	margin: 10px 0;
+}
+
+.cont .main .pwd .input{
+	margin: 0px;
+}
+
+.cont .main .pwd .link{
+	display: block;
+	text-align: right;
+	font-size: 0.8rem;
+	width: 100%;
+}
+
+.cont .main .login{
+	width: 100%;
+	margin-top: 10px;
+	padding: 10px;
+}
