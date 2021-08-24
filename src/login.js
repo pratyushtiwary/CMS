@@ -2,6 +2,7 @@ import { Helmet } from "react-helmet";
 import styles from "./styles/login.module.css";
 import { Typography, TextField, Button } from "@material-ui/core";
 import PasswordField from "./components/PasswordField";
+import { appName } from "./globals";
 
 export default function Login(props){
 
@@ -13,7 +14,7 @@ export default function Login(props){
 	return (
 		<>
 			<Helmet>
-				<title>Login - {props.appName}</title>
+				<title>Login - {appName}</title>
 			</Helmet>
 			<div className={styles.cont}>
 				<div className={styles.bg}></div>

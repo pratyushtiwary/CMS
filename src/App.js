@@ -3,6 +3,7 @@ import { createTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import Login from "./login";
 import Register from "./register";
+import User from "./user/index";
 
 const theme = createTheme({
   palette: {
@@ -20,7 +21,6 @@ const theme = createTheme({
   },
 });
 
-const appName = "CMS";
 
 function App() {
   return (
@@ -28,11 +28,17 @@ function App() {
       <ThemeProvider theme={theme}>
         <Router>
           <Switch>
-            <Route path="/login" exact>
-              <Login appName={appName}/>
+            <Route path="/login">
+              <Login/>
             </Route>
             <Route path="/register">
-              <Register appName={appName}/>
+              <Register/>
+            </Route>
+            <Route path="/" exact>
+              <User/>
+            </Route>
+            <Route path="/*">
+              <User/>
             </Route>
           </Switch>
         </Router>

@@ -3,18 +3,25 @@ import { Typography, TextField, Button, Select, FormControl, InputLabel, MenuIte
 import styles from "./styles/register.module.css";
 import PasswordField from "./components/PasswordField";
 import { createRef, useState } from "react";
+import { appName } from "./globals";
 
 
 function Form1(props){
 	const userTypes = ["Employee","Vendor"];
+	const roomTypes = ["For Bachelor","For Family"];
 	const [name, setName] = useState("");
 	const [errors,setErrors] = useState(["",""]);
 	const nameRef = createRef();
 	const emailRef = createRef();
-	const [value,setValue] = useState(0);
+	const [UserType,setUserType] = useState(0);
+	const [RoomType,setRoomType] = useState(0);
 
 	function changeUserType(e){
-		setValue(e.target.value);
+		setUserType(e.target.value);
+	}
+
+	function changeRoomType(e){
+		setRoomType(e.target.value);
 	}
 
 	function onSubmit(e){
@@ -60,7 +67,7 @@ function Form1(props){
 	        <InputLabel htmlFor="userType" variant="outlined">User Type</InputLabel>
 	        <Select
 	          color="primary"
-	          value={value}
+	          value={UserType}
 	          variant="outlined"
 	          label="User Type"
 	          onChange={changeUserType}
@@ -73,6 +80,27 @@ function Form1(props){
 	        }
 	        </Select>
 	    </FormControl>
+	    {
+	    	UserType===0 && (
+		    	<FormControl variant="outlined" className={styles.input}>
+			        <InputLabel htmlFor="userType" variant="outlined">Accomodation Type</InputLabel>
+			        <Select
+			          color="primary"
+			          value={RoomType}
+			          variant="outlined"
+			          label="Accomodation Type"
+			          onChange={changeRoomType}
+					  required
+			        >
+			        {
+			        	roomTypes.map((e,i)=>(
+				          <MenuItem value={i} key={i}>{e}</MenuItem>
+			        	))
+			        }
+			        </Select>
+			    </FormControl>
+		    )
+	    }
 		<TextField
 			type="email"
 			variant="outlined"
@@ -157,7 +185,7 @@ export default function Register(props){
 	return (
 		<>
 			<Helmet>
-				<title>Register - {props.appName}</title>
+				<title>Register - {appName}</title>
 			</Helmet>
 			<div className={styles.cont}>
 				<div className={styles.bg}></div>

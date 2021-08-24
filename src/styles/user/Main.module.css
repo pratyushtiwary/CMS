@@ -1,0 +1,119 @@
+.cont, .announcement{
+	position: relative;
+	width: 100vw;
+	min-height: 100vh;
+}
+
+.cont .notFound,
+.announcement .notFound{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	text-align: center;
+}
+
+.cont .notFound .img,
+.announcement .notFound .img{
+	object-fit: fill;
+}
+
+.cont .notFound .msg .title,
+.announcement .notFound .msg .title{
+	font-weight: bold;
+	margin-bottom: 2.5px;
+}
+
+.announcement .title{
+	padding: 25px 0;
+	position: relative;
+	width: 100%;
+}
+
+.announcement .title .line{
+	position: absolute;
+	top: 50%;
+	transform: translate(0%,-50%);
+	z-index: 1;
+	height: 1px;
+	background: #000;
+	width: 100%;
+}
+
+.announcement .title .text{
+	position: relative;
+	margin-left: 5px;
+	width: fit-content;
+	background-color: #fff;
+	z-index: 2;
+	padding: 0 10px;
+}
+
+
+.cont .complaints{
+	display: grid;
+	position: relative;
+	align-items: center;
+	align-content: center;
+	justify-items: center;
+	min-height: 100vh;
+	width: 100%;
+	grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+}
+
+.cont .complaints .block{
+	display: grid;
+	align-self: center;
+	align-content: center;
+	justify-content: center;
+	height: 250px;
+	width: 280px;
+	padding: 10px;
+	margin: 10px;
+	text-align: center;
+	background: #eeeeee;
+}
+
+.cont .complaints .block .title,
+.cont .complaints .block .subtitle{
+	display: block;
+	width: 100%;
+	text-align: center;
+}
+
+.announcement .content{
+	position: relative;
+	width: 100%;
+	height: 100%;
+	display: grid;
+	align-content: center;
+	justify-content: center;
+	margin-bottom: 10px;
+}
+
+.announcement .content .block{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	padding: 10px;
+	border-radius: 5px;
+	background-color: #eeeeee;
+	max-width: 80%;
+}
+
+
+.announcement .content .block .attr{
+	margin-top: 10px;
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.announcement .content .block .attr .author{
+	text-align: right;
+}
+
+@media screen and (max-width: 947px){
+	.cont .complaints{
+		margin-top: 100px;
+	}
+}

@@ -1,0 +1,31 @@
+.headerCont{
+	flex-grow: 1;
+}
+
+.headerCont .header{
+	background-color: rgba(0,0,0,0.75) !important;
+}
+
+.headerCont .header .title{
+	flex-grow: 1;
+}
+
+.drawer{
+	position: relative;
+	width: 80vw;
+	max-width: 300px;
+}
+
+.drawer .item{
+	position: relative;
+	text-transform: none;
+	padding: 10px;
+	padding-left: 15px;
+	width: 100%;
+}
+
+.headerCont .header .nC{
+	margin-left: 10px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}

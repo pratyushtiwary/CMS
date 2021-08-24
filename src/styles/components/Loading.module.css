@@ -1,0 +1,8 @@
+.cont{
+	display: grid;
+	justify-items: center;
+}
+
+.cont .loader{
+	margin-bottom: 10px;
+}
