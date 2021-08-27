@@ -1,25 +1,4 @@
-.cont{
-	margin-top: 100px;
-	position: relative;
-	left: 50%;
-	transform: translate(-50%);
-	width: 80%;
-	max-width: 600px;
-}
-
-.cont .txtAr{
-	position: relative;
-	width: 100%;
-	margin-bottom: 10px;
-}
-
-.cont .input{
-	position: relative;
-	margin: 10px 0;
-	width: 100%;
-}
-
-.cont .imgs{
+.imgs{
 	position: relative;
 	width: 100%;
 	display: grid;
@@ -28,7 +7,7 @@
 	grid-template-columns: repeat(auto-fill,minmax(125px,1fr));
 }
 
-.cont .imgs .upload{
+.imgs .upload{
 	display: block;
 	position: relative;
 	text-align: center;
@@ -40,11 +19,11 @@
 	min-height: 112.5px;
 }
 
-.cont .imgs .hide{
+.imgs .hide{
 	display: none;
 }
 
-.cont .imgs .img{
+.imgs .img{
 	position: relative;
 	padding: 10px;
 	margin: 5px;
@@ -52,7 +31,7 @@
 	border-radius: 5px;
 }
 
-.cont .imgs .img .image{
+.imgs .img .image{
 	position: relative;
 	left: 50%;
 	background-size: cover;
@@ -63,7 +42,7 @@
 	width: 100px;
 }
 
-.cont .imgs .img .remove{
+.imgs .img .remove{
 	position: absolute;
 	width: 25px;
 	height: 25px;
@@ -74,16 +53,4 @@
 	padding: 5px;
 	z-index: 2;
 	backdrop-filter: blur(10px);
-}
-
-.cont .submit{
-	margin: 10px 0;
-	padding: 10px;
-	width: 100%;
-}
-
-@media screen and (max-width: 434px){
-	.cont{
-		width: 90%;
-	}
 }

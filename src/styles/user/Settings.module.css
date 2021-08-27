@@ -1,0 +1,19 @@
+.cont{
+	position: relative;
+	margin-top: 90px;
+	width: 90%;
+	max-width: 600px;
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.cont .input{
+	width: 100%;
+	margin: 10px 0;
+}
+
+.cont .button{
+	width: 100%;
+	margin: 10px 0;
+	padding: 10px 0;
+}

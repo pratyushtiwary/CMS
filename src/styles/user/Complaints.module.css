@@ -1,0 +1,91 @@
+html,body{
+	overflow-x: unset !important;
+}
+
+.cont{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	width: 90%;
+	max-width: 600px;
+	margin-top: 75px;
+}
+
+.cont .search{
+	position: sticky;
+	top: 0;
+	background: rgba(255,255,255,0.75);
+	z-index: 5;
+	padding: 10px;
+}
+
+.cont .search .searchInput{
+	width: 100%;
+	background: #ffffff;
+}
+
+.cont .main .all{
+	width: 97%;
+}
+
+.cont .notFound{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	text-align: center;
+}
+
+.cont .notFound .img{
+	object-fit: fill;
+}
+
+.cont .notFound .msg .title{
+	font-weight: bold;
+	margin-bottom: 2.5px;
+}
+
+.cont .complaint{
+	position: relative;
+	margin: 10px;
+}
+
+.cont .complaint .main{
+	padding: 10px;
+}
+
+.cont .complaint .main .meta{
+	display: grid;
+	margin-top: 15px;
+	grid-template-columns: 1fr 1fr;
+}
+
+.cont .complaint .main .meta .status{
+	text-align: right;
+	text-transform: uppercase;
+	margin-right: 10px;
+}
+
+.cont .complaint .body{
+	position: relative;
+	display: grid;
+	align-items: center;
+	grid-template-columns: auto 0.25fr;
+}
+
+.pending{
+	color: orange;
+}
+
+.resolved{
+	color: green;
+}
+
+.error{
+	color: red;
+}
+
+.cont .main .body .menu{
+	width: 45px;
+	height: 45px;
+}

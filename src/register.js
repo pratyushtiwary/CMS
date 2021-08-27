@@ -10,6 +10,7 @@ function Form1(props){
 	const userTypes = ["Employee","Vendor"];
 	const roomTypes = ["For Bachelor","For Family"];
 	const [name, setName] = useState("");
+	const [id, setId] = useState("");
 	const [errors,setErrors] = useState(["",""]);
 	const nameRef = createRef();
 	const emailRef = createRef();
@@ -37,6 +38,10 @@ function Form1(props){
 		}
 	}
 
+	function changeId(e){
+		setId(e.target.value);
+	}
+
 	function changeName(e){
 		const val = e.target.value;
 		if(name.split(" ").length === 1){
@@ -61,6 +66,16 @@ function Form1(props){
 			error={((errors[0]!=="")?true:false)}
 			helperText={errors[0]}
 			ref={nameRef}
+			required
+		/>
+		<TextField
+			type="text"
+			variant="outlined"
+			label= {userTypes[UserType]+" Id Number"}
+			id="id"
+			onChange={changeId}
+			value = {id}
+			className={styles.input}
 			required
 		/>
 	    <FormControl variant="outlined" className={styles.input}>

@@ -12,7 +12,7 @@ export default function Alert(props){
 				onClose={handleClose}
 				aria-labelledby="alert-dialog-title"
 				aria-describedby="alert-dialog-description"
-				dismissable
+				dismissable="true"
 			>
 				<DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
 				<DialogContent>
@@ -21,9 +21,16 @@ export default function Alert(props){
 		          </DialogContentText>
 		        </DialogContent>
 		        <DialogActions>
-		          <Button onClick={handleClose} color="primary">
-		            Dismiss
-		          </Button>
+					<Button onClick={handleClose} color="primary">
+						Dismiss
+					</Button>
+		        	{
+		        		props.buttons && props.buttons.map((e,i)=>(
+							<Button onClick={e.onClick} key={i} color="primary">
+								{e.content}
+							</Button>
+		        		))
+		        	}
 		        </DialogActions>
 			</Dialog>
 		</>

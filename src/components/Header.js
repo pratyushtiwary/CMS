@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { useScrollTrigger, Slide, AppBar, Toolbar, Typography, Button, IconButton, Icon, SwipeableDrawer, List, ListItemIcon, ListItemText } from '@material-ui/core';
+import { useScrollTrigger, Slide, AppBar, useMediaQuery, Toolbar, Typography, Button, IconButton, Icon, SwipeableDrawer, List, ListItemIcon, ListItemText } from '@material-ui/core';
 import styles from "../styles/components/Header.module.css";
 
 export default function Header(props){
 	const { window } = props;
+	const maxWidth = useMediaQuery("(max-width: 700px)")
 	const [drawer,setDrawer] = useState(false);
 	const trigger = useScrollTrigger({ target: window ? window() : undefined });
 	const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
@@ -64,8 +65,13 @@ export default function Header(props){
 		            {props.title}
 		          </Typography>
 		        	{
-		          		!props.hideNewComplaint && (
-			          		<Button color="inherit" variant="outlined" className={styles.nC} href="new_complaint">+ New Complaint</Button>
+		          		!props.hideNewComplaint && !maxWidth && (
+			          		<Button color="inherit" variant="outlined" className={styles.nC} href="/new_complaint">+ New Complaint</Button>
+			        	)
+			        }
+			        {
+		          		!props.hideNewComplaint && maxWidth && (
+			          		<Button color="inherit" variant="outlined" className={styles.nC+" "+styles.add} href="/new_complaint">+</Button>
 			        	)
 			        }
 		        </Toolbar>

@@ -1,0 +1,8 @@
+.cont{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	width: 90%;
+	max-width: 750px;
+	margin-top: 75px;
+}

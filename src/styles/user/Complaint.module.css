@@ -1,0 +1,168 @@
+.cont{
+	position: absolute;
+	width: 100%;
+	height: auto;
+	min-height: 100vh;
+}
+
+.cont .notFound{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	text-align: center;
+}
+
+.cont .notFound .img{
+	object-fit: fill;
+}
+
+.cont .notFound .msg .title{
+	font-weight: bold;
+	margin-bottom: 2.5px;
+}
+
+.cont .complaint{
+	position: relative;
+	width: 90%;
+	max-width: 750px;
+	left: 50%;
+	transform: translate(-50%);
+	margin-top: 75px;
+	margin-bottom: 10px;
+}
+
+.cont .complaint .main{
+	margin: 10px 0;
+}
+
+.cont .complaint .main.first{
+	margin-top: 75px;
+}
+
+.cont .complaint .main .title{
+	margin-bottom: 5px;
+}
+
+.cont .complaint .main.inline *{
+	display: inline;
+}
+
+.cont .complaint .main.inline .status{
+	text-transform: uppercase;
+}
+
+.pending{
+	color: orange;
+}
+
+.resolved{
+	color: green;
+}
+
+.error{
+	color: red;
+}
+
+.cont .complaint .actions{
+	display: grid;
+	grid-template-columns: repeat(auto-fit,minmax(177.5px,1fr));
+}
+
+.cont .complaint .actions .action{
+	text-transform: none;
+	margin: 10px;
+}
+
+.cont .complaint .main .image{
+	position: relative;
+	width: 100%;
+	display: grid;
+	align-items: center;
+	justify-content: center;
+	grid-template-columns: repeat(auto-fill,minmax(125px,1fr));
+}
+
+
+.cont .complaint .main .image .img{
+	display: grid;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	text-align: center;
+	text-transform: none;
+	margin: 5px;
+	padding: 10px;
+	min-height: 112.5px;
+	background: #fafafa;
+	border-radius: 5px;
+}
+
+.update .cont{
+	position: relative;
+	width: 100%;
+	max-width: 600px;
+	left: 50%;
+	transform: translate(-50%);
+	height: auto;
+	min-height: auto;
+}
+
+.update .input{
+	position: relative;
+	width: 100%;
+}
+
+.update .image{
+	margin: 10px 0;
+}
+
+.update .image .title{
+	margin-bottom: 10px;
+}
+
+.update .image .imgs{
+	position: relative;
+	width: 100%;
+	display: grid;
+	align-items: center;
+	justify-content: center;
+	grid-template-columns: repeat(auto-fill,minmax(125px,1fr));
+}
+
+.update .image .imgs .upload{
+	display: block;
+	position: relative;
+	text-align: center;
+	text-transform: none;
+	margin-left: 5px;
+	padding: 10px;
+	width: 95%;
+	height: 90%;
+	min-height: 112.5px;
+	background: #eeeeee;
+	border-radius: 5px;
+}
+
+.update .image .imgs .img{
+	display: grid;
+	align-items: center;
+	justify-content: center;
+	position: relative;
+	text-align: center;
+	text-transform: none;
+	margin: 5px;
+	padding: 10px;
+	min-height: 112.5px;
+	background: #fafafa;
+	border-radius: 5px;
+}
+
+.update .image .imgs .img .close{
+	position: absolute;
+	top: 0;
+	right: 0;
+	padding: 10px;
+	border-radius: 50%;
+	background: rgba(255,255,255,0.5);
+}
