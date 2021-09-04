@@ -1,7 +1,7 @@
 import { useState, createRef } from "react";
 import { Typography, Button, Icon, IconButton } from "@material-ui/core";
 import styles from "../styles/components/Uploader.module.css";
-import Alert from "../components/Alert";
+import Alert from "./Alert";
 
 
 export default function Uploader(props){
@@ -9,6 +9,7 @@ export default function Uploader(props){
 	const fileInput = createRef();
 	const [alertMsg,setAlertMsg] = useState(null);
 	const [alertVisibile, setAlertVisibility] = useState(false);
+	
 
 	function fileChooser(){
 		fileInput.current.click();
@@ -55,7 +56,6 @@ export default function Uploader(props){
 	function closeAlert(){
 		setAlertVisibility(false);
 	}
-
 	return (
 		<>
 			<div className={styles.imgs}>
@@ -68,6 +68,28 @@ export default function Uploader(props){
 						else{
 							img = new Blob([e]);
 							img = window.URL.createObjectURL(img);
+						}
+
+						if(props.clickable){
+							return (
+								<div key={i} className={styles.img}>
+									<a href={img} target="_blank"  rel="noreferrer">
+										{
+											props.rem!==false && (
+												<IconButton className={styles.remove} onClick={removeImg}>
+													<Icon>close</Icon>
+												</IconButton>
+											)
+										}
+										<div 
+											className={styles.image}
+											style = {{
+												backgroundImage: 'url('+img+')'
+											}}
+										></div>
+									</a>
+								</div>
+							)
 						}
 						return (
 							<div key={i} className={styles.img}>
@@ -119,7 +141,6 @@ export default function Uploader(props){
 					/>
 				)
 			}
-			
 		</>
 	)
 }

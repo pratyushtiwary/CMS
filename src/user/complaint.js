@@ -144,6 +144,7 @@ export default function Complaint(props){
 								title = {dialogTitle+" Complaint"}
 								open = {openDialog}
 								className={styles.update}
+								fullScreen={true}
 								buttons = {[{
 									onClick: dismiss,
 									content: "Dismiss"

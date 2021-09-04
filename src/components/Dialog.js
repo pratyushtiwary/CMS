@@ -4,7 +4,7 @@ import { Button, Dialog as D, DialogContent, DialogContentText, DialogActions, D
 export default function Dialog(props){
 
 	return (
-		<D open={props.open} fullScreen={true}>
+		<D open={props.open} fullScreen={props.fullScreen} fullWidth={props.fullWidth||false} maxWidth={props.maxWidth||"sm"}>
 		    <center><DialogTitle>{props.title}</DialogTitle></center>
 		    <DialogContent className={props.className}>
 		      <DialogContentText>

@@ -4,6 +4,7 @@ import { ThemeProvider } from '@material-ui/styles';
 import Login from "./login";
 import Register from "./register";
 import User from "./user/index";
+import Vendor from "./vendor/index";
 
 const theme = createTheme({
   palette: {
@@ -35,10 +36,10 @@ function App() {
               <Register/>
             </Route>
             <Route path="/" exact>
-              <User/>
+              <Vendor/>
             </Route>
             <Route path="/*">
-              <User/>
+              <Vendor/>
             </Route>
           </Switch>
         </Router>

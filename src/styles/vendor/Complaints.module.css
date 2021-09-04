@@ -1,0 +1,93 @@
+.cont{
+	margin-top: 75px;
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	width: 90%;
+	min-height: calc(100vh - 75px);
+}
+
+.cont .search{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	width: 100%;
+	max-width: 600px;
+}
+
+.cont .search .searchInput{
+	width: 100%;
+}
+
+.cont .errorBlock{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 100%;
+	transform: translate(-50%,-50%);
+	text-align: center;
+}
+
+.cont .errorBlock .errorImg{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	max-width: 350px;
+	max-height: 350px;
+	width: 90%;
+	height: 90%;
+}
+
+.cont .complaints{
+	display: grid;
+	margin-top: 10px;
+	grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+}
+
+.cont .complaints .main{
+	margin: 10px;
+}
+
+.cont .complaints .main .body{
+	padding: 10px;
+}
+
+.cont .complaints .main .body .title{
+	overflow: hidden;
+	white-space: nowrap;
+	margin-right: 25px;
+	text-overflow: ellipsis;
+}
+
+.cont .complaints .main .block{
+	margin: 5px 0;
+	display: block;
+}
+
+.cont .complaints .main .block span{
+	text-transform: uppercase;
+}
+
+.pending span{
+	color: orange;
+}
+
+.error span{
+	color: red;
+}
+
+.resolved span{
+	color: green;
+}
+
+.high span{
+	color: red;
+}
+
+.mid span{
+	color: orange;
+}
+
+.low span{
+	color: black;
+}

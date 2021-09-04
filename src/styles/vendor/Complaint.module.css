@@ -1,0 +1,83 @@
+.cont{
+	position: relative;
+	margin-top: 75px;
+	min-height: calc(100vh - 75px);
+	width: 100%;
+}
+
+.cont .errorCont{
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%,-50%);
+	width: auto;
+	height: auto;
+	text-align: center;
+	width: 97.5%;
+	max-width: 600px;
+}
+
+.cont .errorCont .img{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	width: 90%;
+	height: 90%;
+	max-width: 350px;
+	max-height: 350px;
+}
+
+.cont .complaint{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	width: 95%;
+	max-width: 800px;
+}
+
+.cont .complaint .block{
+	margin: 10px 0;
+}
+
+.cont .complaint .block .body{
+	margin-left: 5px;
+}
+
+.cont .complaint .block .subtitle{
+	margin-bottom: 5px;
+}
+
+.cont .complaint .block .status .body{
+	margin-right: 10px;
+	display: inline;
+	text-transform: uppercase;
+}
+
+.error{
+	color: red;
+}
+
+.pending{
+	color: orange;
+}
+
+.resolved{
+	color: green;
+}
+
+.input{
+	position: relative;
+	width: 100%;
+}
+
+.high{
+	color: red;
+}
+
+.mid{
+	color: orange;
+}
+
+.statusDialog .input{
+	margin: 10px 0;
+}
