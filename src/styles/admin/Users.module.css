@@ -1,0 +1,116 @@
+.cont{
+	position: relative;
+	width: 99.5vw;
+	max-width: 600px;
+	left: 50%;
+	transform: translate(-50%);
+	margin-top: 80px;
+}
+
+.cont .block{
+	position: relative;
+	margin: 10px 0;
+}
+
+.cont .block .inner{
+	padding: 10px;
+	display: grid;
+	grid-template-columns: 50px 1fr;
+	position: relative;
+	width: 100%;
+}
+
+.cont .block .inner .initials{
+	display: grid;
+	align-self: center;
+	justify-content: center;
+	align-content: center;
+	font-size: 2rem;
+	color: #ffffff;
+	background: var(--primaryColor);
+	border-radius: 50%;
+	widows: 50px;
+	height: 50px;
+}
+
+.cont .block .inner .meta{
+	position: relative;
+	height: 100%;
+	width: 90%;
+	overflow: hidden;
+	margin-left: 25px;
+}
+
+.cont .block .inner .meta .name{
+	position: relative;
+	width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.cont .block .inner .content{
+	position: relative;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	width: 100%;
+}
+
+.cont .block .inner .content .text{
+	position: relative;
+	width: 99.5%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.cont .block .inner .content span{
+	margin-right: 5px;
+}
+
+.input{
+	position: sticky !important;
+	top: 0;
+	width: 100%;
+	padding: 10px 0 !important;
+	margin-bottom: 10px !important;
+	z-index: 5;
+	background: #ffffff;
+}
+
+.cont .dept{
+	margin: 10px 0;
+	border: 1px solid #eeeeee;
+	border-radius: 4px;
+	padding: 10px;
+}
+
+.cont .dept .title{
+	font-size: 1.25rem;
+	position: sticky;
+	top: 75px;
+	z-index: 2;
+	padding: 10px 7.5px;
+	background: #ffffff;
+}
+
+.cont .tabPanel{
+	position: relative;
+}
+
+.cont .notFound{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	text-align: center;
+}
+
+.cont .notFound .img{
+	object-fit: fill;
+}
+
+.cont .notFound .msg .title{
+	font-weight: bold;
+	margin-bottom: 2.5px;
+}

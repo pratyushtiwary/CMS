@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useScrollTrigger, Slide, AppBar, useMediaQuery, Toolbar, Typography, Button, IconButton, Icon, SwipeableDrawer, List, ListItemIcon, ListItemText } from '@material-ui/core';
 import styles from "../styles/components/Header.module.css";
+import Session from "./Session";
 
 export default function Header(props){
 	const { window } = props;
@@ -10,12 +11,17 @@ export default function Header(props){
 	const iOS = process.browser && /iPad|iPhone|iPod/.test(navigator.userAgent);
 
 	function toggleDrawer(event){
-	    if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
-	      return;
-	    }
+		if (event && event.type === 'keydown' && (event.key === 'Tab' || event.key === 'Shift')) {
+		  return;
+		}
 
-	    setDrawer((d)=>!d);
-	  };
+		setDrawer((d)=>!d);
+	};
+
+	function logout(){
+		Session.clear("_id");
+	}
+
 
 	return (
 	<>
@@ -32,7 +38,7 @@ export default function Header(props){
 						{
 							props.items.map((e,i)=>{
 								return (
-									<Button key={i} button href={props.links[i]} className={styles.item}>
+									<Button key={i} href={props.links[i]} className={styles.item}>
 										{
 											props.icons && props.icons[i] && (
 												<ListItemIcon className={styles.itemIcon}><Icon>{props.icons[i]}</Icon></ListItemIcon>
@@ -44,8 +50,11 @@ export default function Header(props){
 								)
 							})
 						}
+						<Button onClick={logout} href="/login" className={styles.item}>
+							<ListItemIcon className={styles.itemIcon}><Icon>logout</Icon></ListItemIcon>
+							<ListItemText>Logout</ListItemText>
+						</Button>
 					</List>
-		
 				</SwipeableDrawer>
 			)
 		}

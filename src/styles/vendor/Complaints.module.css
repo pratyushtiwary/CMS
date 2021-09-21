@@ -68,26 +68,34 @@
 	text-transform: uppercase;
 }
 
-.pending span{
+.cont .complaints .main .pending span{
 	color: orange;
 }
 
-.error span{
+.cont .complaints .main .error span{
 	color: red;
 }
 
-.resolved span{
+.cont .complaints .main .resolved span{
 	color: green;
 }
 
-.high span{
+.cont .complaints .main .high span{
 	color: red;
 }
 
-.mid span{
+.cont .complaints .main .mid span{
 	color: orange;
 }
 
-.low span{
+.cont .complaints .main .low span{
 	color: black;
+}
+
+.cont .complaints .main.high{
+	border: 1px solid red !important;
+}
+
+.cont .complaints .main.mid{
+	border: 1px solid orange !important;
 }

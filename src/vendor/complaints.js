@@ -75,7 +75,7 @@ export default function Complaints(props){
 							<div className={styles.complaints}>
 								{
 									complaints.map((e,i)=>(
-										<Card className={styles.main} variant="outlined">
+										<Card className={styles.main+" "+styles[e.priority]} variant="outlined">
 											<CardActionArea href={"/complaint/"+e["id"]} className={styles.body}>
 												<Typography variant="h4" className={styles.title}>{e.title}</Typography>
 												<Typography variant="sutitle2" className={styles.block}>Created On :- {e.on}</Typography>

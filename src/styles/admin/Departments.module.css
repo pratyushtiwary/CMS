@@ -1,0 +1,52 @@
+.cont{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	width: 97.5vw;
+	max-width: 600px;
+	margin-top: 80px;
+}
+
+.cont .search{
+	position: sticky;
+	top: 0;
+	width: 100%;
+	background: #ffffff;
+	z-index: 2;
+	padding-bottom: 10px;
+}
+
+.cont .departments{
+	display: grid;
+	grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+}
+
+.cont .departments .department{
+	margin: 10px;
+}
+
+.cont .departments .department .inner{
+	padding: 10px;
+}
+
+.cont .departments .department .inner .title{
+	margin-bottom: 5px;
+}
+
+.cont .departments .department .inner .emps{
+	display: grid;
+	align-items: center;
+	grid-template-columns: auto 1fr;	
+}
+
+.cont .departments .department .inner .emps .content{
+	margin-left: 5px;
+}
+
+.cont .departments .department .inner .rename,
+.cont .departments .department .inner .delete{
+	position: relative;
+	width: 92.5%;
+	padding: 5px;
+	margin: 2.5px 0;
+}

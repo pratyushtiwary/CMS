@@ -1,0 +1,20 @@
+.cont{
+	position: relative;
+	width: 95vw;
+	max-width: 600px;
+	margin-top: 75px;
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.cont .body{
+	position: relative;
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.cont .post{
+	position: relative;
+	width: 100%;
+	padding: 10px;
+}

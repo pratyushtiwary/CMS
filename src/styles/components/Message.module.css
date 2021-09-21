@@ -1,0 +1,33 @@
+.success,
+.error{
+	background-color: green;
+	color: #ffffff;
+	border-radius: 4px;
+	width: 90%;
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	text-align: center;
+	padding: 5px;
+	margin: 5px 0;
+	display: grid;
+	grid-template-columns: auto auto;
+	align-items: center;
+	justify-content: center;
+}
+
+.error{
+	background-color: red;
+}
+
+.error .icon,
+.success .icon{
+	color: #ffffff !important;
+	margin-right: 5px;
+}
+
+
+.error .message,
+.success .message{
+	display: inline;
+}
