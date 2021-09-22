@@ -39,7 +39,6 @@ function App() {
       "forget_password": 1
     }
     if(loggedin){
-      console.log(loggedin);
       if(loggedin.type==="employee"){
         setContent(<User/>)
       }

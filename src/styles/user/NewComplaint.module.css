@@ -1,5 +1,6 @@
-.cont{
-	margin-top: 100px;
+.cont,
+.skeleton{
+	margin-top: 80px;
 	position: relative;
 	left: 50%;
 	transform: translate(-50%);
@@ -82,8 +83,50 @@
 	width: 100%;
 }
 
+.skeleton .complaintInput,
+.skeleton .departmentSelector,
+.skeleton .submitButton,
+.skeleton .imgSelector{
+	background: #afafaf;
+	border-radius: 4px;
+	margin-bottom: 10px;
+	z-index: 1;
+}
+
+.skeleton .complaintInput{
+	height: 35vh;
+}
+
+.skeleton .imgSelector{
+	height: 125px;
+	width: 125px;
+}
+
+.skeleton .departmentSelector,
+.skeleton .submitButton{
+	height: 45px;
+}
+
+.skeleton{
+	animation: skeletonAnimate 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonAnimate{
+	0%{
+		opacity: 0.25;
+	}
+	50%{
+		opacity: 1;
+	}
+	100%{
+		opacity: 0.25;
+	}
+}
+
+
 @media screen and (max-width: 434px){
-	.cont{
+	.cont,
+	.skeleton{
 		width: 90%;
 	}
 }

@@ -268,26 +268,6 @@ export default function ForgetPassword(props){
 					</>
 				)
 			}
-			<div className={styles.cont}>
-				<div className={styles.main}>
-					{
-						maxWidth && (
-							<Typography variant="h5" className={styles.title}>Forget Password</Typography>
-						)
-					}
-					{
-						!maxWidth && (
-							<Typography variant="h4" className={styles.title}>Forget Password</Typography>
-						)
-					}
-					<Success open={Boolean(successMsg)} message={successMsg}/>
-					<Error open={Boolean(errorMsg)} message={errorMsg}/>
-					<Form1 onSubmit={sendOTP} className={visible[0]} />
-					<Form2 onSubmit={forgetPassword} error={setErrorMsg} className={visible[1]} sendOTP={sendOTP} success={setSuccessMsg}/>
-				</div>
-				<div className={styles.opacity} tabIndex={-1}></div>
-				<div className={styles.bg} tabIndex={-1}></div>
-			</div>
 			<Loading
 				open={Boolean(loaderMsg)}
 				msg={loaderMsg}
