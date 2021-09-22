@@ -21,12 +21,11 @@ class Image(DB):
 
 				self.conn.commit()
 
-				id = conn.lastrowid
-
 				conn.close()
 
-				return (id,True)
+				return True
 			except:
-				return (error("SERVER_ERROR"),False)
+				self.conn.rollback()
+				return error("SERVER_ERROR")
 		else:
-			return (0,error("SERVER_ERROR"))
+			return error("SERVER_ERROR")

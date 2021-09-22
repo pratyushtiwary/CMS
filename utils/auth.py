@@ -41,14 +41,17 @@ def generateToken(data:dict):
 	return data
 
 def verifyToken(token:str):
-	token = decrypt(token)
-	token = loads(token)
+	try:
+		token = decrypt(token)
+		token = loads(token)
 
-	now = datetime.now().timestamp()
+		now = datetime.now().timestamp()
 
-	if now > token.get("expiry",0):
+		if now > token.get("expiry",0):
+			return False
+		return True
+	except:
 		return False
-	return True
 
 
 def viewToken(token:str):

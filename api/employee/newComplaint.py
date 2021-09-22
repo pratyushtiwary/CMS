@@ -2,31 +2,26 @@ import json
 from flask import request, Response
 from utils.validate import exists
 from utils.msg import error, success
-from utils.files import uploader
 from models.complaint import Complaint
 from utils.auth import viewToken
 
 def newComplaint():
 	req = request.form
 	files = request.files
-	if exists(["token","body"],req,True):
-		token, body = req["token"], req["body"]
+	if exists(["token","body","dept"],req,True):
+		token, body, dept = req["token"], req["body"],req["dept"]
 		eid = viewToken(token)["id"]
 		complaint = Complaint()
-
-		id, status = complaint.create({
+		status = complaint.create({
 			"eid": eid,
 			"body": body,
+			"dept": dept,
 			"priority": "low",
-			"status": "pending"
+			"status": "pending",
+			"images": files
 		}) 
-
 		if status == True:
-			upload = uploader(files,id)
-			if upload==True:
-				return success("Complaint Opened Successfully!")
-			else:
-				return upload
+			return success("Complaint Opened Successfully!")
 		else:
-			return id
+			return status
 	return Response(response=error("INVALID_REQUEST"),status=400)	

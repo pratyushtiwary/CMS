@@ -6,44 +6,42 @@ import re
 from models.image import Image
 
 
-def getExtension(file):
-	return re.split(r"\.",file.filename).pop()
+class Files:
+	def __init__(self):
+		self.files = []
+		self.paths = []
+		self.status = "unsaved"
 
-def is_valid_file(file):
-	filetype = getExtension(file)
+	def __getExtension(self,file):
+		return re.split(r"\.",file.filename).pop()
 
-	if filetype in allowed_file_types:
-		return True
-	return False
+	def __is_valid_file(self,file):
+		filetype = self.__getExtension(file)
 
-def validate(files,keys):
-	all_valid = []
-	for key in keys:
-		if files[key].filename != "":
-			all_valid.append(is_valid_file(files[key]))
-
-	if len(all_valid) == len(keys):
-		return True
-
-	return False
+		if filetype in allowed_file_types:
+			return True
+		return False
 
 
-def uploader(files,id):
-	img = Image()
-	keys = list(files.keys())
-	if validate(files,keys):
-		for key in keys:
-			newFileName = str(uuid()) + "." + getExtension(files[key])
-			filepath = os.path.join(save_path,newFileName)
-			files[key].save(filepath)
-			imgId, status = img.add({
-				"cid": id,
-				"path": filepath
-			})
+	def append(self,file):
+		if self.__is_valid_file(file):
+			newFileName = str(uuid()) + "." + self.__getExtension(file)
+			self.files.append(file)
+			self.paths.append(newFileName)
+			return newFileName
+		else:
+			raise Exception(error("INVALID_FILE"))
 
-			if status!=True:
-				return imgId
+	def commit(self):
+		if len(self.files) > 0:
+			files = self.files
+			paths = self.paths
 
-		return True
-	return error("INVALID_FILE")
+			for i in range(len(files)):
+				files[i].save(os.path.join(save_path,paths[i]))
 
+		self.status = "saved"
+
+	def __del__(self):
+		del self.files
+		del self.paths

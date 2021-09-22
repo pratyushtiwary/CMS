@@ -13,7 +13,7 @@ eCode = {
 	"INVALID_REQUEST": "Invalid request, try again with proper parameters",
 	"NO_USER_FOUND_PHONE": "No user with that phone number found",
 	"INVALID_FILE": "Whoops a file seems to be invalid :(",
-	"SERVER_ERROR": "Some interal server error occured, try again later!",
+	"SERVER_ERROR": "Some internal server error occured, try again later!",
 	"UNAUTH_REQUEST": "Unauthorized Request"
 }
 

@@ -32,11 +32,10 @@ def decrypt(msg:str,salt:str=key):
 			msg :- Encrypted message to decrypt,
 			salt :- Salt to decrypt (default equals to globals.key)
 	"""
-
-	msg = b64.b64decode(msg)
-	iv = msg[:16]
-	msg = msg[16:]
 	try:
+		msg = b64.b64decode(msg)
+		iv = msg[:16]
+		msg = msg[16:]
 		cipher = AES.new(salt,AES.MODE_GCM,iv)
 		decrypted_msg = str(cipher.decrypt(msg),"utf-8")
 		return decrypted_msg

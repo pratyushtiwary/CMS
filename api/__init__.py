@@ -8,6 +8,13 @@ from models.employee import Employee
 from flask_cors import CORS, cross_origin
 from utils.auth import auth
 
+
+# ---------------
+# |   Extras    |
+# ---------------
+from api.fetch.departments import fetchDepartments
+
+
 # ---------------
 # |  Employees  |
 # ---------------
@@ -49,6 +56,19 @@ def forgetpassword():
 	if request.method == "POST":
 		req = request.json
 		return forgetPassword(req)
+	return abort(405)
+
+
+# ---------------
+# |   Extras    |
+# ---------------
+
+@api.route("/fetch/departments",methods=["POST","GET"])
+@cross_origin(origin = ["http://localhost:3000"],methods = ["GET","POST"])
+@auth
+def fetchdepartments():
+	if request.method == "POST":
+		return fetchDepartments()
 	return abort(405)
 
 # ---------------
