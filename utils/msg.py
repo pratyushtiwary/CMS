@@ -14,7 +14,10 @@ eCode = {
 	"NO_USER_FOUND_PHONE": "No user with that phone number found",
 	"INVALID_FILE": "Whoops a file seems to be invalid :(",
 	"SERVER_ERROR": "Some internal server error occured, try again later!",
-	"UNAUTH_REQUEST": "Unauthorized Request"
+	"UNAUTH_REQUEST": "Unauthorized Request",
+	"NO_ANNOUNCEMENT_FOUND": "Unable to find any announcement :(",
+	"MAX_REPOST_LIMIT_REACHED": "Hey looks like you already have reposted this complaint 2 times",
+	"NO_COMPLAINT_FOUND": "No complaint found with that id"
 }
 
 def error(code: str):

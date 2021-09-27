@@ -1,9 +1,4 @@
-import json
-from utils.auth import generateToken
-from utils.sender import verifyOTP
-from utils.validate import exists
-from flask import Response
-from utils.msg import error, success
+from utils.msg import success
 from models.department import Department
 
 

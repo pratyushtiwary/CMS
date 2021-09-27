@@ -26,3 +26,6 @@ otp_validity_minutes = 30
 max_file_size = 0 #(in megabytes) set 0 for no restriction
 allowed_file_types = ["jpeg","jpg","png","svg","gif","bmp","ico"]
 save_path = "images"
+
+# Cross origin
+url = "http://localhost:3000"

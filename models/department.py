@@ -4,7 +4,6 @@ from utils.msg import error
 class Department(DB):
 	def __init__(self):
 		self.tableName = "department"
-
 		self.conn = DB.__init__(self)
 
 

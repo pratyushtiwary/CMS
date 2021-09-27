@@ -1,8 +1,6 @@
-import json
 from models.employee import Employee
 from models.vendor import Vendor
 from models.admin import Admin
-from utils.auth import generateToken
 from utils.sender import verifyOTP
 from utils.validate import exists
 from flask import Response

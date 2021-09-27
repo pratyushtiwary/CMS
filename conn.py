@@ -7,16 +7,25 @@ class DB:
 			DB class to interact with the database
 		"""
 		try:
-			self.mydb = mysql.connector.connect(
+			self.conn = mysql.connector.connect(
 				host=dbhost,
 				user=dbusername,
 				password=dbpassword,
 				database=dbname
 			)
-			return self.mydb
+			return self.conn
 		except Exception as e:
-			print("MYSQL Error :",e)
+			print("MYSQL Connection Error :",e)
 			exit()
 
 	def __del__(self):
-		self.mydb.close()
+		if self.conn:
+			self.conn.close()
+
+def connect():
+	return mysql.connector.connect(
+		host=dbhost,
+		user=dbusername,
+		password=dbpassword,
+		database=dbname
+	)

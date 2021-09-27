@@ -5,7 +5,6 @@ from utils.msg import error
 class Image(DB):
 	def __init__(self):
 		self.tableName = 'image'
-
 		self.conn = DB.__init__(self)
 
 

@@ -5,6 +5,22 @@ from utils.encryption import password_hash
 import smtplib
 from email.message import EmailMessage
 from globals import appName, email_host, email_username, email_password, email_port, otp_validity_minutes
+from conn import connect
+
+# Dictionary of possible notifications
+notifications = {
+	"NEW_COMPLAINT": """
+		Hey, this is to notify you that someone(hopefully you) have opened a new complaint
+		<br><br>
+		Now relax and chill we'll keep you updated with the status of this complaint
+	"""
+}
+
+def sendMail(msg):
+	s = smtplib.SMTP(email_host, email_port)
+	s.starttls()
+	s.login(email_username,email_password)
+	s.send_message(msg)
 
 def sendOTP(args: dict):
 	"""
@@ -29,11 +45,6 @@ def sendOTP(args: dict):
 		"""
 			Sending Email
 		"""	
-		s = smtplib.SMTP(email_host, email_port)
-
-		s.starttls()
-
-		s.login(email_username,email_password)
 
 		msg = EmailMessage()
 
@@ -82,7 +93,7 @@ def sendOTP(args: dict):
 			</html>
 		""", subtype='html')
 
-		s.send_message(msg)
+		sendMail(msg)
 
 		return otp.setOTP(password_hash(code))
 	else:
@@ -106,12 +117,77 @@ def sendMsg(args):
 		
 		Takes a dictionary as a parameter
 
-		Dictionary should have email , phone, msg and id keys
+		Dictionary should have email , phone, msg keys
 
 	"""
+	types = {
+		"employee": "employees",
+		"admin": "admin",
+		"vendor": "vendor"
+	}
+	if exists(["id","email","phone","code","subject","type"],args):
+		email, phone, code, subject, type, id = args.get("email"),args.get("phone"),args.get("code"), args.get("subject"), args.get("type"), args.get("id")
+		msg = EmailMessage()
 
-	if exists(["id","email","phone","msg"],args):
-		email, phone, msg = args.get("email"),args.get("phone"),args.get("msg")
+		msg["Subject"] = f"{appName}: {subject}"
+
+		tableName = types.get(type)
+		conn = connect()
+
+		msg["From"] = email_username
+
+		msg["To"] = email
+
+		if notifications.get(code,False):
+			content = notifications.get(code)
+		else:
+			content = code
+		msg.set_content(f"""
+			<!DOCTYPE html>
+			<html>
+				<body>
+					<table style="font-family: sans-serif;">
+						<tr>
+							<th style="color: #000000;font-size: 1.5rem;text-align: left;">{appName}</th>
+						</tr>
+						<tbody>
+							<tr>
+								<td>
+									<hr style="width: 100%;">
+									<br>
+									{content}
+									<br>
+									<br>
+									<hr style="width: 100%;">
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<br>
+									Regards,<br>
+									{appName} Admin
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</body>
+			</html>
+		""", subtype='html')
+
+
+		sql = f"SELECT 1 FROM `{tableName}` WHERE `id`= %s AND `notify` = 1"
+		vals = (id,)
+		cursor = conn.cursor()
+
+		cursor.execute(sql,vals)
+
+		notify = cursor.fetchone()
+
+		if notify:
+			sendMail(msg)
+
+		cursor.close()
+		conn.close()
 		return True
 	else:
 		return False

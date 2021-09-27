@@ -5,7 +5,7 @@ def exists(keys: list, d: dict,parseDifferent:bool=False):
 		sum = 0
 		try:
 			for key in keys:
-				if d[key]:
+				if d[key]!=False:
 					sum+=1
 			if sum == total:
 				return True
@@ -18,11 +18,13 @@ def exists(keys: list, d: dict,parseDifferent:bool=False):
 		sum = 0
 		if(type(d) == dict):
 			for key in keys:
-				if d.get(key,False)!=False:
+				val = d.get(key,False)
+				if val!=False:
 					sum += 1
 
 			if sum == total:
 				return True
+
 			return False
 		else:
 			return False

@@ -13,7 +13,6 @@ class OTP(DB,GetSet):
 		self.email = email
 		self.tableName = "otp"
 		self.phone = phone
-
 		self.conn = DB.__init__(self)
 
 		GetSet.__init__(self,self.tableName)
