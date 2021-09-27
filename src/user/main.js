@@ -6,19 +6,49 @@ import first from "../assets/user/main/first.png";
 import second from "../assets/user/main/second.png";
 import { Typography, Button, useMediaQuery } from "@material-ui/core";
 import { appName } from "../globals";
+import hit from "../components/hit";
+import Session from "../components/Session";
 
 export default function Main(props){
 	const maxWidth = useMediaQuery("(max-width: 700px)")
 	const [complaints,setComplaints] = useState(null);
 	const [announcement,setAnnouncement] = useState(null);
+	const [complaintStatLoaded,setComplaintStatLoaded] = useState(false);
+	const [announcementLoaded,setAnnouncementLoaded] = useState(false);
 
 	useEffect(()=>{
-		setComplaints([6,3,2,1]);
-		setAnnouncement({
-			"text": "Adipisicing quis irure do fugiat ad duis occaecat incididunt ut ut dolor esse proident labore laboris non cupidatat voluptate nisi magna esse deserunt ullamco sit commodo anim est ea sunt in eu dolore nisi qui nostrud sed ullamco ut pariatur do irure duis aliquip dolor deserunt duis ullamco nisi esse anim fugiat laboris aute ut dolore enim dolore ex dolore nulla aliquip in in laborum culpa dolor do ullamco qui deserunt in magna ullamco ut amet exercitation enim consequat fugiat culpa veniam aliqua ut fugiat officia in esse anim laborum in ut non ullamco esse dolore sed do ut veniam in reprehenderit laboris eiusmod aliquip minim quis dolor excepteur est labore non minim irure culpa irure in tempor fugiat veniam nulla fugiat in labore id anim consequat voluptate voluptate et adipisicing in voluptate exercitation nulla eiusmod qui ex do pariatur reprehenderit veniam eiusmod excepteur incididunt dolor mollit non ut dolor.",
-			"author": "Admin",
-			"on": "23/08/2021"
-		});
+		const token = Session.login().token
+		hit("api/employee/getComplaintsByStatus",{
+			"token": token
+		}).then((c)=>{
+			if(c.success){
+				if(c.success.msg.total===0){
+					setComplaintStatLoaded(null)
+					setComplaints(null)
+				}
+				else{
+					setComplaintStatLoaded(true)
+					setComplaints(c.success.msg)
+				}
+			}
+			else{
+				setComplaintStatLoaded(null)
+				setComplaints(null)
+			}
+			
+		})
+		hit("api/fetch/latestAnnouncement",{
+			"token": token
+		}).then((c)=>{
+			if(c.success){
+				setAnnouncement(c.success.msg);
+				setAnnouncementLoaded(true);
+			}
+			else{
+				setAnnouncement(null);
+				setAnnouncementLoaded(null);
+			}
+		})
 	},[])
 
 	return (
@@ -28,13 +58,13 @@ export default function Main(props){
 			</Helmet>
 			<Header
 				title = "Dashboard"
-				items = {["Complaints","Settings"]}
-				links = {["/complaints","/settings"]}
-				icons = {["segment","settings"]}
+				items = {["Complaints","Announcements","Settings"]}
+				links = {["/complaints","/announcements","/settings"]}
+				icons = {["segment","campaign","settings"]}
 			/>
 			<div className={styles.cont}>
 				{
-					!complaints && maxWidth && (
+					!complaints && complaintStatLoaded===null && maxWidth && (
 						<div className={styles.notFound}>
 							<img 
 								src = {first}
@@ -51,7 +81,7 @@ export default function Main(props){
 					) 
 				}
 				{
-					!complaints && !maxWidth && (
+					!complaints && complaintStatLoaded===null && !maxWidth && (
 						<div className={styles.notFound}>
 							<img 
 								src = {first}
@@ -68,24 +98,34 @@ export default function Main(props){
 					) 
 				}
 				{
-					complaints && (
+					complaints && complaintStatLoaded && (
 						<div className={styles.complaints}>
 							<Button className={styles.block} href="/complaints">
-								<Typography variant="h4" className={styles.title}>{complaints[0]}</Typography>
+								<Typography variant="h4" className={styles.title}>{complaints.total||0}</Typography>
 								<Typography variant="h6" className={styles.subtitle}>Total Complaint(s)</Typography>
 							</Button>
 							<Button className={styles.block} href="/complaints">
-								<Typography variant="h4" className={styles.title}>{complaints[1]}</Typography>
+								<Typography variant="h4" className={styles.title}>{complaints.resolved||0}</Typography>
 								<Typography variant="h6" className={styles.subtitle}>Resolved Complaint(s)</Typography>
 							</Button>
 							<Button className={styles.block} href="/complaints">
-								<Typography variant="h4" className={styles.title}>{complaints[2]}</Typography>
+								<Typography variant="h4" className={styles.title}>{complaints.pending||0}</Typography>
 								<Typography variant="h6" className={styles.subtitle}>Pending Complaint(s)</Typography>
 							</Button>
 							<Button className={styles.block} href="/complaints">
-								<Typography variant="h4" className={styles.title}>{complaints[3]}</Typography>
+								<Typography variant="h4" className={styles.title}>{complaints.error||0}</Typography>
 								<Typography variant="h6" className={styles.subtitle}>Complaint(s) with Error</Typography>
 							</Button>
+						</div>
+					)
+				}
+				{
+					complaintStatLoaded===false && (
+						<div className={styles.complaintSkeleton}>
+							<div className={styles.total}></div>
+							<div className={styles.resolved}></div>
+							<div className={styles.error}></div>
+							<div className={styles.pending}></div>
 						</div>
 					)
 				}
@@ -97,7 +137,7 @@ export default function Main(props){
 				</div>
 				<div className={styles.main}>
 					{
-						!announcement && (
+						!announcement && announcementLoaded===null && (
 							<div className={styles.notFound}>
 							<img 
 								src = {second}
@@ -113,7 +153,7 @@ export default function Main(props){
 						)
 					}
 					{
-						announcement && (
+						announcement && announcementLoaded && (
 							<div className={styles.content}>
 								<div className={styles.block}>
 									<Typography variant="subtitle" className={styles.text}>{announcement.text}</Typography>
@@ -122,6 +162,19 @@ export default function Main(props){
 										<Typography variant="subtitle2" className={styles.author}>- {announcement.author}</Typography>
 									</div>
 								</div>
+								{
+									announcement.more && (
+										<Button variant="outlined" color="primary" className={styles.more} href="/announcements">View More</Button>
+									)
+								}
+							</div>
+						)
+					}
+					{
+						announcementLoaded===false && (
+							<div className={styles.announcementSkeleton}>
+								<div className={styles.content}></div>
+								<div className={styles.more}></div>
 							</div>
 						)
 					}

@@ -85,9 +85,9 @@ export default function Complaint(props){
 			</Helmet>
 			<Header
 				title = {"Complaint"}
-				items = {["Home","Complaints","Settings"]}
-				links = {["/","/complaints","/settings"]}
-				icons = {["home","segment","settings"]}
+				items = {["Home","Complaints","Announcements","Settings"]}
+				links = {["/","/complaints","/announcements","/settings"]}
+				icons = {["home","segment","campaign","settings"]}
 			/>
 			<div className={styles.cont}>
 				{

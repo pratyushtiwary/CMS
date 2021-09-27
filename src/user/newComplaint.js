@@ -48,6 +48,7 @@ export default function NewComplaint(props){
 				window.location.reload();
 			}
 		})
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	},[]);
 
 	function onFile(e){
@@ -73,7 +74,7 @@ export default function NewComplaint(props){
 			formData.append("file"+i,e);
 		});
 
-		hit("api/employee/new_complaint",formData)
+		hit("api/employee/newComplaint",formData)
 		.then((c)=>{
 			setLoaderMsg(null);
 			
@@ -98,9 +99,9 @@ export default function NewComplaint(props){
 			<Header
 				title = "New Complaint"
 				hideNewComplaint = {true}
-				items = {["Home","Complaints","Settings"]}
-				icons = {["home","segment","settings"]}
-				links = {["/","/complaints","/settings"]}
+				items = {["Home","Complaints","Announcements","Settings"]}
+				icons = {["home","segment","campaign","settings"]}
+				links = {["/","/complaints","/announcements","/settings"]}
 			/>
 			{
 				loaded === null && (

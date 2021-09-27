@@ -49,9 +49,9 @@ export default function Setttings(props){
 			</Helmet>
 			<Header
 				title = "Settings"
-				items = {["Home","Complaints"]}
-				links = {["/","/complaints"]}
-				icons = {["home","segment"]}
+				items = {["Home","Complaints","Announcements"]}
+				links = {["/","/complaints","/announcements"]}
+				icons = {["home","segment","campaign"]}
 			/>
 			<form className={styles.cont} onSubmit={submit}>
 				<FormControl variant="outlined" className={styles.input}>

@@ -5,84 +5,43 @@ import styles from "../styles/user/Complaints.module.css";
 import { Card, TextField, MenuItem, Menu, ListItemIcon, ListItemText, IconButton, Icon, CardActionArea, Typography } from "@material-ui/core"; 
 import first from "../assets/user/main/first.png";
 import { useState, useEffect } from "react";
+import Session from "../components/Session";
+import hit from "../components/hit";
+
+const limit = 10;
+let current = 0;
 
 export default function Complaints(props){
 	const [complaints,setComplaints] = useState(null);
 	const [anchorEl, setAnchorEl] = useState(null);
+	const [loaded,setLoaded] = useState(false);
+	const token = Session.login().token;
 
 	useEffect(()=>{
+		hit("api/employee/getComplaints",{
+			"token": token,
+			"offset": "0"
+		}).then((c)=>{
+			if(c.success){
+				if(c.success.msg.count <= 0){
+					setComplaints(null);
+					setLoaded(null)
+				}
+				else{
+					setLoaded(true);
+					setComplaints(c.success.msg.complaints);
+				}
+			}
+			else{
+				setComplaints(null);
+				setLoaded(null)
+			}
+		})
 		setComplaints([{
 			"complaintId": Math.round(Math.random() * 1000),
 			"shortTitle": "Lorem ipsum excepteur non...",
-			"longText": "Lorem ipsum qui laboris veniam ut incididunt officia veniam ut sed sint in tempor nostrud minim in amet aute et qui anim consectetur aliqua do dolore ea deserunt id commodo ad adipisicing reprehenderit mollit in proident cupidatat aute qui cupidatat.",
 			"date": "24/08/2021",
 			"status": "pending"
-		},{
-			"complaintId": Math.round(Math.random() * 1000),
-			"shortTitle": "Lorem ipsum excepteur non...",
-			"longText": "Lorem ipsum qui laboris veniam ut incididunt officia veniam ut sed sint in tempor nostrud minim in amet aute et qui anim consectetur aliqua do dolore ea deserunt id commodo ad adipisicing reprehenderit mollit in proident cupidatat aute qui cupidatat.",
-			"date": "24/08/2021",
-			"status": "resolved"
-		},{
-			"complaintId": Math.round(Math.random() * 1000),
-			"shortTitle": "Lorem ipsum excepteur non...",
-			"longText": "Lorem ipsum qui laboris veniam ut incididunt officia veniam ut sed sint in tempor nostrud minim in amet aute et qui anim consectetur aliqua do dolore ea deserunt id commodo ad adipisicing reprehenderit mollit in proident cupidatat aute qui cupidatat.",
-			"date": "24/08/2021",
-			"status": "error"
-		},{
-			"complaintId": Math.round(Math.random() * 1000),
-			"shortTitle": "Lorem ipsum excepteur non...",
-			"longText": "Lorem ipsum qui laboris veniam ut incididunt officia veniam ut sed sint in tempor nostrud minim in amet aute et qui anim consectetur aliqua do dolore ea deserunt id commodo ad adipisicing reprehenderit mollit in proident cupidatat aute qui cupidatat.",
-			"date": "24/08/2021",
-			"status": "pending"
-		},{
-			"complaintId": Math.round(Math.random() * 1000),
-			"shortTitle": "Lorem ipsum excepteur non...",
-			"longText": "Lorem ipsum qui laboris veniam ut incididunt officia veniam ut sed sint in tempor nostrud minim in amet aute et qui anim consectetur aliqua do dolore ea deserunt id commodo ad adipisicing reprehenderit mollit in proident cupidatat aute qui cupidatat.",
-			"date": "24/08/2021",
-			"status": "resolved"
-		},{
-			"complaintId": Math.round(Math.random() * 1000),
-			"shortTitle": "Lorem ipsum excepteur non...",
-			"longText": "Lorem ipsum qui laboris veniam ut incididunt officia veniam ut sed sint in tempor nostrud minim in amet aute et qui anim consectetur aliqua do dolore ea deserunt id commodo ad adipisicing reprehenderit mollit in proident cupidatat aute qui cupidatat.",
-			"date": "24/08/2021",
-			"status": "error"
-		},{
-			"complaintId": Math.round(Math.random() * 1000),
-			"shortTitle": "Lorem ipsum excepteur non...",
-			"longText": "Lorem ipsum qui laboris veniam ut incididunt officia veniam ut sed sint in tempor nostrud minim in amet aute et qui anim consectetur aliqua do dolore ea deserunt id commodo ad adipisicing reprehenderit mollit in proident cupidatat aute qui cupidatat.",
-			"date": "24/08/2021",
-			"status": "pending"
-		},{
-			"complaintId": Math.round(Math.random() * 1000),
-			"shortTitle": "Lorem ipsum excepteur non...",
-			"longText": "Lorem ipsum qui laboris veniam ut incididunt officia veniam ut sed sint in tempor nostrud minim in amet aute et qui anim consectetur aliqua do dolore ea deserunt id commodo ad adipisicing reprehenderit mollit in proident cupidatat aute qui cupidatat.",
-			"date": "24/08/2021",
-			"status": "resolved"
-		},{
-			"complaintId": Math.round(Math.random() * 1000),
-			"shortTitle": "Lorem ipsum excepteur non...",
-			"longText": "Lorem ipsum qui laboris veniam ut incididunt officia veniam ut sed sint in tempor nostrud minim in amet aute et qui anim consectetur aliqua do dolore ea deserunt id commodo ad adipisicing reprehenderit mollit in proident cupidatat aute qui cupidatat.",
-			"date": "24/08/2021",
-			"status": "error"
-		},{
-			"complaintId": Math.round(Math.random() * 1000),
-			"shortTitle": "Lorem ipsum excepteur non...",
-			"longText": "Lorem ipsum qui laboris veniam ut incididunt officia veniam ut sed sint in tempor nostrud minim in amet aute et qui anim consectetur aliqua do dolore ea deserunt id commodo ad adipisicing reprehenderit mollit in proident cupidatat aute qui cupidatat.",
-			"date": "24/08/2021",
-			"status": "pending"
-		},{
-			"complaintId": Math.round(Math.random() * 1000),
-			"shortTitle": "Lorem ipsum excepteur non...",
-			"longText": "Lorem ipsum qui laboris veniam ut incididunt officia veniam ut sed sint in tempor nostrud minim in amet aute et qui anim consectetur aliqua do dolore ea deserunt id commodo ad adipisicing reprehenderit mollit in proident cupidatat aute qui cupidatat.",
-			"date": "24/08/2021",
-			"status": "resolved"
-		},{
-			"complaintId": Math.round(Math.random() * 1000),
-			"shortTitle": "Lorem ipsum excepteur non...",
-			"longText": "Lorem ipsum qui laboris veniam ut incididunt officia veniam ut sed sint in tempor nostrud minim in amet aute et qui anim consectetur aliqua do dolore ea deserunt id commodo ad adipisicing reprehenderit mollit in proident cupidatat aute qui cupidatat.",
-			"date": "24/08/2021",
-			"status": "error"
 		}])
 	},[props]);
 
@@ -105,31 +64,31 @@ export default function Complaints(props){
 			</Helmet>
 			<Header
 				title="Complaints"
-				items = {["Home","Settings"]}
-				links = {["/","/settings"]}
-				icons = {["home","settings"]}
+				items = {["Home","Announcements","Settings"]}
+				links = {["/","/announcements","/settings"]}
+				icons = {["home","campaign","settings"]}
 				search
 			/>
+			{
+				!complaints && loaded===null && (
+					<div className={styles.notFound}>
+						<img 
+							src = {first}
+							alt = "No Complaints Found Illustration"
+							width = "300px"
+							heigth = "300px"
+							className = {styles.img}
+						/>
+						<div className={styles.msg}>
+							<Typography variant="h5" className={styles.title}>No Complaints Found</Typography>
+							<Typography variant="subtitle2" className={styles.subtitle}>To register a complaint click on the "New Complaint" button above</Typography>
+						</div>
+					</div>
+				) 
+			}
 			<div className={styles.cont}>
 				{
-					!complaints && (
-						<div className={styles.notFound}>
-							<img 
-								src = {first}
-								alt = "No Complaints Found Illustration"
-								width = "300px"
-								heigth = "300px"
-								className = {styles.img}
-							/>
-							<div className={styles.msg}>
-								<Typography variant="h5" className={styles.title}>No Complaints Found</Typography>
-								<Typography variant="subtitle2" className={styles.subtitle}>To register a complaint click on the "New Complaint" button above</Typography>
-							</div>
-						</div>
-					) 
-				}
-				{
-					complaints && (
+					complaints && loaded===true && (
 						<div className={styles.search}>
 							<TextField
 								placeholder = "Search..."
@@ -140,13 +99,13 @@ export default function Complaints(props){
 					)
 				}
 				{
-					complaints && complaints.map((e,i)=>(
+					complaints && loaded===true && complaints.map((e,i)=>(
 						<Card variant="outlined" key={i} className={styles.complaint} title="Click to view complaint">
 							<CardActionArea className={styles.main} href={"/complaint/"+e.complaintId}>
 								<div className={styles.all}>
 									<Typography variant="subtitle2">Complaint id :- {e.complaintId}</Typography>
 									<div className={styles.body}>
-										<Typography variant="h5">{e.shortTitle}</Typography>
+										<Typography variant="h5" className={styles.title}>{e.shortTitle}</Typography>
 										<IconButton className={styles.menu} onClick={showMenu}>
 											<Icon>more_vert</Icon>
 										</IconButton>
@@ -161,6 +120,15 @@ export default function Complaints(props){
 					))
 				}
 			</div>
+			{
+				loaded===false && (
+					<div className={styles.skeleton} aria-label="Loading Complaints">
+						<div className={styles.search}></div>
+						<div className={styles.complaint}></div>
+						<div className={styles.complaint}></div>
+					</div>
+				)
+			}
 			<Menu
 				anchorEl={anchorEl}
 				open={Boolean(anchorEl)}

@@ -56,13 +56,12 @@ export default function ResendOtp({ onClick }){
 
 	useEffect(()=>{
 		clearTimer(getDeadTime());
-
 		return ()=>{
 			if(Ref.current){
 				clearInterval(Ref.current);
 			}
 		}
-
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	},[])
 
 	const onClickReset = (e)=>{

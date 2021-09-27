@@ -7,6 +7,7 @@
 }
 
 .headerCont .header .title{
+	font-family: 'Merriweather', serif !important;
 	flex-grow: 1;
 }
 
