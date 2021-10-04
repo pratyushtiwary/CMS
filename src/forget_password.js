@@ -161,7 +161,7 @@ export default function ForgetPassword(props){
 	const [reset,setReset] = useState(false);
 
 	useEffect(()=>{
-		const loggedin = Session.login();
+		const loggedin = Session.login().token;
 		if(loggedin){
 			window.location.href = "/";
 		}else{

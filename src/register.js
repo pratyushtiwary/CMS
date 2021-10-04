@@ -290,7 +290,7 @@ export default function Register(props){
 	const [registered,setRegistered] = useState(false);
 
 	useEffect(()=>{
-		const loggedin = Session.login();
+		const loggedin = Session.login().token;
 		if(loggedin){
 			window.location.href = "/";
 		}else{

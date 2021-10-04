@@ -67,7 +67,7 @@ export default function Announcements(props){
 			<Header
 				title = "Announcements"
 				items = {["Home","Complaints","Setting"]}
-				links = {["/","/complaints","/setting"]}
+				links = {["/","/complaints","/settings"]}
 				icons = {["home","segment","settings"]}
 			/>
 			{

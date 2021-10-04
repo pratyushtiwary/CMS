@@ -1,15 +1,22 @@
-import { useState, createRef } from "react";
+import { useState, createRef, useEffect } from "react";
 import { Typography, Button, Icon, IconButton } from "@material-ui/core";
 import styles from "../styles/components/Uploader.module.css";
 import Alert from "./Alert";
+import { URL } from "../globals";
 
-
-export default function Uploader(props){
-	const [imgs,setImgs] = useState(props.default||[]);
+export default function Uploader({ defaultImgs, onFile, clickable, rem }){
+	const [imgs,setImgs] = useState(defaultImgs||[]);
 	const fileInput = createRef();
 	const [alertMsg,setAlertMsg] = useState(null);
 	const [alertVisibile, setAlertVisibility] = useState(false);
 	
+
+	useEffect(()=>{
+		if(defaultImgs){
+			setImgs([...defaultImgs]);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	},[defaultImgs])
 
 	function fileChooser(){
 		fileInput.current.click();
@@ -35,7 +42,7 @@ export default function Uploader(props){
 						break;
 					}
 				}
-				props.onFile && props.onFile(is);
+				onFile && onFile(is);
 				return [...is]
 			}
 		});			
@@ -48,7 +55,7 @@ export default function Uploader(props){
 		let is = imgs;
 		is.splice(index,1);
 		setImgs(()=>{
-			props.onFile && props.onFile(is);
+			onFile && onFile(is);
 			return [...is];
 		});
 	}
@@ -63,19 +70,19 @@ export default function Uploader(props){
 					imgs.length!==0 && imgs.map((e,i)=>{
 						let img;
 						if(typeof e === "string"){
-							img = e;
+							img = URL+"images/"+e;
 						}
 						else{
 							img = new Blob([e]);
 							img = window.URL.createObjectURL(img);
 						}
 
-						if(props.clickable){
+						if(clickable){
 							return (
 								<div key={i} className={styles.img}>
 									<a href={img} target="_blank"  rel="noreferrer">
 										{
-											props.rem!==false && (
+											rem!==false && (
 												<IconButton className={styles.remove} onClick={removeImg}>
 													<Icon>close</Icon>
 												</IconButton>
@@ -94,7 +101,7 @@ export default function Uploader(props){
 						return (
 							<div key={i} className={styles.img}>
 								{
-									props.rem!==false && (
+									rem!==false && (
 										<IconButton className={styles.remove} onClick={removeImg}>
 											<Icon>close</Icon>
 										</IconButton>
@@ -111,7 +118,7 @@ export default function Uploader(props){
 					})
 				}
 				{
-					props.rem!==false && (
+					rem!==false && (
 						<Button className={styles.upload} variant="outlined" onClick={fileChooser}>
 							<Typography variant="h5">+</Typography>
 							<Typography variant="subtitle2">Upload Image</Typography>
@@ -119,7 +126,7 @@ export default function Uploader(props){
 					)
 				}
 				{
-					props.rem!==false && (
+					rem!==false && (
 						<input
 							type="file"
 							accept="image/*"
@@ -132,7 +139,7 @@ export default function Uploader(props){
 				}
 			</div>
 			{
-				props.rem!==false && (
+				rem!==false && (
 					<Alert
 						title = "Alert"
 						msg = {alertMsg}

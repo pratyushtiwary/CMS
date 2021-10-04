@@ -47,6 +47,12 @@ Session.login = (token=undefined,type="")=>{
 		if(data){
 			data = JSON.parse(data);
 		}
+		else{
+			data = {
+				token: false,
+				type: false
+			}
+		}
 		return data;
 	}
 }

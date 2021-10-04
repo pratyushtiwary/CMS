@@ -23,7 +23,7 @@ export default function Login(props){
 	const [logged,setLogged] = useState(false);
 
 	useEffect(()=>{
-		const loggedin = Session.login();
+		const loggedin = Session.login().token;
 		if(loggedin){
 			window.location.href = "/";
 		}else{

@@ -78,8 +78,40 @@ html,body{
 	position: relative;
 	display: grid;
 	align-items: center;
-	grid-template-columns: auto 50px;
 }
+
+.cont .loadMore{
+	position: relative;
+	margin: 10px 0;
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.cont .loadingNext{
+	display: grid;
+	margin: 10px 0;
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	grid-template-columns: auto auto;
+	align-items: center;
+	justify-content: center;
+}
+
+.cont .loadingNext .circle{
+	margin-right: 10px;
+}
+
+.dialog .input{
+	position: relative;
+	width: 100%;
+	margin-bottom: 10px;
+}
+
+.dialog .image{
+	margin: 10px 0;
+}
+
 
 .pending{
 	color: orange;
@@ -93,10 +125,6 @@ html,body{
 	color: red;
 }
 
-.cont .main .body .menu{
-	width: 45px;
-	height: 45px;
-}
 
 .skeleton .search,
 .skeleton .complaint{

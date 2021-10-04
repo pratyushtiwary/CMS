@@ -2,20 +2,26 @@ import { appName } from "../globals";
 import { Helmet } from "react-helmet";
 import Header from "../components/Header";
 import styles from "../styles/user/Complaints.module.css";
-import { Card, TextField, MenuItem, Menu, ListItemIcon, ListItemText, IconButton, Icon, CardActionArea, Typography } from "@material-ui/core"; 
+import { Button, Card, TextField, CardActionArea, Typography, CircularProgress } from "@material-ui/core"; 
 import first from "../assets/user/main/first.png";
 import { useState, useEffect } from "react";
 import Session from "../components/Session";
 import hit from "../components/hit";
 
 const limit = 10;
-let current = 0;
+let current = limit;
+let timer = null;
 
 export default function Complaints(props){
 	const [complaints,setComplaints] = useState(null);
-	const [anchorEl, setAnchorEl] = useState(null);
 	const [loaded,setLoaded] = useState(false);
 	const token = Session.login().token;
+	const [next,setNext] = useState(false);
+	const [searchVal,setSearchVal] = useState("");
+	const [loadingNext,setLoadingNext] = useState(false);
+	const [loadingMsg,setLoadingMsg] = useState(null);
+	const [searching,setSearching] = useState(false);
+	const [noComplaints,setNoComplaints] = useState(false);
 
 	useEffect(()=>{
 		hit("api/employee/getComplaints",{
@@ -28,6 +34,12 @@ export default function Complaints(props){
 					setLoaded(null)
 				}
 				else{
+
+					if(c.success.msg.count > limit){
+						setNext(true);
+						setLoadingNext(false);
+					}
+
 					setLoaded(true);
 					setComplaints(c.success.msg.complaints);
 				}
@@ -36,26 +48,113 @@ export default function Complaints(props){
 				setComplaints(null);
 				setLoaded(null)
 			}
-		})
-		setComplaints([{
-			"complaintId": Math.round(Math.random() * 1000),
-			"shortTitle": "Lorem ipsum excepteur non...",
-			"date": "24/08/2021",
-			"status": "pending"
-		}])
-	},[props]);
+		});
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	},[]);
 
-	const handleClose = (e) => {
-		document.querySelector("html").style.overflowY = "auto";
-		setAnchorEl(null);
-	};
+	function loadAllComplaints(){
+		hit("api/employee/getComplaints",{
+			"token": token,
+			"offset": "0"
+		}).then((c)=>{
+			if(c.success){
+				if(c.success.msg.count <= 0){
+					setComplaints(null);
+					setLoaded(null)
+				}
+				else{
 
-	function showMenu(e){
-		e.preventDefault();
-		document.querySelector("html").style.overflowY = "hidden";
-		setAnchorEl(e.currentTarget);
+					if(c.success.msg.count > limit){
+						setNext(true);
+						setLoadingNext(false);
+					}
+
+					setLoaded(true);
+					setComplaints(c.success.msg.complaints);
+				}
+			}
+			else{
+				setComplaints(null);
+				setLoaded(null)
+			}
+		});
 	}
 
+	function loadMore(){
+		setLoadingMsg("Loading");
+		setLoadingNext(true);
+		hit("api/employee/getComplaints",{
+			"token": token,
+			"offset": current
+		}).then((c)=>{
+			if(c.success){
+				const newComplaints = c.success.msg.complaints
+				const allComplaints = [...complaints,...newComplaints]
+				if(c.success.msg.count <= 0){
+					setNext(false);
+					setLoadingNext(false);
+				}
+				else{
+
+					if(c.success.msg.count > allComplaints.length){
+						setNext(true);
+						setLoadingNext(false);
+					}
+					else{
+						setNext(false);
+						setLoadingNext(false);
+					}
+
+					setLoaded(true);
+					setComplaints((c)=>[...c,...newComplaints]);
+				}
+
+				current += limit;
+			}
+		})
+	}
+
+	function doSearch(val){
+		setNoComplaints(false);
+		hit("api/employee/searchComplaint",{
+			"token": token,
+			"term": val
+		}).then((c)=>{
+			setNext(false);
+			setLoadingNext(false);
+			if(c.success){
+				const cs = c.success.msg
+				if(cs.length>0){
+					setSearching(false);
+					setComplaints([...cs]);
+				}
+				else{
+					setNoComplaints(true);
+				}
+			}
+			else{
+				setNoComplaints(true);
+			}
+		})
+	}
+
+	function search(e){
+		const val = e.currentTarget.value;
+		clearTimeout(timer);
+		timer = setTimeout(()=>{
+			if(!val.match(/^[\s]*$/)){
+				setNext(true);
+				setLoadingNext(true);
+				setSearching(true);
+				setLoadingMsg("Searching");
+				doSearch(val);
+			}
+			else{
+				loadAllComplaints()
+			}
+		},1500);
+		setSearchVal(val);
+	}
 
 	return (
 		<>
@@ -86,6 +185,23 @@ export default function Complaints(props){
 					</div>
 				) 
 			}
+			{
+				noComplaints && (
+					<div className={styles.notFound}>
+						<img 
+							src = {first}
+							alt = "No Complaints Found Illustration"
+							width = "300px"
+							heigth = "300px"
+							className = {styles.img}
+						/>
+						<div className={styles.msg}>
+							<Typography variant="h5" className={styles.title}>No Complaints Found</Typography>
+							<Typography variant="subtitle2" className={styles.subtitle}>Try rephrasing the search query.</Typography>
+						</div>
+					</div>
+				) 
+			}
 			<div className={styles.cont}>
 				{
 					complaints && loaded===true && (
@@ -94,21 +210,20 @@ export default function Complaints(props){
 								placeholder = "Search..."
 								variant = "outlined"
 								className={styles.searchInput}
+								value={searchVal}
+								onChange={search}
 							/>
 						</div>
 					)
 				}
 				{
-					complaints && loaded===true && complaints.map((e,i)=>(
+					complaints && loaded===true && !searching && complaints.map((e,i)=>(
 						<Card variant="outlined" key={i} className={styles.complaint} title="Click to view complaint">
 							<CardActionArea className={styles.main} href={"/complaint/"+e.complaintId}>
 								<div className={styles.all}>
 									<Typography variant="subtitle2">Complaint id :- {e.complaintId}</Typography>
 									<div className={styles.body}>
 										<Typography variant="h5" className={styles.title}>{e.shortTitle}</Typography>
-										<IconButton className={styles.menu} onClick={showMenu}>
-											<Icon>more_vert</Icon>
-										</IconButton>
 									</div>
 									<div className={styles.meta}>
 										<Typography variant="subtitle2">{e.date}</Typography>
@@ -118,6 +233,19 @@ export default function Complaints(props){
 							</CardActionArea>
 						</Card>
 					))
+				}
+				{
+					loaded === true && next && !loadingNext && (
+						<Button className={styles.loadMore} variant="outlined" color="primary" onClick={loadMore}>Load More</Button>
+					)
+				}
+				{
+					loaded === true && next && loadingNext && (
+						<div className={styles.loadingNext}>
+							<CircularProgress size={24} color="primary" className={styles.circle} />
+							<Typography variant="subtitle1" className={styles.txt}>{loadingMsg}</Typography>
+						</div>
+					)
 				}
 			</div>
 			{
@@ -129,25 +257,6 @@ export default function Complaints(props){
 					</div>
 				)
 			}
-			<Menu
-				anchorEl={anchorEl}
-				open={Boolean(anchorEl)}
-				onClose={handleClose}
-				keepMounted
-			>
-				<MenuItem onClick={handleClose}>
-					<ListItemIcon><Icon>edit</Icon></ListItemIcon>
-					<ListItemText>Update</ListItemText>
-				</MenuItem>
-				<MenuItem onClick={handleClose}>
-					<ListItemIcon><Icon>restart_alt</Icon></ListItemIcon>
-					<ListItemText>Repost</ListItemText>
-				</MenuItem>
-				<MenuItem onClick={handleClose}>
-					<ListItemIcon><Icon>delete</Icon></ListItemIcon>
-					<ListItemText>Delete</ListItemText>
-				</MenuItem>
-			</Menu>
 		</>
 	)
 }

@@ -38,7 +38,7 @@ function App() {
       "register": 1,
       "forget_password": 1
     }
-    if(loggedin){
+    if(loggedin.token){
       if(loggedin.type==="employee"){
         setContent(<User/>)
       }

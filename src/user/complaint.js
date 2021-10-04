@@ -4,11 +4,17 @@ import Dialog from "../components/Dialog";
 import { Helmet } from "react-helmet";
 import { appName } from "../globals";
 import first from "../assets/user/main/first.png";
-import { Typography, TextField, Button, ListItemText, ListItemIcon, Icon } from "@material-ui/core";
+import { Typography, TextField, Button, ListItemText, ListItemIcon, Icon, FormControl, Select, InputLabel, MenuItem } from "@material-ui/core";
 import styles from "../styles/user/Complaint.module.css";
 import Alert from "../components/Alert";
 import Uploader from "../components/Uploader";
+import hit from "../components/hit";
+import Session from "../components/Session";
+import Loading from "../components/Loading";
+import { Error, Success } from "../components/Message";
 
+const token = Session.login().token
+let err, suc;
 
 export default function Complaint(props){
 	const id = props.match.params.id;
@@ -17,25 +23,73 @@ export default function Complaint(props){
 	const [dialogTitle,setDialogTitle] = useState("Update");
 	const [val,setVal] = useState("");
 	const [openAlert,setOpenAlert] = useState(false);
+	const [loaded,setLoaded] = useState(false);
+	const [errorMsg,setErrorMsg] = useState(null);
+	const [successMsg,setSuccessMsg] = useState(null);
+	const [imgs,setImgs] = useState([]);
+	const [loading,setLoading] = useState(null);
+	const [ids,setIds] = useState([0]);
+	const [departments,setDepartments] = useState(["-"]);
+	const [department,setDepartment] = useState(0);
+
 
 	useEffect(()=>{
-		const status = ["pending","error","resolved"][Math.round(Math.random()*1000) % 3];
-		let text = "Pariatur culpa aliqua magna in esse est amet aute cillum sed elit minim sit enim do exercitation irure voluptate occaecat et anim laboris magna labore esse in irure dolore sunt amet culpa tempor laborum culpa do dolor aliquip sed nulla est mollit pariatur magna consectetur quis voluptate dolore nulla in exercitation ut commodo ea ut consectetur mollit enim labore aliqua ex in in proident nisi quis id proident proident tempor consequat exercitation aliqua dolore cupidatat irure irure ut duis pariatur labore amet exercitation laboris nostrud ex et nostrud excepteur adipisicing est dolor anim quis adipisicing labore eu occaecat aliquip esse pariatur dolore nostrud amet laborum reprehenderit et commodo amet adipisicing qui sit voluptate ea reprehenderit anim reprehenderit fugiat sed proident culpa amet pariatur aliqua irure in dolore ullamco elit pariatur ex consequat consectetur sunt veniam ut nostrud ea irure id magna dolor in laboris excepteur velit minim adipisicing aliquip voluptate qui ad id ut aliquip sint deserunt est amet minim laborum dolore sit anim magna esse fugiat occaecat id ut mollit est non consectetur id tempor excepteur nisi sint minim ut ut ut irure sit sunt occaecat culpa consequat."
-		if(id<=1000){
-			setComplaint({
-				"longText": text,
-				"date": "24/08/2021",
-				"status": status
-			});
-			setVal(text);
-		}
-		else{
-			setComplaint(1);
-		}
+		clearTimeout(suc)
+		suc = setTimeout(()=>{
+			setSuccessMsg(null);
+		},4500);
+	},[successMsg])
+
+	useEffect(()=>{
+		clearTimeout(err)
+		err = setTimeout(()=>{
+			setErrorMsg(null);
+		},4500);
+	},[errorMsg])
+
+	useEffect(()=>{		
+		hit("api/fetch/departments",{
+			"token": token
+		}).then((c)=>{
+			if(c.success.msg){
+				const is = [];
+				const names = [];
+				const res = c.success.msg.departments;
+				res.forEach((e,i)=>{
+					is.push(e.id);
+					names.push(e.name);
+				});
+				setIds((e)=>[...e,...is]);
+				setDepartments((e)=>[...e,...names]);
+			}
+		})
+		hit("api/employee/getComplaint",{
+			"token": token,
+			"cid": id
+		}).then((c)=>{
+			if(c.success){
+				setLoaded(true);
+				setComplaint(c.success.msg);
+				setImgs([...c.success.msg.imgs]);
+			}
+			else{
+				setLoaded(null);
+				setComplaint(1);
+			}
+		})
+		// eslint-disable-next-line react-hooks/exhaustive-deps
 	},[id]);
+
+	const updateInput = (func) => (e)=>{
+		func(e.target.value);
+	}
 
 	function changeTextField(e){
 		setVal(e.target.value);
+	}
+
+	function updateFile(e){
+		setImgs([...e]);
 	}
 
 	function del(){
@@ -46,6 +100,18 @@ export default function Complaint(props){
 	function update(){
 		setVal(complaint.longText);
 		setDialogTitle("Update");
+		let dept = complaint.dept;
+		if(typeof dept === "object"){
+			dept = 0;
+		}
+		let index = 0;
+		for(let i=0;i<ids.length;i++){
+			if(parseInt(ids[i])===parseInt(dept)){
+				index = i;
+				break;
+			}
+		}
+		setDepartment(index);
 		document.querySelector("html").style.overflow = "hidden";
 		setOpenDialog(true);
 	}
@@ -57,23 +123,120 @@ export default function Complaint(props){
 	}
 
 	function doUpdate(){
-		console.log("Update")
 		dismiss();
+		setLoading("Updating...");
+		const formData = new window.FormData();
+		const body = val;
+		const oldImgs = [];
+		const cid = id;
+		let dept = ids[department];
+		formData.append("cid",cid);
+		formData.append("body",body);
+		formData.append("dept",dept);
+		formData.append("token",token);
+		imgs.forEach((e,i)=>{
+			if(typeof e === "string"){
+				oldImgs.push(e);
+			}
+			else{
+				formData.append("file"+i,e);
+			}
+		});
+		formData.append("oldImgs",JSON.stringify(oldImgs));
+		hit("api/employee/updateComplaint",formData,true)
+		.then((c)=>{
+			setLoading(null);
+			setLoaded(false);
+			if(c.success){
+				setSuccessMsg("Complaint Updated Successfully!");
+				hit("api/employee/getComplaint",{
+					"token": token,
+					"cid": id
+				}).then((c)=>{
+					if(c.success){
+						setLoaded(true);
+						setComplaint(c.success.msg);
+					}
+					else{
+						setLoaded(null);
+						setComplaint(1);
+					}
+				});
+			}
+			else{
+				setErrorMsg(c.error.msg);
+			}
+		})
 	}
 
 	function doRepost(){
-		console.log("Repost")
 		dismiss();
+		setLoading("Reposting...");
+		const formData = new window.FormData();
+		const body = val;
+		const oldImgs = [];
+		const cid = id;
+		let dept = ids[department];
+		formData.append("cid",cid);
+		formData.append("body",body);
+		formData.append("dept",dept);
+		formData.append("token",token);
+		imgs.forEach((e,i)=>{
+			if(typeof e === "string"){
+				oldImgs.push(e);
+			}
+			else{
+				formData.append("file"+i,e);
+			}
+		});
+		formData.append("oldImgs",JSON.stringify(oldImgs));
+		hit("api/employee/repostComplaint",formData,true)
+		.then((c)=>{
+			setLoading(null);
+			if(c.success){
+				setSuccessMsg("New Complaint Opened Successfully!");
+			}
+			else{
+				setErrorMsg(c.error.msg);
+			}
+		})
 	}
 
 	function doDelete(){
-		console.log("Delete")
 		dismiss();
+		setLoading("Deleting...");
+		hit("api/employee/deleteComplaint",{
+			"token": token,
+			"cid": id
+		}).then((c)=>{
+			setLoading(null);
+			setSuccessMsg(null);
+			setErrorMsg(null);
+			if(c.success){
+				setSuccessMsg(c.success.msg);
+				window.location.href = "/complaints";
+			}
+			else{
+				setErrorMsg(c.error.msg);
+			}
+		})
 	}
 
 	function repost(){
 		setVal(complaint.longText);
 		setDialogTitle("Repost");
+		let dept = complaint.dept;
+		if(typeof dept === "object"){
+			dept = 0;
+		}
+		let index = 0;
+		for(let i=0;i<ids.length;i++){
+			if(parseInt(ids[i])===parseInt(dept)){
+				index = i;
+				break;
+			}
+		}
+		setDepartment(index);
 		document.querySelector("html").style.overflow = "hidden";
 		setOpenDialog(true);
 	}
@@ -90,8 +253,10 @@ export default function Complaint(props){
 				icons = {["home","segment","campaign","settings"]}
 			/>
 			<div className={styles.cont}>
+				<Success open={Boolean(successMsg)} message={successMsg} />
+				<Error open={Boolean(errorMsg)} message={errorMsg} />
 				{
-					complaint!==1 && complaint && (
+					complaint!==1 && loaded===true && complaint && (
 						<>
 							<div className={styles.complaint} style={{minHeight:"80vh"}}>
 								<div className={styles.main+" "+styles.first+" "+styles.inline}>
@@ -103,15 +268,22 @@ export default function Complaint(props){
 									<Typography variant="subtitle1">{complaint.longText}</Typography>
 								</div>
 								<div className={styles.main}>
-									<Typography variant="subtitle2" className={styles.title}>Images :-</Typography>
-									<div className={styles.image}>
-										{
-											<Uploader 
-												default={["https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=webp&v=1530129081"]}
-												rem={false}
-											/>
-										}
-									</div>
+									{
+										complaint.imgs.length > 0 && (
+											<>
+												<Typography variant="subtitle2" className={styles.title}>Images :-</Typography>
+												<div className={styles.image}>
+													{
+														<Uploader 
+															defaultImgs={complaint.imgs}
+															clickable
+															rem={false}
+														/>
+													}
+												</div>
+											</>
+										)
+									}
 								</div>
 								<div className={styles.main+" "+styles.inline}>
 									<Typography variant="subtitle2" className={styles.title}>Complaint Date :- </Typography>
@@ -163,10 +335,29 @@ export default function Complaint(props){
 										onChange={changeTextField}
 										className={styles.input}
 									/>
+									<FormControl variant="outlined" className={styles.input}>
+								        <InputLabel htmlFor="departmentType" variant="outlined">Department</InputLabel>
+								        <Select
+								          id = "departmentType"
+								          color="primary"
+								          value={department}
+								          variant="outlined"
+								          label="Department"
+								          onChange={updateInput(setDepartment)}
+										  required
+								        >
+								        {
+								        	departments.map((e,i)=>(
+										          <MenuItem value={i} key={i}>{e}</MenuItem>
+								        	))
+								        }
+								        </Select>
+								    </FormControl>
 									<div className={styles.image}>
 										<Typography variant="subtitle2" className={styles.title}>Images</Typography>
 										<Uploader 
-											default={["https://cdn.shopify.com/s/files/1/0533/2089/files/placeholder-images-image_large.png?format=webp&v=1530129081"]}
+											defaultImgs={complaint.imgs}
+											onFile={updateFile}
 										/>
 									</div>
 								</div>
@@ -185,22 +376,36 @@ export default function Complaint(props){
 					)
 				}
 				{
-						complaint===1 && (
-							<div className={styles.notFound}>
-								<img 
-									src = {first}
-									alt = "No Complaints Found Illustration"
-									width = "300px"
-									heigth = "300px"
-									className = {styles.img}
-								/>
-								<div className={styles.msg}>
-									<Typography variant="h5" className={styles.title}>Complaint {id} not found</Typography>
-								</div>
+					complaint===1 && loaded===null && (
+						<div className={styles.notFound}>
+							<img 
+								src = {first}
+								alt = "No Complaints Found Illustration"
+								width = "300px"
+								heigth = "300px"
+								className = {styles.img}
+							/>
+							<div className={styles.msg}>
+								<Typography variant="h5" className={styles.title}>Complaint {id} not found</Typography>
 							</div>
-						) 
-					}
+						</div>
+					) 
+				}
+				{
+					loaded===false && (
+						<div className={styles.skeleton}>
+							<div className={styles.id}></div>
+							<div className={styles.desc}></div>
+							<div className={styles.date}></div>
+							<div className={styles.status}></div>
+						</div>
+					)
+				}	
 			</div>
+			<Loading
+				open = {Boolean(loading)}
+				msg = {loading}
+			/>
 		</>
 	)
 }
