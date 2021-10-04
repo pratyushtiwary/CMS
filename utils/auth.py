@@ -47,8 +47,8 @@ def verifyToken(token:str):
 
 		now = datetime.now().timestamp()
 
-		if now > token.get("expiry",0):
-			return False
+		# if now > token.get("expiry",0):
+		# 	return False
 		return True
 	except:
 		return False

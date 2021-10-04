@@ -2,6 +2,7 @@ from conn import DB
 from utils.getset import GetSet
 from utils.encryption import password_hash,password_verify
 from utils.msg import error
+from utils.validate import exists
 from utils.sender import sendOTP, sendMsg
 
 class Employee(DB,GetSet):
@@ -123,3 +124,54 @@ class Employee(DB,GetSet):
 			return False
 		else:
 			return error("USER_ALREADY_EXISTS")
+
+	def setDetail(self,args):
+		if exists(["id","name","email","phone","roomNo","accomodation","notify"],args):
+			conn = self.conn.cursor()
+			id, name, email, phone, roomNo, accomodation, notify = args["id"], args["name"], args["email"], args["phone"], args["roomNo"], args["accomodation"], args["notify"]
+			try:
+				sql = f"""
+						UPDATE {self.tableName} 
+						SET `name` = %s, `email` = %s, `phone` = %s, `roomNo` = %s, `accomodation` = %s, `notify` = %s
+						WHERE `id` = %s
+				"""
+				vals = (name,email,phone,roomNo,accomodation,notify,id)
+				conn.execute(sql,vals)
+				self.conn.commit()
+				conn.close()
+
+				return True
+			except Exception as e:
+				self.conn.rollback()
+				return error("SERVER_ERROR")
+		return error("SERVER_ERROR")
+
+	def fetchDetail(self,id):
+		conn = self.conn.cursor()
+		try:
+			eid = id
+			sql = f"""
+					SELECT `name`,`email`,`phone`,`roomNo`,`accomodation`,`notify`
+					FROM `{self.tableName}`
+					WHERE `id` = %s
+			"""
+			vals = (eid,)
+			conn.execute(sql,vals)
+
+			res = conn.fetchone()
+			conn.close()
+			if res:
+				final = {
+					"name": res[0],
+					"email": res[1],
+					"phone": res[2],
+					"roomNo": res[3],
+					"accomodation": res[4],
+					"notify": res[5]
+				}
+				return (True,final)
+			else:
+				return (False,error("NO_USER_FOUND"))
+		except Exception as e:
+			self.conn.rollback()
+			return (False,error("SERVER_ERROR"))

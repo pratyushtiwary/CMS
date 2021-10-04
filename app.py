@@ -15,7 +15,7 @@ CORS(app)
 
 app.register_blueprint(api,url_prefix='/api')
 
-@app.route("/image/<path:path>")
+@app.route("/images/<path:path>")
 def showImage(path):
 	return send_from_directory(globals.save_path,path)
 

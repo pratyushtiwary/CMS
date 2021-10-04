@@ -38,11 +38,14 @@ def register(req):
 				"code": otp	
 			})
 
-			res = obj.register(args)
-			if res==True:
-				return success("User registered successfully")
+			if verfotp==True:
+				res = obj.register(args)
+				if res==True:
+					return success("User registered successfully")
+				else:
+					return res
 			else:
-				return res
+				return verfotp
 
 		
 

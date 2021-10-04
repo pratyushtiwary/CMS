@@ -26,6 +26,11 @@ from api.employee.loadAnnouncements import loadAnnouncements
 from api.employee.getComplaints import getComplaints
 from api.employee.repostComplaint import repostComplaint
 from api.employee.updateComplaint import updateComplaint
+from api.employee.getComplaint import getComplaint
+from api.employee.deleteComplaint import deleteComplaint
+from api.employee.fetchDetails import fetchDetails
+from api.employee.setDetails import setDetails
+from api.employee.searchComplaint import searchComplaint
 
 
 
@@ -145,4 +150,49 @@ def repostcomplaint():
 def updatecomplaint():
 	if request.method == "POST":
 		return updateComplaint()
+	return abort(405)
+
+@api.route("/employee/getComplaint",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@auth
+def getcomplaint():
+	if request.method == "POST":
+		req = request.json
+		return getComplaint(req)
+	return abort(405)
+
+@api.route("/employee/deleteComplaint",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@auth
+def deletecomplaint():
+	if request.method == "POST":
+		req = request.json
+		return deleteComplaint(req)
+	return abort(405)
+
+@api.route("/employee/fetchDetails",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@auth
+def fetchdetails():
+	if request.method == "POST":
+		req = request.json
+		return fetchDetails(req)
+	return abort(405)
+
+@api.route("/employee/setDetails",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@auth
+def setdetails():
+	if request.method == "POST":
+		req = request.json
+		return setDetails(req)
+	return abort(405)
+
+@api.route("/employee/searchComplaint",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@auth
+def searchcomplaint():
+	if request.method == "POST":
+		req = request.json
+		return searchComplaint(req)
 	return abort(405)

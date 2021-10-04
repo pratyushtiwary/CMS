@@ -11,7 +11,6 @@ def newComplaint():
 		token, body, dept = req["token"], req["body"],req["dept"]
 		eid = viewToken(token)["id"]
 		complaint = Complaint()
-		print("Hi")
 		status = complaint.create({
 			"eid": eid,
 			"body": body,
