@@ -4,14 +4,12 @@ from utils.msg import error, success
 from models.complaint import Complaint
 from utils.auth import viewToken
 
-def getComplaint(req):
-	if exists(["cid"],req):
-		eid = viewToken(req["token"])["id"]
+def getComplaints(req):
+	if exists(["token","offset"],req):
+		token = req["token"]
+		offset = int(req["offset"])
 		complaint = Complaint()
-		cid = req["cid"]
-		status,res = complaint.fetchoneEmployeeComplaint(eid,cid)
-		if status==True:
-			return success(res)
-		else:
-			return res
+		vid = viewToken(token)["id"]
+		data = complaint.fetchVendorComplaints(vid,offset)
+		return success(data)
 	return Response(response=error("INVALID_REQUEST"),status=400)	

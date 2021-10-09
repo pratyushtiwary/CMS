@@ -20,18 +20,13 @@ from api.fetch.latestAnnouncement import latestAnnouncement
 # ---------------
 # |  Employees  |
 # ---------------
-from api.employee.newComplaint import newComplaint
-from api.employee.getComplaintsByStatus import getComplaintsByStatus
-from api.employee.loadAnnouncements import loadAnnouncements
-from api.employee.getComplaints import getComplaints
-from api.employee.repostComplaint import repostComplaint
-from api.employee.updateComplaint import updateComplaint
-from api.employee.getComplaint import getComplaint
-from api.employee.deleteComplaint import deleteComplaint
-from api.employee.fetchDetails import fetchDetails
-from api.employee.setDetails import setDetails
-from api.employee.searchComplaint import searchComplaint
+import api.employee as Employee
 
+
+# ---------------
+# |  Vendors    |
+# ---------------
+import api.vendor as Vendor
 
 
 api = Blueprint("api",__name__,url_prefix="/api")
@@ -103,96 +98,156 @@ def latestannouncement():
 @api.route("/employee/newComplaint",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
 @auth
-def newcomplaint():
+def employee_newcomplaint():
 	if request.method == "POST":
-		return newComplaint()
+		return Employee.newComplaint()
 	return abort(405)
 
 
 @api.route("/employee/getComplaintsByStatus",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
 @auth
-def getcomplaintsbystatus():
+def employee_getcomplaintsbystatus():
 	if request.method == "POST":
 		req = request.json
-		return getComplaintsByStatus(req)
+		return Employee.getComplaintsByStatus(req)
 	return abort(405)
 
 @api.route("/employee/loadAnnouncements",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
 @auth
-def loadannouncements():
+def employee_loadannouncements():
 	if request.method == "POST":
 		req = request.json
-		return loadAnnouncements(req)
+		return Employee.loadAnnouncements(req)
 	return abort(405)
 
 @api.route("/employee/getComplaints",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
 @auth
-def getcomplaints():
+def employee_getcomplaints():
 	if request.method == "POST":
 		req = request.json
-		return getComplaints(req)
+		return Employee.getComplaints(req)
 	return abort(405)
 
 @api.route("/employee/repostComplaint",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
 @auth
-def repostcomplaint():
+def employee_repostcomplaint():
 	if request.method == "POST":
-		return repostComplaint()
+		return Employee.repostComplaint()
 	return abort(405)
 
 @api.route("/employee/updateComplaint",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
 @auth
-def updatecomplaint():
+def employee_updatecomplaint():
 	if request.method == "POST":
-		return updateComplaint()
+		return Employee.updateComplaint()
 	return abort(405)
 
 @api.route("/employee/getComplaint",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
 @auth
-def getcomplaint():
+def employee_getcomplaint():
 	if request.method == "POST":
 		req = request.json
-		return getComplaint(req)
+		return Employee.getComplaint(req)
 	return abort(405)
 
 @api.route("/employee/deleteComplaint",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
 @auth
-def deletecomplaint():
+def employee_deletecomplaint():
 	if request.method == "POST":
 		req = request.json
-		return deleteComplaint(req)
+		return Employee.deleteComplaint(req)
 	return abort(405)
 
 @api.route("/employee/fetchDetails",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
 @auth
-def fetchdetails():
+def employee_fetchdetails():
 	if request.method == "POST":
 		req = request.json
-		return fetchDetails(req)
+		return Employee.fetchDetails(req)
 	return abort(405)
 
 @api.route("/employee/setDetails",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
 @auth
-def setdetails():
+def employee_setdetails():
 	if request.method == "POST":
 		req = request.json
-		return setDetails(req)
+		return Employee.setDetails(req)
 	return abort(405)
 
 @api.route("/employee/searchComplaint",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
 @auth
-def searchcomplaint():
+def employee_searchcomplaint():
 	if request.method == "POST":
 		req = request.json
-		return searchComplaint(req)
+		return Employee.searchComplaint(req)
+	return abort(405)
+
+
+
+# ---------------
+# |  Vendors    |
+# ---------------
+
+@api.route("/vendor/getComplaints",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@auth
+def vendor_getcomplaints():
+	if request.method == "POST":
+		req = request.json
+		return Vendor.getComplaints(req)
+	return abort(405)
+
+@api.route("/vendor/loadAnnouncements",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@auth
+def vendor_loadannouncements():
+	if request.method == "POST":
+		req = request.json
+		return Vendor.loadAnnouncements(req)
+	return abort(405)
+
+@api.route("/vendor/searchComplaint",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@auth
+def vendor_searchcomplaint():
+	if request.method == "POST":
+		req = request.json
+		return Vendor.searchComplaint(req)
+	return abort(405)
+
+@api.route("/vendor/getComplaint",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@auth
+def vendor_getcomplaint():
+	if request.method == "POST":
+		req = request.json
+		return Vendor.getComplaint(req)
+	return abort(405)
+
+@api.route("/vendor/changePriority",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@auth
+def vendor_changepriority():
+	if request.method == "POST":
+		req = request.json
+		return Vendor.changePriority(req)
+	return abort(405)
+
+@api.route("/vendor/changeStatus",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@auth
+def vendor_changestatus():
+	if request.method == "POST":
+		req = request.json
+		return Vendor.changeStatus(req)
 	return abort(405)

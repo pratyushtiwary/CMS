@@ -6,10 +6,10 @@ from utils.auth import viewToken
 
 def getComplaint(req):
 	if exists(["cid"],req):
-		eid = viewToken(req["token"])["id"]
+		vid = viewToken(req["token"])["id"]
 		complaint = Complaint()
 		cid = req["cid"]
-		status,res = complaint.fetchoneEmployeeComplaint(eid,cid)
+		status,res = complaint.fetchoneVendorComplaint(vid,cid)
 		if status==True:
 			return success(res)
 		else:

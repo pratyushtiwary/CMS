@@ -10,6 +10,6 @@ def getComplaints(req):
 		offset = int(req["offset"])
 		complaint = Complaint()
 		eid = viewToken(token)["id"]
-		data = complaint.fetch(eid,offset)
+		data = complaint.fetchEmployeeComplaints(eid,offset)
 		return success(data)
 	return Response(response=error("INVALID_REQUEST"),status=400)	

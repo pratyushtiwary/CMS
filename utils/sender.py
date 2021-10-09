@@ -13,6 +13,16 @@ notifications = {
 		Hey, this is to notify you that someone(hopefully you) have opened a new complaint
 		<br><br>
 		Now relax and chill we'll keep you updated with the status of this complaint
+	""",
+	"ERROR_STATUS": """
+		Hey, looks like there is some error in your complaint.
+		<br><br>
+		<a href="%s/complaint/%s">Click here to view your complaint.</a>
+	""",
+	"RESOLVED_STATUS": """
+		Hey, your complaint has been resolved.
+		<br><br>
+		<a href="%s/complaint/%s">Click here to view your complaint.</a>
 	"""
 }
 
@@ -142,6 +152,10 @@ def sendMsg(args):
 			content = notifications.get(code)
 		else:
 			content = code
+
+
+		if args["extras"]:
+			content = content%args["extras"]
 		msg.set_content(f"""
 			<!DOCTYPE html>
 			<html>

@@ -4,14 +4,15 @@ from utils.validate import exists
 from utils.msg import error, success
 from models.complaint import Complaint
 from utils.auth import viewToken
+import time
 
 def searchComplaint(req):
 	if exists(["term"],req):
 		term = req["term"]
-		eid = viewToken(req["token"])["id"]
+		vid = viewToken(req["token"])["id"]
 		complaint = Complaint()
 
-		complaints = complaint.searchEmployeeComplaint(eid,term)
+		complaints = complaint.searchVendorComplaint(vid,term)
 
 		return success(complaints)
 	return Response(response=error("INVALID_REQUEST"),status=400)	
