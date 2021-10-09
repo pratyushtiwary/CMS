@@ -41,7 +41,7 @@
 .cont .complaints{
 	display: grid;
 	margin-top: 10px;
-	grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+	grid-template-columns: repeat(auto-fill,minmax(300px,1fr));
 }
 
 .cont .complaints .main{
@@ -98,4 +98,70 @@
 
 .cont .complaints .main.mid{
 	border: 1px solid orange !important;
+}
+
+.cont .loadMore{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.cont .searching{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	width: fit-content;
+	display: grid;
+	align-items: center;
+	grid-template-columns: auto 1fr;
+}
+
+.cont .searching .circle{
+	margin-right: 10px;
+}
+
+
+.skeleton{
+	position: relative;
+	width: 100%;
+}
+
+.skeleton div{
+	background: #afafaf;
+	border-radius: 5px;
+	padding: 10px;
+}
+
+.skeleton .search{
+	height: 25px;
+}
+
+.skeleton .complaints{
+	background: transparent !important;
+}
+
+.skeleton .complaints .complaint{
+	margin: 10px;
+	height: 125px;
+}
+
+.skeleton .loadMore{
+	height: 25px;
+	width: 125px;
+}
+
+.skeleton{
+	animation: skeletonAnimate 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonAnimate{
+	0%{
+		opacity: 0.25;
+	}
+	50%{
+		opacity: 1;
+	}
+	100%{
+		opacity: 0.25;
+	}
 }

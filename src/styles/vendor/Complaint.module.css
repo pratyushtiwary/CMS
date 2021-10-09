@@ -27,7 +27,8 @@
 	max-height: 350px;
 }
 
-.cont .complaint{
+.cont .complaint,
+.cont .skeleton{
 	position: relative;
 	left: 50%;
 	transform: translate(-50%);
@@ -80,4 +81,48 @@
 
 .statusDialog .input{
 	margin: 10px 0;
+}
+
+
+.skeleton .block,
+.skeleton .subheading,
+.skeleton .desc{
+	height: 15px;
+	padding: 10px;
+	border-radius: 10px;
+	width: 100%;
+	background: #afafaf;
+	margin: 5px 0;
+}
+
+.skeleton .subheading{
+	height: 10px;
+	width: 100px;
+}
+
+.skeleton .desc{
+	height: 25px;
+}
+
+.skeleton .img{
+	width: 75px;
+	height: 75px;
+	border-radius: 10px;
+	background: #afafaf;
+}
+
+.skeleton{
+	animation: skeletonAnimate 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonAnimate{
+	0%{
+		opacity: 0.25;
+	}
+	50%{
+		opacity: 1;
+	}
+	100%{
+		opacity: 0.25;
+	}
 }

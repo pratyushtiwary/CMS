@@ -293,6 +293,25 @@ export default function Complaint(props){
 									<Typography variant="subtitle2" className={styles.title}>Complaint Status :- </Typography>
 									<Typography variant="subtitle1" className={styles.status+" "+styles[complaint.status]}>{complaint.status}</Typography>
 								</div>
+								{
+									complaint.status === "resolved" && complaint.msg && (
+										<div className={styles.main+" "+styles.inline}>
+											<Typography variant="subtitle2" className={styles.title}>Resolution :- </Typography>
+											<Typography variant="subtitle1">{complaint.msg}</Typography>
+										</div>
+
+									)
+								}
+								{
+									complaint.status === "error" && complaint.msg && (
+										<div className={styles.main+" "+styles.inline}>
+											<Typography variant="subtitle2" className={styles.title}>Error :- </Typography>
+											<Typography variant="subtitle1">{complaint.msg}</Typography>
+										</div>
+
+									)
+								}
+
 								<div className={styles.actions}>
 									{
 										complaint.status !== "resolved" && (

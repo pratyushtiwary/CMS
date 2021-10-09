@@ -1,13 +1,13 @@
 import styles from "../styles/components/Message.module.css";
 import { Typography, Icon } from "@material-ui/core";
 
-export function Error({ open, message }){
+export function Error({ open, message, width }){
 
 	return (
 		<>
 			{
 				open && (
-					<div className={styles.error}>
+					<div className={styles.error+" "+(width&&styles.fitWidth)}>
 						<Icon className={styles.icon}>error</Icon>
 						<Typography variant="subtitle1" className={styles.message}>{message}</Typography>
 					</div>
@@ -18,12 +18,12 @@ export function Error({ open, message }){
 
 }
 
-export function Success({ open, message }){
+export function Success({ open, message, width }){
 	return (
 		<>
 			{
 				open && (
-					<div className={styles.success}>
+					<div className={styles.success+" "+(width&&styles.fitWidth)}>
 						<Icon className={styles.icon}>check_circle</Icon>
 						<Typography variant="subtitle1" className={styles.message}>{message}</Typography>
 					</div>
