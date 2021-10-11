@@ -17,7 +17,8 @@ eCode = {
 	"UNAUTH_REQUEST": "Unauthorized Request",
 	"NO_ANNOUNCEMENT_FOUND": "Unable to find any announcement :(",
 	"MAX_REPOST_LIMIT_REACHED": "Hey looks like you already have reposted this complaint 2 times",
-	"NO_COMPLAINT_FOUND": "No complaint found with that id"
+	"NO_COMPLAINT_FOUND": "No complaint found with that id",
+	"INVALID_RIGHTS": "You don't have sufficient rights!"
 }
 
 def error(code: str):

@@ -6,7 +6,7 @@ from api.sendotp import sendotp
 from utils.validate import exists
 from models.employee import Employee
 from flask_cors import CORS, cross_origin
-from utils.auth import auth
+from utils.auth import auth, authN
 from globals import url
 
 
@@ -24,9 +24,14 @@ import api.employee as Employee
 
 
 # ---------------
-# |  Vendors    |
+# |   Vendors   |
 # ---------------
 import api.vendor as Vendor
+
+# ---------------
+# |   Admin     |
+# ---------------
+import api.admin as Admin
 
 
 api = Blueprint("api",__name__,url_prefix="/api")
@@ -97,7 +102,7 @@ def latestannouncement():
 
 @api.route("/employee/newComplaint",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="employee")
 def employee_newcomplaint():
 	if request.method == "POST":
 		return Employee.newComplaint()
@@ -106,7 +111,7 @@ def employee_newcomplaint():
 
 @api.route("/employee/getComplaintsByStatus",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="employee")
 def employee_getcomplaintsbystatus():
 	if request.method == "POST":
 		req = request.json
@@ -115,7 +120,7 @@ def employee_getcomplaintsbystatus():
 
 @api.route("/employee/loadAnnouncements",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="employee")
 def employee_loadannouncements():
 	if request.method == "POST":
 		req = request.json
@@ -124,7 +129,7 @@ def employee_loadannouncements():
 
 @api.route("/employee/getComplaints",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="employee")
 def employee_getcomplaints():
 	if request.method == "POST":
 		req = request.json
@@ -133,7 +138,7 @@ def employee_getcomplaints():
 
 @api.route("/employee/repostComplaint",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="employee")
 def employee_repostcomplaint():
 	if request.method == "POST":
 		return Employee.repostComplaint()
@@ -141,7 +146,7 @@ def employee_repostcomplaint():
 
 @api.route("/employee/updateComplaint",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="employee")
 def employee_updatecomplaint():
 	if request.method == "POST":
 		return Employee.updateComplaint()
@@ -149,7 +154,7 @@ def employee_updatecomplaint():
 
 @api.route("/employee/getComplaint",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="employee")
 def employee_getcomplaint():
 	if request.method == "POST":
 		req = request.json
@@ -158,7 +163,7 @@ def employee_getcomplaint():
 
 @api.route("/employee/deleteComplaint",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="employee")
 def employee_deletecomplaint():
 	if request.method == "POST":
 		req = request.json
@@ -167,7 +172,7 @@ def employee_deletecomplaint():
 
 @api.route("/employee/fetchDetails",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="employee")
 def employee_fetchdetails():
 	if request.method == "POST":
 		req = request.json
@@ -176,7 +181,7 @@ def employee_fetchdetails():
 
 @api.route("/employee/setDetails",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="employee")
 def employee_setdetails():
 	if request.method == "POST":
 		req = request.json
@@ -185,7 +190,7 @@ def employee_setdetails():
 
 @api.route("/employee/searchComplaint",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="employee")
 def employee_searchcomplaint():
 	if request.method == "POST":
 		req = request.json
@@ -200,7 +205,7 @@ def employee_searchcomplaint():
 
 @api.route("/vendor/getComplaints",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="vendor")
 def vendor_getcomplaints():
 	if request.method == "POST":
 		req = request.json
@@ -209,7 +214,7 @@ def vendor_getcomplaints():
 
 @api.route("/vendor/loadAnnouncements",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="vendor")
 def vendor_loadannouncements():
 	if request.method == "POST":
 		req = request.json
@@ -218,7 +223,7 @@ def vendor_loadannouncements():
 
 @api.route("/vendor/searchComplaint",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="vendor")
 def vendor_searchcomplaint():
 	if request.method == "POST":
 		req = request.json
@@ -227,7 +232,7 @@ def vendor_searchcomplaint():
 
 @api.route("/vendor/getComplaint",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="vendor")
 def vendor_getcomplaint():
 	if request.method == "POST":
 		req = request.json
@@ -236,7 +241,7 @@ def vendor_getcomplaint():
 
 @api.route("/vendor/changePriority",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="vendor")
 def vendor_changepriority():
 	if request.method == "POST":
 		req = request.json
@@ -245,9 +250,21 @@ def vendor_changepriority():
 
 @api.route("/vendor/changeStatus",methods=["POST","GET"])
 @cross_origin(origin = [url],methods = ["GET","POST"])
-@auth
+@authN(access_level="vendor")
 def vendor_changestatus():
 	if request.method == "POST":
 		req = request.json
 		return Vendor.changeStatus(req)
+	return abort(405)
+
+
+# ---------------
+# |   Admin     |
+# ---------------
+@api.route("/admin/getUsersByStat",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@authN(access_level="admin")
+def admin_getusersbystat():
+	if request.method == "POST":
+		return Admin.getUsersByStat()
 	return abort(405)

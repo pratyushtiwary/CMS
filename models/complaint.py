@@ -92,8 +92,8 @@ class Complaint(DB):
 
 	def searchEmployeeComplaint(self,eid,term):
 		conn = self.conn.cursor()
-		sql = f"SELECT `id`,`shortBody`,`status`,`ts` FROM `{self.tableName}` WHERE LOWER(`shortBody`) LIKE %s OR `id` = %s AND `eid` = %s "
-		vals = ("%"+term+"%",term,eid)
+		sql = f"SELECT `id`,`shortBody`,`status`,`ts` FROM `{self.tableName}` WHERE LOWER(`shortBody`) LIKE %s OR `id` = %s OR `status` = %s AND `eid` = %s "
+		vals = ("%"+term+"%",term,term,eid)
 		conn.execute(sql,vals)
 		results = conn.fetchall()
 		complaints = []

@@ -11,6 +11,8 @@ class Admin(DB,GetSet):
 		"""
 		self.conn = DB.__init__(self)
 		self.tableName = "admin"
+		self.employeeTable = "employees"
+		self.vendorTable = "vendor"
 		GetSet.__init__(self,self.tableName)
 
 		self.email = email
@@ -116,3 +118,25 @@ class Admin(DB,GetSet):
 			return False
 		else:
 			return error("USER_ALREADY_EXISTS")
+
+	def getAllUsers(self):
+		conn = self.conn.cursor()
+
+		sql = f"""
+					SELECT COUNT(DISTINCT e.id), COUNT(DISTINCT v.id)
+					FROM {self.employeeTable} e, {self.vendorTable} v
+			"""
+		conn.execute(sql)
+		res = conn.fetchone()
+		final = {
+			"employees": 0,
+			"vendors": 0,
+			"total": 0
+		}
+		if res:
+			final["employees"] = res[0]
+			final["vendors"] = res[1]
+			final["total"] = res[0] + res[1]
+
+		return final
+
