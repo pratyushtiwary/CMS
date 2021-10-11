@@ -104,9 +104,9 @@ export default function NewUser(props){
 			</Helmet>
 			<Header
 				title = "New User"
-				items = {["Home","New Announcement","New Department","Departments","Complaints","Users","Settings"]}
-				links = {["/","/new_announcement","/new_department","/departments","/complaints","/users","/settings"]}
-				icons = {["home","notification_add","plus_one","domain","segment","people","settings"]}
+				items = {["Home","New Announcement","New Department","Announcements","Departments","Complaints","Users","Settings"]}
+				links = {["/","/new_announcement","/new_department","/announcements","/departments","/complaints","/users","/settings"]}
+				icons = {["home","notification_add","plus_one","campaign","domain","segment","people","settings"]}
 				hideNewComplaint
 			/>
 			<form className={styles.cont} onSubmit={create}>

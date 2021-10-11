@@ -1,0 +1,8 @@
+.imgCont{
+	height: 100%;
+	width: 100%;
+}
+
+.imgCont .img{
+	object-fit: contain;
+}

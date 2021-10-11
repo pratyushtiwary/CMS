@@ -33,7 +33,58 @@
 	left: 50%;
 	transform: translate(-50%);
 	width: 95%;
-	max-width: 800px;
+}
+
+.cont .images{
+	margin-bottom: 10px;
+	border: 1px solid #000000;
+	border-radius: 10px;
+}
+
+.cont .complaintBody{
+	display: grid;
+	grid-template-columns: 1fr 0.35fr;
+}
+
+.cont .complaintBody .side .block{
+	background: #eeeeee;
+	padding: 10px;
+	border-radius: 10px;
+	margin-left: 25px;
+	position: sticky;
+	top: 80px;
+}
+
+.cont .complaintBody .side .block .content{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	display: grid;
+	align-items: center;
+	justify-items: center;
+}
+
+.cont .complaintBody .side .block .initial{
+	border-radius: 50%;
+	background: #000000;
+	width: 100px;
+	height: 100px;
+	display: grid;
+	align-content: center;
+	justify-content: center;
+	color: #ffffff;
+	font-size: 28px;
+}
+
+.cont .complaintBody .side .block .iconTxt{
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	justify-items: center;
+}
+
+.cont .complaintBody .side .block .iconTxt span{
+	margin-right: 10px;
 }
 
 .cont .complaint .block{
@@ -46,6 +97,7 @@
 
 .cont .complaint .block .subtitle{
 	margin-bottom: 5px;
+	font-size: 24px;
 }
 
 .cont .complaint .block .status .body{
@@ -56,14 +108,17 @@
 
 .error{
 	color: red;
+	font-weight: bold;
 }
 
 .pending{
 	color: orange;
+	font-weight: bold;
 }
 
 .resolved{
 	color: green;
+	font-weight: bold;
 }
 
 .input{
@@ -73,42 +128,68 @@
 
 .high{
 	color: red;
+	font-weight: bold;
 }
 
 .mid{
 	color: orange;
+	font-weight: bold;
 }
 
 .statusDialog .input{
 	margin: 10px 0;
 }
 
+.low{
+	font-weight: bold;
+}
 
-.skeleton .block,
-.skeleton .subheading,
-.skeleton .desc{
-	height: 15px;
-	padding: 10px;
+.adminMsg{
+	font-weight: bold;
+}
+
+.skeleton .side{
+	position: relative;
+}
+
+.skeleton .images,
+.skeleton .block .subtitle,
+.skeleton .block .body,
+.skeleton .side .block{
+	background: #afafaf !important;
 	border-radius: 10px;
+	margin-bottom: 10px;
+}
+
+.skeleton .complaintBody{
+	display: grid;
+	grid-template-columns: 1fr 0.25fr;
+}
+
+.skeleton .images{
 	width: 100%;
-	background: #afafaf;
-	margin: 5px 0;
+	height: 300px;
 }
 
-.skeleton .subheading{
-	height: 10px;
-	width: 100px;
+.skeleton .block .subtitle{
+	height: 45px;
+	width: 150px;
 }
 
-.skeleton .desc{
-	height: 25px;
+.skeleton .block .body{
+	width: 95%;
+	height: 50px;
 }
 
-.skeleton .img{
-	width: 75px;
-	height: 75px;
-	border-radius: 10px;
-	background: #afafaf;
+.skeleton .block .body.desc{
+	width: 95%;
+	height: 150px;
+}
+
+.skeleton .side .block{
+	position: sticky;
+	top: 80px;
+	height: 200px;
 }
 
 .skeleton{
@@ -124,5 +205,32 @@
 	}
 	100%{
 		opacity: 0.25;
+	}
+}
+
+@media screen and (max-width: 931px){
+	.cont .complaintBody{
+		grid-template-columns: 1fr 0.5fr;
+	}
+}
+
+@media screen and (max-width: 699px){
+	.cont .complaintBody{
+		grid-template-columns: 1fr 0.75fr;
+	}
+}
+
+@media screen and (max-width: 567px){
+	.cont .complaintBody{
+		display: block;
+	}
+	.cont .complaintBody .side{
+		width: 95%;
+		position: relative;
+		left: 50%;
+		transform: translate(-50%);
+	}
+	.cont .complaintBody .side .block{
+		margin-left: 0px;
 	}
 }

@@ -106,8 +106,8 @@ export default function NewComplaint(props){
 			{
 				loaded === null && (
 					<div className={styles.cont}>
-						<Success open={Boolean(successMsg)} message={successMsg}/>
-						<Error open={Boolean(errorMsg)} message={errorMsg}/>
+						<Success open={Boolean(successMsg)} message={successMsg} float/>
+						<Error open={Boolean(errorMsg)} message={errorMsg} float/>
 					</div>
 				)
 			}

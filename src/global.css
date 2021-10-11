@@ -6,3 +6,12 @@ input[disabled],
 button[disabled]{
 	cursor: no-drop;
 }
+
+.control-arrow{
+	background: rgba(0,0,0,0.15) !important;
+	opacity: 1 !important;
+}
+
+header{
+	z-index: 999 !important;
+}

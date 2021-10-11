@@ -17,9 +17,9 @@ export default function NewDepartment(props){
 			</Helmet>
 			<Header
 				title = "New Department"
-				items = {["Home","New User","New Announcement","Departments","Complaints","Users","Settings"]}
-				links = {["/","/new_user","/new_announcement","/departments","/complaints","/users","/settings"]}
-				icons = {["home","person_add","notification_add","domain","segment","people","settings"]}
+				items = {["Home","New User","New Announcement","Announcements","Departments","Complaints","Users","Settings"]}
+				links = {["/","/new_user","/new_announcement","/announcements","/departments","/complaints","/users","/settings"]}
+				icons = {["home","person_add","notification_add","campaign","domain","segment","people","settings"]}
 				hideNewComplaint
 			/>
 			<form className={styles.cont} onSubmit={create}>

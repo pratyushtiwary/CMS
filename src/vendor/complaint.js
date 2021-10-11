@@ -1,16 +1,16 @@
 import { useState, useEffect } from "react";
-import { Typography, TextField, Button, MenuItem, Select, FormControl, InputLabel } from "@material-ui/core";
+import { Typography, TextField, Button, MenuItem, Select, FormControl, InputLabel, Icon } from "@material-ui/core";
 import styles from "../styles/vendor/Complaint.module.css";
 import { appName } from "../globals";
 import Helmet from "react-helmet";
 import Header from "../components/Header";
-import Uploader from "../components/Uploader";
 import Dialog from "../components/Dialog";
 import errorImg from "../assets/vendor/error.svg";
 import hit from "../components/hit";
 import Session from "../components/Session";
 import Loading from "../components/Loading";
 import { Error, Success } from "../components/Message";
+import Carousel from "../components/Carousel";
 
 const token = Session.login().token;
 let err, suc;
@@ -45,33 +45,19 @@ export default function Complaint(props){
 	},[errorMsg])
 
 	useEffect(()=>{
-		// hit("api/vendor/getComplaint",{
-		// 	"token": token,
-		// 	"cid": id
-		// }).then((c)=>{
-		// 	if(c.success){
-		// 		setComplaint(c.success.msg);
-		// 		setLoaded(true);
-		// 	}
-		// 	else{
-		// 		setComplaint(null);
-		// 		setLoaded(null);
-		// 	}
-		// })
-		setComplaint({
-			"desc": "Qui ullamco quis deserunt laborum esse ullamco et veniam eu adipisicing non incididunt ut fugiat cillum deserunt eiusmod ut ut veniam irure occaecat excepteur ullamco ut consequat in proident elit ut nulla mollit reprehenderit voluptate culpa ut magna exercitation consectetur irure culpa ullamco aliquip reprehenderit labore ullamco laborum anim duis aliqua cillum occaecat non non esse consectetur aliqua adipisicing quis officia sint in exercitation laboris ullamco dolore veniam eu culpa occaecat occaecat officia sunt labore quis laboris proident sint elit deserunt ullamco commodo tempor aliqua aute duis quis ut id ex pariatur occaecat dolore in sint incididunt culpa proident ea officia anim non voluptate id nulla pariatur cupidatat ea enim cupidatat pariatur et enim aute labore nisi veniam ut in officia enim adipisicing ut est veniam laboris commodo mollit eiusmod sint exercitation sint occaecat exercitation adipisicing dolor duis elit et elit eu laborum anim ullamco in et pariatur eiusmod consectetur sit consectetur ut ullamco fugiat eu consequat aute dolor do deserunt do eu esse non laborum labore officia incididunt dolore dolor voluptate reprehenderit ut deserunt do adipisicing tempor dolor ut sed qui laboris quis laborum ut dolore dolor in eu duis commodo aliqua eu voluptate commodo laboris anim eu in consequat cupidatat est in reprehenderit duis veniam aliqua proident nisi fugiat officia consectetur incididunt esse ullamco labore ut aliqua laboris aute ut aute.",
-			"on": "10/09/2021",
-			"status": "pending",
-			"priority": "low",
-			"adminMsg": "Sunt occaecat eiusmod duis.",
-			"msg": "Ut laboris.",
-			"user": {
-				"name": "Test1234",
-				"roomNo": "1234"
-			},
-			"imgs": []
+		hit("api/vendor/getComplaint",{
+			"token": token,
+			"cid": id
+		}).then((c)=>{
+			if(c.success){
+				setComplaint(c.success.msg);
+				setLoaded(true);
+			}
+			else{
+				setComplaint(null);
+				setLoaded(null);
+			}
 		});
-		setLoaded(true);
 	},[id]);
 
 	function changeStatus(){
@@ -195,83 +181,89 @@ export default function Complaint(props){
 				{
 					complaint && loaded === true && (
 						<>
-							<Success open={Boolean(successMsg)} message={successMsg} width />
-							<Error open={Boolean(errorMsg)} message={errorMsg} width />
+							<Success open={Boolean(successMsg)} message={successMsg} float />
+							<Error open={Boolean(errorMsg)} message={errorMsg} float />
 							<div className={styles.complaint}>
-								<div className={styles.block}>
-									<Typography variant="subtitle2" className={styles.subtitle}>Complaint Description: -</Typography>
-									<Typography variant="subtitle1" className={styles.body}>{complaint.desc}</Typography>
+								<div className={styles.images}>
+									<Carousel imgs={complaint.imgs}/>
 								</div>
-								<div className={styles.block}>
-									<Typography variant="subtitle2" className={styles.subtitle}>Complaint By: -</Typography>
-									<Typography variant="subtitle1" className={styles.body}>
-										Name :- {complaint.user.name}<br/>
-										Room No. :- {complaint.user.roomNo}
-									</Typography>
-								</div>
-								<div className={styles.block}>
-									<Typography variant="subtitle2" className={styles.subtitle}>Complaint On: -</Typography>
-									<Typography variant="subtitle1" className={styles.body}>{complaint.on}</Typography>
-								</div>
-								<div className={styles.block}>
-									<Typography variant="subtitle2" className={styles.subtitle}>Priority: -</Typography>
-									<div className={styles.status}>
-										<Typography variant="subtitle1" className={styles.body+" "+styles[complaint.priority]}>{complaint.priority}</Typography>
+								<div className={styles.complaintBody}>
+									<div className={styles.main}>
+										<div className={styles.block}>
+											<Typography variant="subtitle2" className={styles.subtitle}>Complaint Description: -</Typography>
+											<Typography variant="subtitle1" className={styles.body}>{complaint.desc}</Typography>
+										</div>
+										<div className={styles.block}>
+											<Typography variant="subtitle2" className={styles.subtitle}>Priority: -</Typography>
+											<div className={styles.status}>
+												<Typography variant="subtitle1" className={styles.body+" "+styles[complaint.priority]}>{complaint.priority}</Typography>
+												{
+													complaint.status!=="resolved" && (
+														<Button color="primary" variant="outlined" className={styles.changeStatus} onClick={changePriority}>Change Priority</Button>
+													)
+												}
+											</div>
+										</div>
+										<div className={styles.block}>
+											<Typography variant="subtitle2" className={styles.subtitle}>Status: -</Typography>
+											<div className={styles.status}>
+												<Typography variant="subtitle1" className={styles.body+" "+styles[complaint.status]}>{complaint.status}</Typography>
+												{
+													complaint.status!=="resolved" && (
+														<Button color="primary" variant="outlined" className={styles.changeStatus} onClick={changeStatus}>Change Status</Button>
+													)
+												}
+										</div>
 										{
-											complaint.status!=="resolved" && (
-												<Button color="primary" variant="outlined" className={styles.changeStatus} onClick={changePriority}>Change Priority</Button>
+											complaint.adminMsg && (
+												<div className={styles.block}>
+													<Typography variant="subtitle2" className={styles.subtitle}>Message from Admin: -</Typography>
+													<Typography variant="subtitle1" className={styles.body+" "+styles.adminMsg}>{complaint.adminMsg}</Typography>
+												</div>
 											)
 										}
-									</div>
-								</div>
-								<div className={styles.block}>
-									<Typography variant="subtitle2" className={styles.subtitle}>Status: -</Typography>
-									<div className={styles.status}>
-										<Typography variant="subtitle1" className={styles.body+" "+styles[complaint.status]}>{complaint.status}</Typography>
 										{
-											complaint.status!=="resolved" && (
-												<Button color="primary" variant="outlined" className={styles.changeStatus} onClick={changeStatus}>Change Status</Button>
+											complaint.msg && complaint.status === "error" && (
+												<div className={styles.block}>
+													<Typography variant="subtitle2" className={styles.subtitle}>Message from you: -</Typography>
+													<Typography variant="subtitle1" className={styles.body}>{complaint.msg}</Typography>
+													{
+														complaint.status === "error" && (
+															<Typography variant="subtitle2" className={styles.body}>To change this message update status of this complaint.</Typography>
+														)
+													}
+												</div>
 											)
 										}
+										{
+											complaint.msg && complaint.status === "resolved" && (
+												<div className={styles.block}>
+													<Typography variant="subtitle2" className={styles.subtitle}>Resolution: -</Typography>
+													<Typography variant="subtitle1" className={styles.body}>{complaint.msg}</Typography>
+												</div>
+											)
+										}
+								</div>
+									</div>
+									<div className={styles.side}>
+										<div className={styles.block}>
+											<Typography variant="subtitle2" className={styles.subtitle}>By : -</Typography>
+											<div className={styles.content}>
+												<Typography variant="subtitle1" className={styles.initial}>{complaint.user.name[0]}</Typography>
+												<Typography variant="h6" title="Employee Name" className={styles.body}>
+													{complaint.user.name}
+												</Typography>
+												<Typography variant="subtitle1" title="Room No." className={styles.body+" "+styles.iconTxt}>
+													<Icon>meeting_room</Icon> {complaint.user.roomNo}
+												</Typography>
+												<Typography variant="subtitle1" title="Complaint On" className={styles.body+" "+styles.iconTxt}>
+													<Icon>schedule</Icon> {complaint.on}
+												</Typography>
+
+											</div>
+										</div>
 									</div>
 								</div>
-								{
-									complaint.imgs && (
-										<div className={styles.block}>
-											<Typography variant="subtitle2" className={styles.subtitle}>Images: -</Typography>
-											<Uploader defaultImgs={complaint.imgs} rem={false} clickable/>
-										</div>
-									)
-								}
-								{
-									complaint.adminMsg && (
-										<div className={styles.block}>
-											<Typography variant="subtitle2" className={styles.subtitle}>Message from Admin: -</Typography>
-											<Typography variant="subtitle1" className={styles.body}>{complaint.adminMsg}</Typography>
-										</div>
-									)
-								}
-								{
-									complaint.msg && complaint.status === "error" && (
-										<div className={styles.block}>
-											<Typography variant="subtitle2" className={styles.subtitle}>Message from you: -</Typography>
-											<Typography variant="subtitle1" className={styles.body}>{complaint.msg}</Typography>
-											{
-												complaint.status === "error" && (
-													<Typography variant="subtitle2" className={styles.body}>To change this message update status of this complaint.</Typography>
-												)
-											}
-										</div>
-									)
-								}
-								{
-									complaint.msg && complaint.status === "resolved" && (
-										<div className={styles.block}>
-											<Typography variant="subtitle2" className={styles.subtitle}>Resolution: -</Typography>
-											<Typography variant="subtitle1" className={styles.body}>{complaint.msg}</Typography>
-										</div>
-									)
-								}
 							</div>
 						</>
 					)
@@ -279,23 +271,30 @@ export default function Complaint(props){
 				{
 					loaded === false && (
 						<div className={styles.skeleton}>
-							<div className={styles.subheading}></div>
-							<div className={styles.desc}></div>
-							<div className={styles.subheading}></div>
-							<div className={styles.block}></div>
-							<div className={styles.block}></div>
-							<div className={styles.subheading}></div>
-							<div className={styles.block}></div>
-							<div className={styles.subheading}></div>
-							<div className={styles.block}></div>
-							<div className={styles.subheading}></div>
-							<div className={styles.block}></div>
-							<div className={styles.subheading}></div>
-							<div className={styles.img}></div>
-							<div className={styles.subheading}></div>
-							<div className={styles.block}></div>
-							<div className={styles.subheading}></div>
-							<div className={styles.block}></div>
+							<div className={styles.images}></div>
+							<div className={styles.complaintBody}>
+								<div className={styles.main}>
+									<div className={styles.block}>
+										<div className={styles.subtitle}></div>
+										<div className={styles.body+" "+styles.desc}></div>
+									</div>
+									<div className={styles.block}>
+										<div className={styles.subtitle}></div>
+										<div className={styles.body}></div>
+									</div>
+									<div className={styles.block}>
+										<div className={styles.subtitle}></div>
+										<div className={styles.body}></div>
+									</div>
+									<div className={styles.block}>
+										<div className={styles.subtitle}></div>
+										<div className={styles.body}></div>
+									</div>
+								</div>
+								<div className={styles.side}>
+									<div className={styles.block}></div>
+								</div>
+							</div>						
 						</div>
 					)
 				}

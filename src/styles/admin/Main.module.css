@@ -50,7 +50,8 @@
 }
 
 
-.cont .complaints{
+.cont .users,
+.cont .skeleton{
 	display: grid;
 	position: relative;
 	align-items: center;
@@ -61,7 +62,7 @@
 	grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
 }
 
-.cont .complaints .block{
+.cont .users .block{
 	display: grid;
 	align-self: center;
 	align-content: center;
@@ -74,8 +75,8 @@
 	background: #eeeeee;
 }
 
-.cont .complaints .block .title,
-.cont .complaints .block .subtitle{
+.cont .users .block .title,
+.cont .users .block .subtitle{
 	display: block;
 	width: 100%;
 	text-align: center;
@@ -112,6 +113,15 @@
 	text-align: right;
 }
 
+.announcement .viewMore{
+	position: relative;
+	width: fit-content;
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	margin-top: 10px;
+}
+
 .new{
 	position: fixed !important;
 	bottom: 25px;
@@ -139,7 +149,45 @@
 	padding: 5px 10px;
 }
 @media screen and (max-width: 947px){
-	.cont .complaints{
+	.cont .users{
 		margin-top: 100px;
+	}
+}
+
+.skeleton .block,
+.skeleton .bigBlock,
+.skeleton .viewMore{
+	background: #afafaf;
+	width: 250px;
+	height: 250px;
+	border-radius: 10px;
+}
+
+.skeleton .bigBlock{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	width: 80%;
+}
+
+.skeleton .viewMore{
+	width: 125px;
+	height: 40px;
+	margin-top: 10px;
+}
+
+.skeleton{
+	animation: skeletonAnimate 1.5s linear infinite;
+}
+
+@keyframes skeletonAnimate{
+	0%{
+		opacity: 0.25;
+	}
+	50%{
+		opacity: 1;
+	}
+	100%{
+		opacity: 0.25;
 	}
 }

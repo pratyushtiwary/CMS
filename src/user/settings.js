@@ -142,8 +142,8 @@ export default function Setttings(props){
 				loaded===true && (
 					<>
 						<form className={styles.cont} onSubmit={submit}>
-							<Success open={Boolean(successMsg)} message={successMsg}/>
-							<Error open={Boolean(errorMsg)} message={errorMsg}/>
+							<Success open={Boolean(successMsg)} message={successMsg} float/>
+							<Error open={Boolean(errorMsg)} message={errorMsg} float/>
 							<FormControl variant="outlined" className={styles.input}>
 						        <InputLabel htmlFor="userType" variant="outlined">Accomodation Type</InputLabel>
 						        <Select

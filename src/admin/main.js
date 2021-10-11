@@ -6,21 +6,50 @@ import first from "../assets/admin/first.png";
 import second from "../assets/admin/second.png";
 import { Typography, Button, useMediaQuery, Fab, Icon, MenuList, Popover, Paper, ClickAwayListener } from "@material-ui/core";
 import { appName } from "../globals";
+import hit from "../components/hit";
+import Session from "../components/Session";
 
+const token = Session.login().token;
 export default function Main(props){
 	const maxWidth = useMediaQuery("(max-width: 700px)")
-	const [complaints,setComplaints] = useState(null);
+	const [users,setUsers] = useState(null);
 	const [announcement,setAnnouncement] = useState(null);
 	const [menu,setMenu] = useState(null);
 	const menuRef = createRef();
+	const [statLoaded,setStatLoaded] = useState(null);
+	const [announcementLoaded,setAnnouncementLoaded] = useState(null);
+	const [more,setMore] = useState(false);
 
 	useEffect(()=>{
-		setComplaints([6,3,2]);
-		setAnnouncement({
-			"text": "Adipisicing quis irure do fugiat ad duis occaecat incididunt ut ut dolor esse proident labore laboris non cupidatat voluptate nisi magna esse deserunt ullamco sit commodo anim est ea sunt in eu dolore nisi qui nostrud sed ullamco ut pariatur do irure duis aliquip dolor deserunt duis ullamco nisi esse anim fugiat laboris aute ut dolore enim dolore ex dolore nulla aliquip in in laborum culpa dolor do ullamco qui deserunt in magna ullamco ut amet exercitation enim consequat fugiat culpa veniam aliqua ut fugiat officia in esse anim laborum in ut non ullamco esse dolore sed do ut veniam in reprehenderit laboris eiusmod aliquip minim quis dolor excepteur est labore non minim irure culpa irure in tempor fugiat veniam nulla fugiat in labore id anim consequat voluptate voluptate et adipisicing in voluptate exercitation nulla eiusmod qui ex do pariatur reprehenderit veniam eiusmod excepteur incididunt dolor mollit non ut dolor.",
-			"author": "Admin",
-			"on": "23/08/2021"
-		});
+		hit("api/admin/getUsersByStat",{
+			"token": token
+		}).then((c)=>{
+			if(c.success){
+				const stats = c.success.msg;
+				if(stats["total"] > 0){
+					setStatLoaded(true);
+					setUsers([stats["total"],stats["employees"],stats["vendors"]])					
+				}
+				else{
+					setStatLoaded(false);
+					setUsers(null);
+				}
+			}
+		})
+		hit("api/fetch/latestAnnouncement",{
+			"token": token
+		}).then((c)=>{
+			if(c.success){
+				setMore(c.success.msg.more);
+				setAnnouncement(c.success.msg);
+				setAnnouncementLoaded(true);
+			}
+			else{
+				setAnnouncement(null);
+				setAnnouncementLoaded(null);
+			}
+		})
+		
 	},[])
 
 	function closeMenu(){
@@ -40,9 +69,9 @@ export default function Main(props){
 			</Helmet>
 			<Header
 				title = "Dashboard"
-				items = {["New User","New Announcement","New Department","Departments","Complaints","Users","Settings"]}
-				links = {["/new_user","/new_announcement","/new_department","/departments","/complaints","/users","/settings"]}
-				icons = {["person_add","notification_add","plus_one","domain","segment","people","settings"]}
+				items = {["New User","New Announcement","New Department","Announcements","Departments","Complaints","Users","Settings"]}
+				links = {["/new_user","/new_announcement","/new_department","/announcements","/departments","/complaints","/users","/settings"]}
+				icons = {["person_add","notification_add","plus_one","campaign","domain","segment","people","settings"]}
 				hideNewComplaint
 			/>
 			<Fab color="primary" aria-label="add" className={styles.new} onClick={showMenu} ref={menuRef}>
@@ -50,24 +79,24 @@ export default function Main(props){
 			</Fab>
 			<div className={styles.cont}>
 				{
-					!complaints && maxWidth && (
+					!users && statLoaded===false && maxWidth && (
 						<div className={styles.notFound}>
 							<img 
 								src = {first}
-								alt = "No Complaints Found Illustration"
+								alt = "No users Found Illustration"
 								width = "300px"
 								heigth = "300px"
 								className = {styles.img}
 							/>
 							<div className={styles.msg}>
-								<Typography variant="h5" className={styles.title}>No Complaints Found</Typography>
+								<Typography variant="h5" className={styles.title}>No users Found</Typography>
 								<Typography variant="subtitle2" className={styles.subtitle}>To register a complaint click on the "+" button above</Typography>
 							</div>
 						</div>
 					) 
 				}
 				{
-					!complaints && !maxWidth && (
+					!users && statLoaded===false && !maxWidth && (
 						<div className={styles.notFound}>
 							<img 
 								src = {first}
@@ -83,20 +112,29 @@ export default function Main(props){
 					) 
 				}
 				{
-					complaints && (
-						<div className={styles.complaints}>
+					users && statLoaded===true && (
+						<div className={styles.users}>
 							<Button className={styles.block} href="/users">
-								<Typography variant="h4" className={styles.title}>{complaints[0]}</Typography>
+								<Typography variant="h4" className={styles.title}>{users[0]}</Typography>
 								<Typography variant="h6" className={styles.subtitle}>Total User(s)</Typography>
 							</Button>
 							<Button className={styles.block} href="/users">
-								<Typography variant="h4" className={styles.title}>{complaints[1]}</Typography>
+								<Typography variant="h4" className={styles.title}>{users[1]}</Typography>
 								<Typography variant="h6" className={styles.subtitle}>Total Employee(s)</Typography>
 							</Button>
 							<Button className={styles.block} href="/users">
-								<Typography variant="h4" className={styles.title}>{complaints[2]}</Typography>
+								<Typography variant="h4" className={styles.title}>{users[2]}</Typography>
 								<Typography variant="h6" className={styles.subtitle}>Total Vendor(s)</Typography>
 							</Button>
+						</div>
+					)
+				}
+				{
+					statLoaded===null && (
+						<div className={styles.skeleton}>
+							<div className={styles.block}></div>
+							<div className={styles.block}></div>
+							<div className={styles.block}></div>
 						</div>
 					)
 				}
@@ -108,7 +146,7 @@ export default function Main(props){
 				</div>
 				<div className={styles.main}>
 					{
-						!announcement && (
+						!announcement && announcementLoaded===false && (
 							<div className={styles.notFound}>
 							<img 
 								src = {second}
@@ -124,7 +162,7 @@ export default function Main(props){
 						)
 					}
 					{
-						announcement && (
+						announcement && announcementLoaded===true && (
 							<div className={styles.content}>
 								<div className={styles.block}>
 									<Typography variant="subtitle1" className={styles.text}>{announcement.text}</Typography>
@@ -133,6 +171,19 @@ export default function Main(props){
 										<Typography variant="subtitle2" className={styles.author}>- {announcement.author}</Typography>
 									</div>
 								</div>
+								{
+									more && (
+										<Button className={styles.viewMore} variant="outlined" href="/announcements">View More</Button>
+									)
+								}
+							</div>
+						)
+					}
+					{
+						announcementLoaded===null && (
+							<div className={styles.skeleton}>
+								<div className={styles.bigBlock}></div>
+								<div className={styles.viewMore}></div>
 							</div>
 						)
 					}

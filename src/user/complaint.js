@@ -12,6 +12,7 @@ import hit from "../components/hit";
 import Session from "../components/Session";
 import Loading from "../components/Loading";
 import { Error, Success } from "../components/Message";
+import Carousel from "../components/Carousel";
 
 const token = Session.login().token
 let err, suc;
@@ -253,12 +254,15 @@ export default function Complaint(props){
 				icons = {["home","segment","campaign","settings"]}
 			/>
 			<div className={styles.cont}>
-				<Success open={Boolean(successMsg)} message={successMsg} />
-				<Error open={Boolean(errorMsg)} message={errorMsg} />
+				<Success open={Boolean(successMsg)} message={successMsg} float />
+				<Error open={Boolean(errorMsg)} message={errorMsg} float />
 				{
 					complaint!==1 && loaded===true && complaint && (
 						<>
 							<div className={styles.complaint} style={{minHeight:"80vh"}}>
+								<div className={styles.images}>
+									<Carousel imgs={complaint.imgs}/>
+								</div>
 								<div className={styles.main+" "+styles.first+" "+styles.inline}>
 									<Typography variant="subtitle2" className={styles.title}>Complaint ID :- </Typography>
 									<Typography variant="subtitle1">{id}</Typography>
@@ -266,24 +270,6 @@ export default function Complaint(props){
 								<div className={styles.main}>
 									<Typography variant="subtitle2" className={styles.title}>Complaint Description :-</Typography>
 									<Typography variant="subtitle1">{complaint.longText}</Typography>
-								</div>
-								<div className={styles.main}>
-									{
-										complaint.imgs.length > 0 && (
-											<>
-												<Typography variant="subtitle2" className={styles.title}>Images :-</Typography>
-												<div className={styles.image}>
-													{
-														<Uploader 
-															defaultImgs={complaint.imgs}
-															clickable
-															rem={false}
-														/>
-													}
-												</div>
-											</>
-										)
-									}
 								</div>
 								<div className={styles.main+" "+styles.inline}>
 									<Typography variant="subtitle2" className={styles.title}>Complaint Date :- </Typography>
@@ -297,7 +283,7 @@ export default function Complaint(props){
 									complaint.status === "resolved" && complaint.msg && (
 										<div className={styles.main+" "+styles.inline}>
 											<Typography variant="subtitle2" className={styles.title}>Resolution :- </Typography>
-											<Typography variant="subtitle1">{complaint.msg}</Typography>
+											<Typography variant="subtitle1" className={styles.bold}>{complaint.msg}</Typography>
 										</div>
 
 									)
@@ -306,7 +292,7 @@ export default function Complaint(props){
 									complaint.status === "error" && complaint.msg && (
 										<div className={styles.main+" "+styles.inline}>
 											<Typography variant="subtitle2" className={styles.title}>Error :- </Typography>
-											<Typography variant="subtitle1">{complaint.msg}</Typography>
+											<Typography variant="subtitle1" className={styles.bold}>{complaint.msg}</Typography>
 										</div>
 
 									)
@@ -413,6 +399,7 @@ export default function Complaint(props){
 				{
 					loaded===false && (
 						<div className={styles.skeleton}>
+							<div className={styles.images}></div>
 							<div className={styles.id}></div>
 							<div className={styles.desc}></div>
 							<div className={styles.date}></div>

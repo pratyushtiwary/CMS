@@ -9,6 +9,7 @@ import Vendor from "./vendor";
 import Users from "./users";
 import Departments from "./departments";
 import Department from "./department";
+import Announcements from "./announcements";
 
 export default function User(props){
 	return (
@@ -31,6 +32,9 @@ export default function User(props){
 				</Route>
 				<Route path="/departments" exact>
 					<Departments/>
+				</Route>
+				<Route path="/announcements" exact>
+					<Announcements/>
 				</Route>
 				<Route path="/employee/:id" component={Employee} />
 				<Route path="/vendor/:id" component={Vendor} />

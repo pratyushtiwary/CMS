@@ -3,13 +3,17 @@ import { Typography, Button, Icon, IconButton } from "@material-ui/core";
 import styles from "../styles/components/Uploader.module.css";
 import Alert from "./Alert";
 import { URL } from "../globals";
+import Lightbox from 'react-image-lightbox';
+
+import 'react-image-lightbox/style.css';
 
 export default function Uploader({ defaultImgs, onFile, clickable, rem }){
 	const [imgs,setImgs] = useState(defaultImgs||[]);
 	const fileInput = createRef();
 	const [alertMsg,setAlertMsg] = useState(null);
 	const [alertVisibile, setAlertVisibility] = useState(false);
-	
+	const [open,setOpen] = useState(false);
+	const [photoIndex,setPhotoIndex] = useState(0);
 
 	useEffect(()=>{
 		if(defaultImgs){
@@ -60,6 +64,11 @@ export default function Uploader({ defaultImgs, onFile, clickable, rem }){
 		});
 	}
 
+	let showLightbox = (i) => () =>{
+		setPhotoIndex(i);
+		setOpen(true);
+	}
+
 	function closeAlert(){
 		setAlertVisibility(false);
 	}
@@ -79,23 +88,21 @@ export default function Uploader({ defaultImgs, onFile, clickable, rem }){
 
 						if(clickable){
 							return (
-								<div key={i} className={styles.img}>
-									<a href={img} target="_blank"  rel="noreferrer">
-										{
-											rem!==false && (
-												<IconButton className={styles.remove} onClick={removeImg}>
-													<Icon>close</Icon>
-												</IconButton>
-											)
-										}
-										<div 
-											className={styles.image}
-											style = {{
-												backgroundImage: 'url('+img+')'
-											}}
-										></div>
-									</a>
-								</div>
+								<Button key={i} className={styles.img} onClick={showLightbox(i)}>
+									{
+										rem!==false && (
+											<IconButton className={styles.remove} onClick={removeImg}>
+												<Icon>close</Icon>
+											</IconButton>
+										)
+									}
+									<div 
+										className={styles.image}
+										style = {{
+											backgroundImage: 'url('+img+')'
+										}}
+									></div>
+								</Button>
 							)
 						}
 						return (
@@ -146,6 +153,22 @@ export default function Uploader({ defaultImgs, onFile, clickable, rem }){
 						open = {alertVisibile}
 						onClose = {closeAlert}
 					/>
+				)
+			}
+			{
+				imgs && open && (
+					<Lightbox
+			            mainSrc={URL+"images/"+imgs[photoIndex]}
+			            nextSrc={URL+"images/"+imgs[(photoIndex + 1) % imgs.length]}
+			            prevSrc={URL+"images/"+imgs[(photoIndex + imgs.length - 1) % imgs.length]}
+			            onCloseRequest={() => setOpen(false)}
+			            onMovePrevRequest={() =>
+							setPhotoIndex((pI)=>((pI + imgs.length - 1) % imgs.length) % 4)
+			            }
+			            onMoveNextRequest={() =>
+			            	setPhotoIndex((pI)=>((pI + 1) % imgs.length) % 4)
+			            }
+			          />
 				)
 			}
 		</>

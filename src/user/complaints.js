@@ -53,6 +53,8 @@ export default function Complaints(props){
 	},[]);
 
 	function loadAllComplaints(){
+		setNoComplaints(null);
+		setSearching(false);
 		hit("api/employee/getComplaints",{
 			"token": token,
 			"offset": "0"
@@ -68,7 +70,6 @@ export default function Complaints(props){
 						setNext(true);
 						setLoadingNext(false);
 					}
-
 					setLoaded(true);
 					setComplaints(c.success.msg.complaints);
 				}
@@ -142,7 +143,7 @@ export default function Complaints(props){
 		const val = e.currentTarget.value;
 		clearTimeout(timer);
 		timer = setTimeout(()=>{
-			if(!val.match(/^[\s]*$/)){
+			if(val.replace(/ /g,"")!==""){
 				setNext(true);
 				setLoadingNext(true);
 				setSearching(true);

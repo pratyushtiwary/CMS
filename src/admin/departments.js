@@ -58,9 +58,9 @@ export default function Departments(props){
 			</Helmet>
 			<Header
 				title = "Departments"
-				items = {["Home","New User","New Announcement","New Department","Complaints","Users","Settings"]}
-				links = {["/","/new_user","/new_announcement","/new_department","/complaints","/users","/settings"]}
-				icons = {["home","person_add","notification_add","plus_one","segment","people","settings"]}
+				items = {["Home","New User","New Announcement","New Department","Announcements","Complaints","Users","Settings"]}
+				links = {["/","/new_user","/new_announcement","/new_department","/announcements","/complaints","/users","/settings"]}
+				icons = {["home","person_add","notification_add","plus_one","campaign","segment","people","settings"]}
 				hideNewComplaint
 			/>
 			<div className={styles.cont}>

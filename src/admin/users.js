@@ -192,9 +192,9 @@ export default function Users(props){
 			</Helmet>
 			<Header
 				title="Users"
-				items = {["Home","New User","New Announcement","New Department","Departments","Complaints","Settings"]}
-				links = {["/","/new_user","/new_announcement","/new_department","/departments","/complaints","/settings"]}
-				icons = {["home","person_add","notification_add","plus_one","domain","segment","settings"]}
+				items = {["Home","New User","New Announcement","New Department","Announcements","Departments","Complaints","Settings"]}
+				links = {["/","/new_user","/new_announcement","/new_department","/announcements","/departments","/complaints","/settings"]}
+				icons = {["home","person_add","notification_add","plus_one","campaign","domain","segment","settings"]}
 				hideNewComplaint
 			/>
 			<div className={styles.cont}>

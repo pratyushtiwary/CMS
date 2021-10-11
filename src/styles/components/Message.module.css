@@ -32,6 +32,14 @@
 	display: inline;
 }
 
-.fitWidth{
+.float{
+	position: fixed;
+	z-index: 100;
+	transform: none;
+	padding: 5px 10px;
+	box-shadow: 5px 5px 20px #afafaf;
+	border-radius: 4px;
+	bottom: 15px;
+	left: 10px;
 	width: fit-content;
 }

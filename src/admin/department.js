@@ -106,9 +106,9 @@ export default function Vendor(props){
 			</Helmet>
 			<Header
 				title = "View Department"
-				items = {["Home","New User","New Announcement","New Department","Departments","Complaints","Users","Settings"]}
-				links = {["/","/new_user","/new_announcement","/new_department","/departments","/complaints","/users","/settings"]}
-				icons = {["home","person_add","notification_add","plus_one","domain","segment","people","settings"]}
+				items = {["Home","New User","New Announcement","New Department","Announcements","Departments","Complaints","Users","Settings"]}
+				links = {["/","/new_user","/new_announcement","/new_department","/announcements","/departments","/complaints","/users","/settings"]}
+				icons = {["home","person_add","notification_add","plus_one","campaign","domain","segment","people","settings"]}
 				hideNewComplaint
 			/>
 			<div className={styles.cont}>
