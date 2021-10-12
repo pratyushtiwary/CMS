@@ -22,11 +22,13 @@ export default function Announcements(props){
 			"token": token,
 			"offset": "0"
 		}).then((c)=>{
-			if(c.success.msg){
+			if(c.success){
 				offset += limit;
 				setAnnouncements([...c.success.msg]);
 				setLoaded(true);
-				setMore(true);
+				if(c.success.msg.length === offset){
+					setMore(true);					
+				}
 			}
 			else{
 				setLoaded(null);

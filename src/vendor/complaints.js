@@ -58,6 +58,7 @@ export default function Complaints(props){
 			"offset": "0"
 		}).then((c)=>{
 			if(c.success){
+				setSearching(null);
 				if(c.success.msg.count > 0){
 
 					if(c.success.msg.count > limit){
@@ -84,12 +85,12 @@ export default function Complaints(props){
 
 	function loadMore(){
 		setMoreComplaints(false);
-		setSearching(true);
+		setSearching("Loading...");
 		hit("api/vendor/getComplaints",{
 			"token": token,
 			"offset": current
 		}).then((c)=>{
-			setSearching(false);
+			setSearching(null);
 			current += limit;
 			if(c.success){
 				if(c.success.msg.count > current){
@@ -108,7 +109,7 @@ export default function Complaints(props){
 		}).then((c)=>{
 			setMoreComplaints(false);
 			setNotFound(false);
-			setSearching(false);
+			setSearching(null);
 			if(c.success){
 				const cs = c.success.msg
 				if(cs.length>0){
@@ -132,10 +133,12 @@ export default function Complaints(props){
 		beginSearch = setTimeout(()=>{
 			if(!val.match(/^[\s]*$/)){
 				setComplaints([]);
-				setSearching(true);
+				setSearching("Searching...");
 				doSearch(val);
 			}
 			else{
+				setComplaints([]);
+				setSearching("Loading...");
 				loadAllComplaints();
 			}
 		},searchAfter);
@@ -187,10 +190,10 @@ export default function Complaints(props){
 								)
 							}
 							{
-								searching && (
+								Boolean(searching) && (
 									<div className={styles.searching}>
 										<CircularProgress size={24} color="primary" className={styles.circle} />
-										<Typography variant="subtitle1" className={styles.txt}>Searching...</Typography>
+										<Typography variant="subtitle1" className={styles.txt}>{searching}</Typography>
 									</div>
 								)
 							}

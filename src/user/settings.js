@@ -11,6 +11,8 @@ import Loading from "../components/Loading";
 import Alert from "../components/Alert";
 
 const token = Session.login().token;
+let err, suc;
+
 export default function Setttings(props){
 
 	const roomTypes = ["For Bachelor","For Family"];
@@ -26,6 +28,20 @@ export default function Setttings(props){
 	const [errorMsg,setErrorMsg] = useState(null);
 	const [loading,setLoading] = useState(null);
 	const [openAlert,setOpenAlert] = useState(false);
+
+	useEffect(()=>{
+		clearTimeout(suc)
+		suc = setTimeout(()=>{
+			setSuccessMsg(null);
+		},4500);
+	},[successMsg])
+
+	useEffect(()=>{
+		clearTimeout(err)
+		err = setTimeout(()=>{
+			setErrorMsg(null);
+		},4500);
+	},[errorMsg])
 
 	useEffect(()=>{
 		hit("api/employee/fetchDetails",{
@@ -141,9 +157,9 @@ export default function Setttings(props){
 			{
 				loaded===true && (
 					<>
+						<Success open={Boolean(successMsg)} message={successMsg} float/>
+						<Error open={Boolean(errorMsg)} message={errorMsg} float/>
 						<form className={styles.cont} onSubmit={submit}>
-							<Success open={Boolean(successMsg)} message={successMsg} float/>
-							<Error open={Boolean(errorMsg)} message={errorMsg} float/>
 							<FormControl variant="outlined" className={styles.input}>
 						        <InputLabel htmlFor="userType" variant="outlined">Accomodation Type</InputLabel>
 						        <Select

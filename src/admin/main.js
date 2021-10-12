@@ -39,6 +39,7 @@ export default function Main(props){
 		hit("api/fetch/latestAnnouncement",{
 			"token": token
 		}).then((c)=>{
+			console.log(c);
 			if(c.success){
 				setMore(c.success.msg.more);
 				setAnnouncement(c.success.msg);
@@ -46,7 +47,7 @@ export default function Main(props){
 			}
 			else{
 				setAnnouncement(null);
-				setAnnouncementLoaded(null);
+				setAnnouncementLoaded(false);
 			}
 		})
 		

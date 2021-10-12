@@ -2,7 +2,7 @@ import Header from "../components/Header";
 import { Helmet } from "react-helmet";
 import { appName } from "../globals";
 import { useState, useEffect } from "react";
-import second from "../assets/user/main/second.png";
+import second from "../assets/admin/second.png";
 import styles from "../styles/admin/Announcements.module.css";
 import { Typography, Button, CircularProgress } from "@material-ui/core";
 import hit from "../components/hit";
@@ -22,7 +22,7 @@ export default function Announcements(props){
 			"token": token,
 			"offset": "0"
 		}).then((c)=>{
-			if(c.success.msg){
+			if(c.success){
 				offset += limit;
 				setAnnouncements([...c.success.msg]);
 				setLoaded(true);
