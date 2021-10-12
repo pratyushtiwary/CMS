@@ -36,7 +36,7 @@ def authN(access_level):
 				if exists(["token"],request.json):
 					token = request.json.get("token")
 				elif exists(["token"],request.form,True):
-					request.form["token"]
+					token = request.form["token"]
 				elif token == None:
 					return Response(response=error("UNAUTH_REQUEST"),status=403)
 
@@ -69,8 +69,8 @@ def verifyToken(token:str):
 
 		now = datetime.now().timestamp()
 
-		# if now > token.get("expiry",0):
-		# 	return False
+		if now > token.get("expiry",0):
+			return False
 		return True
 	except:
 		return False

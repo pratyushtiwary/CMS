@@ -268,3 +268,12 @@ def admin_getusersbystat():
 	if request.method == "POST":
 		return Admin.getUsersByStat()
 	return abort(405)
+
+@api.route("/admin/createAnnouncement",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@authN(access_level="admin")
+def admin_createannouncement():
+	if request.method == "POST":
+		req = request.json
+		return Admin.createAnnouncement(req)
+	return abort(405)

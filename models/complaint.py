@@ -65,7 +65,7 @@ class Complaint(DB):
 
 				return True
 			except Exception as e:
-				print(e)
+				print("Error",e)
 				del files
 				self.conn.rollback()
 				return error("SERVER_ERROR")
@@ -92,8 +92,8 @@ class Complaint(DB):
 
 	def searchEmployeeComplaint(self,eid,term):
 		conn = self.conn.cursor()
-		sql = f"SELECT `id`,`shortBody`,`status`,`ts` FROM `{self.tableName}` WHERE LOWER(`shortBody`) LIKE %s OR `id` = %s OR `status` = %s AND `eid` = %s "
-		vals = ("%"+term+"%",term,term,eid)
+		sql = f"SELECT `id`,`shortBody`,`status`,`ts` FROM `{self.tableName}` WHERE `eid` = %s AND (LOWER(`shortBody`) LIKE %s OR `id` = %s OR `status` = %s)"
+		vals = (eid,"%"+term+"%",term,term)
 		conn.execute(sql,vals)
 		results = conn.fetchall()
 		complaints = []
@@ -111,8 +111,8 @@ class Complaint(DB):
 
 	def searchVendorComplaint(self,vid,term):
 		conn = self.conn.cursor()
-		sql = f"SELECT `id`,`shortBody`,`status`, `priority`,`ts` FROM `{self.tableName}` WHERE LOWER(`shortBody`) LIKE %s OR `id` = %s or `status` = %s or `priority` = %s AND `vid` = %s "
-		vals = ("%"+term+"%",term,term,term,vid)
+		sql = f"SELECT `id`,`shortBody`,`status`, `priority`,`ts` FROM `{self.tableName}` WHERE `vid` = %s AND (LOWER(`shortBody`) LIKE %s OR `id` = %s or `status` = %s or `priority` = %s)"
+		vals = (vid,"%"+term+"%",term,term,term)
 		conn.execute(sql,vals)
 		results = conn.fetchall()
 		complaints = []

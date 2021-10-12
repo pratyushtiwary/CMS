@@ -8,5 +8,8 @@ def loadAnnouncements(req):
 	if exists(["offset"],req):
 		offset = int(req["offset"])
 		announcements = announcement.load(offset)
-		return success(announcements)
+		if announcements:
+			return success(announcements)
+		else:
+			return error("NO_ANNOUNCEMENT_FOUND")
 	return Response(response=error("INVALID_REQUEST"),status=400)	

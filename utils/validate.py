@@ -5,9 +5,8 @@ def exists(keys: list, d: dict,parseDifferent:bool=False):
 		sum = 0
 		try:
 			for key in keys:
-				if type(d[key])==bool and d[key]==False:
-					continue
-				sum+=1
+				if type(d[key])!=bool and d[key]!=False:
+					sum+=1
 			if sum == total:
 				return True
 			else:

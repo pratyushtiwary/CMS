@@ -154,8 +154,9 @@ def sendMsg(args):
 			content = code
 
 
-		if args["extras"]:
+		if args.get("extras",False):
 			content = content%args["extras"]
+
 		msg.set_content(f"""
 			<!DOCTYPE html>
 			<html>
