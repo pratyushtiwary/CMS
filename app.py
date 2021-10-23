@@ -5,6 +5,7 @@ from api import api
 from utils.msg import error
 import os
 import mimetypes
+import time
 
 app = Flask(__name__)
 
@@ -20,6 +21,9 @@ app.register_blueprint(api,url_prefix='/api')
 def showImage(path):
 	return send_from_directory(globals.save_path,path)
 
+# @app.before_request
+# def before_request():
+# 	time.sleep(5)
 
 if __name__ == "__main__":
 	app.run()

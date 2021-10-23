@@ -23,16 +23,15 @@ class OTP(DB,GetSet):
 		email = self.email
 		phone = self.phone
 		type = self.type
-		sql = f"SELECT 1 FROM `{self.tableName}` WHERE `email` = %s and `type` = %s"
-		vals = (email,type)
+		sql = f"SELECT 1 FROM `{self.tableName}` WHERE `email` = %s and `phone` = %s and `type` = %s"
+		vals = (email,phone,type)
 		conn = self.conn.cursor()
 		conn.execute(sql,vals)
-
 		res = conn.fetchone()
 
 		if(res):
-			sql = f"UPDATE `{self.tableName}` SET `Code`= %s, `ts`= CURRENT_TIMESTAMP() WHERE `email`= %s and `type` = %s"
-			vals = (code,email,type)
+			sql = f"UPDATE `{self.tableName}` SET `Code`= %s, `ts`= CURRENT_TIMESTAMP() WHERE `email`= %s and `phone` = %s and `type` = %s"
+			vals = (code,email,phone,type)
 		else:
 			sql = f"INSERT INTO `{self.tableName}`(`id`, `ts`, `code`, `phone`, `email`, `type`) VALUES(NULL,CURRENT_TIMESTAMP(),%s,%s,%s,%s)"
 			vals = (code,phone,email,type)
@@ -57,7 +56,6 @@ class OTP(DB,GetSet):
 		conn.execute(sql,vals)
 
 		res = conn.fetchone()
-
 		if res:
 
 			ts = res[1] + datetime.timedelta(minutes=otp_validity_minutes)

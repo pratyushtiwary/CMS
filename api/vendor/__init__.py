@@ -4,3 +4,4 @@ from api.vendor.searchComplaint import searchComplaint
 from api.vendor.getComplaint import getComplaint
 from api.vendor.changePriority import changePriority
 from api.vendor.changeStatus import changeStatus
+from api.vendor.saveFeedback import saveFeedback

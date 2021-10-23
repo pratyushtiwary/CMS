@@ -40,7 +40,6 @@ def sendotp(req):
 				res = obj.login()
 				if res==True:
 					phone = obj.get("phone",False)
-
 					if phone:
 
 						result = sendOTP({

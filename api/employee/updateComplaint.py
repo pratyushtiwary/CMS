@@ -8,9 +8,9 @@ from utils.auth import viewToken
 def updateComplaint():
 	req = request.form
 
-	if exists(["cid","body","dept","oldImgs"],req,True):
+	if exists(["cid","body","oldImgs"],req,True):
 		eid = viewToken(req["token"])["id"]
-		cid, body, oldImgs, dept = req["cid"], req["body"], json.loads(req["oldImgs"]), req["dept"]
+		cid, body, oldImgs = req["cid"], req["body"], json.loads(req["oldImgs"])
 		newImgs = request.files
 		finalImgs = []
 		finalImgs.extend(oldImgs)
@@ -23,7 +23,6 @@ def updateComplaint():
 			"eid": eid,
 			"cid": cid,
 			"body": body,
-			"dept": dept,
 			"finalImgs": finalImgs
 		})
 

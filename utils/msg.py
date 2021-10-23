@@ -19,6 +19,10 @@ eCode = {
 	"MAX_REPOST_LIMIT_REACHED": "Hey looks like you already have reposted this complaint 2 times",
 	"NO_COMPLAINT_FOUND": "No complaint found with that id",
 	"INVALID_RIGHTS": "You don't have sufficient rights!",
+	"NO_DEPARTMENT_FOUND": "No department with that id found! :(",
+	"NO_VENDOR_FOUND": "No vendor with that id found! :(",
+	"NO_EMPLOYEE_FOUND": "No employee with that id found! :(",
+	"INVALID_PARAMS": "Invalid parameters :("
 }
 
 def error(code: str):

@@ -1,17 +1,20 @@
 from conn import DB
 from utils.validate import exists
 from json import dumps
-from utils.msg import error
+from utils.msg import error, success
 from utils.files import Files
 from utils.sender import sendMsg
 from globals import save_path, url
 import os
+from models.feedback import Feedback
 
 class Complaint(DB):
 	def __init__(self):
 		self.tableName = "complaint"
 		self.imageTable = "image"
-		self.employeeTable = "employees"
+		self.employeeTable = "employee"
+		self.vendorTable = "vendor"
+		self.feedbackTable = "feedback"
 		self.conn = DB.__init__(self)
 
 
@@ -31,13 +34,13 @@ class Complaint(DB):
 				email,phone = res[0], res[1]
 				shortBody = body[0:50]
 
-				sql = f"""INSERT INTO `{self.tableName}`(`id`, `eid`, `vid`,`shortBody`, `body`, `ts`, `priority`, `status`, `msg`, `adminMsg`,`dept`,`repostFrom`,`repostCount`) 
-					VALUES(NULL,%s,NULL,%s,%s,CURRENT_TIMESTAMP(),%s,%s,NULL,NULL,%s,NULL,0)
+				sql = f"""INSERT INTO `{self.tableName}`(`id`, `eid`, `vid`,`shortBody`, `body`, `ts`, `priority`, `status`, `msg`, `adminMsg`,`dept`,`repostFrom`,`repostCount`,`allotmentDate`) 
+					VALUES(NULL,%s,NULL,%s,%s,CURRENT_TIMESTAMP(),%s,%s,NULL,NULL,%s,NULL,0,NULL)
 				"""
 				vals = (eid,shortBody,body,priority,status,dept)
 				if int(dept) == 0:
-					sql = f"""INSERT INTO `{self.tableName}`(`id`, `eid`, `vid`,`shortBody` ,`body`, `ts`, `priority`, `status`, `msg`, `adminMsg`,`dept`,`repostFrom`,`repostCount`) 
-						VALUES(NULL,%s,NULL,%s,%s,CURRENT_TIMESTAMP(),%s,%s,NULL,NULL,NULL,NULL,0)
+					sql = f"""INSERT INTO `{self.tableName}`(`id`, `eid`, `vid`,`shortBody` ,`body`, `ts`, `priority`, `status`, `msg`, `adminMsg`,`dept`,`repostFrom`,`repostCount`.`allotmentDate`) 
+						VALUES(NULL,%s,NULL,%s,%s,CURRENT_TIMESTAMP(),%s,%s,NULL,NULL,NULL,NULL,0,NULL)
 					"""
 					vals = (eid,shortBody,body,priority,status)
 				
@@ -206,7 +209,12 @@ class Complaint(DB):
 		conn = self.conn.cursor()
 		final = {}
 
-		sql = f"SELECT `body`,`ts`,`status`,`dept`,`msg` FROM `{self.tableName}` WHERE `id` = %s AND `eid` = %s"
+		sql = f"""
+			SELECT c.`body`,c.`ts`,c.`status`,c.`dept`,c.`msg`,c.`allotmentDate`,c.`vid` 
+			FROM `{self.tableName}` c
+			WHERE c.`id` = %s 
+			AND c.`eid` = %s
+		"""
 		vals = (cid,eid)
 		conn.execute(sql,vals)
 		res = conn.fetchone()
@@ -218,6 +226,20 @@ class Complaint(DB):
 				"dept": res[3],
 				"msg": res[4]
 			}
+			sql = f"""
+				SELECT `name`
+				FROM `{self.vendorTable}`
+				WHERE `id` = %s
+			"""
+			vals = (res[6],)
+			conn.execute(sql,vals)
+			vendor = conn.fetchone()
+			if vendor:
+				final["vendor"] = {
+					"name": vendor[0],
+				}
+				if res[5]:
+					final["vendor"]["allotmentDate"] = res[5].strftime("%d/%m/%y")
 
 			sql = f"SELECT `id`,`path` FROM `{self.imageTable}` WHERE `cid` = %s"
 			vals = (cid,)
@@ -231,6 +253,9 @@ class Complaint(DB):
 				final["imgs"].append(img[1])
 				final["imgsId"].append(img[0])
 
+			feedback = Feedback()
+			final["feedback"] = feedback.get(cid)
+
 			return (True,final)
 		else:
 			return (False,error("NO_COMPLAINT_FOUND"))
@@ -243,7 +268,7 @@ class Complaint(DB):
 			select c.`body`, c.`ts`, c.`status`, c.`priority`, c.`adminMsg`, c.`msg`, e.`name`, e.`roomNo`
 			from complaint c, (
 				select `id`, `name`, `roomNo`
-			    from employees
+			    from `{self.employeeTable}`
 			) e
 			where c.eid = e.id
 			and c.id = %s
@@ -277,6 +302,10 @@ class Complaint(DB):
 			for img in imgs:
 				final["imgs"].append(img[1])
 				final["imgsId"].append(img[0])
+
+			feedback = Feedback()
+
+			final["feedback"] = feedback.get(cid,"vendor")
 
 			return (True,final)
 		else:
@@ -315,15 +344,15 @@ class Complaint(DB):
 
 					if int(dept) == 0:
 						sql = f"""
-								INSERT INTO `{self.tableName}`(`id`, `eid`, `vid`,`shortBody` ,`body`, `ts`, `priority`, `status`, `msg`, `adminMsg`, `dept`, `repostFrom`, `repostCount`)
-								VALUES (NULL,%s,NULL,%s,%s,CURRENT_TIMESTAMP(),'low','pending',NULL,NULL,NULL,%s,NULL)
+								INSERT INTO `{self.tableName}`(`id`, `eid`, `vid`,`shortBody` ,`body`, `ts`, `priority`, `status`, `msg`, `adminMsg`, `dept`, `repostFrom`, `repostCount`,`allotmentDate`)
+								VALUES (NULL,%s,NULL,%s,%s,CURRENT_TIMESTAMP(),'low','pending',NULL,NULL,NULL,%s,NULL,NULL)
 						"""
 						vals = (eid,shortBody,body,repostFrom)
 					else:
 
 						sql = f"""
-								INSERT INTO `{self.tableName}`(`id`, `eid`, `vid`,`shortBody` ,`body`, `ts`, `priority`, `status`, `msg`, `adminMsg`, `dept`, `repostFrom`, `repostCount`)
-								VALUES (NULL,%s,NULL,%s,%s,CURRENT_TIMESTAMP(),'low','pending',NULL,NULL,%s,%s,NULL)
+								INSERT INTO `{self.tableName}`(`id`, `eid`, `vid`,`shortBody` ,`body`, `ts`, `priority`, `status`, `msg`, `adminMsg`, `dept`, `repostFrom`, `repostCount`,`allotmentDate`)
+								VALUES (NULL,%s,NULL,%s,%s,CURRENT_TIMESTAMP(),'low','pending',NULL,NULL,%s,%s,NULL,NULL)
 						"""
 						vals = (eid,shortBody,body,dept,repostFrom)
 					conn.execute(sql,vals)
@@ -372,9 +401,9 @@ class Complaint(DB):
 				return error("SERVER_ERROR")
 
 	def update(self,args):
-		if exists(["eid","cid","body","finalImgs","dept"],args):
+		if exists(["eid","cid","body","finalImgs"],args):
 			conn = self.conn.cursor()
-			eid, cid, body, finalImgs, dept = args["eid"], args["cid"], args["body"], args["finalImgs"], args["dept"]
+			eid, cid, body, finalImgs = args["eid"], args["cid"], args["body"], args["finalImgs"]
 			try:
 				sql = f"SELECT `id`,`path` FROM `{self.imageTable}` WHERE cid = %s"
 				vals = (cid,)
@@ -403,12 +432,8 @@ class Complaint(DB):
 
 				shortBody = body[0:50]
 
-				if int(dept) == 0:
-					sql = f"UPDATE `{self.tableName}` SET `body` = %s, `shortBody` = %s, `status`='pending', `dept` = NULL WHERE `id` = %s"
-					vals = (body,shortBody,cid)
-				else:
-					sql = f"UPDATE `{self.tableName}` SET `body` = %s, `shortBody` = %s, `status`='pending',`dept` = %s WHERE `id` = %s"
-					vals = (body,shortBody,dept,cid)
+				sql = f"UPDATE `{self.tableName}` SET `body` = %s, `shortBody` = %s, `status`='pending' WHERE `id` = %s"
+				vals = (body,shortBody,cid)
 				conn.execute(sql,vals)
 
 				files.commit()
@@ -467,6 +492,10 @@ class Complaint(DB):
 
 
 			sql = f"DELETE FROM `{self.imageTable}` WHERE `cid` = %s"
+			vals = (cid,)
+			conn.execute(sql,vals)
+
+			sql = f"DELETE FROM `{self.feedbackTable}` WHERE `forComplaint` = %s"
 			vals = (cid,)
 			conn.execute(sql,vals)
 
@@ -543,3 +572,245 @@ class Complaint(DB):
 			print(e)
 			self.conn.rollback()
 			return error("SERVER_ERROR")
+
+	def listAll(self,offset):
+		conn = self.conn.cursor()
+		sql = f"""
+			SELECT COUNT(*)
+			FROM `{self.tableName}`
+		"""
+		conn.execute(sql)
+		res = conn.fetchone()
+		count = 0
+		if res:
+			count = res[0]
+
+		sql = f"""
+			SELECT `id`,`eid`,`vid`,`allotmentDate`,`status`,`priority`,`shortBody`
+			FROM `{self.tableName}`
+			ORDER BY `id` DESC
+			LIMIT 10
+			OFFSET %s
+		"""
+		vals = (offset,)
+		conn.execute(sql,vals)
+		rows = conn.fetchall()
+		final = []
+		for row in rows:
+			temp = {
+				"id": row[0],
+				"status": row[4],
+				"priority": row[5],
+				"shortDesc": row[6]
+			}
+			if row[3]:
+				temp["assignedOn"] = row[3].strftime("%d/%m/%y")
+
+			if row[2]:
+				sql = f"""
+					SELECT `name`
+					FROM `{self.vendorTable}`
+					WHERE `id` = %s
+				"""
+				vals = (row[2],)
+				conn.execute(sql,vals)
+				res = conn.fetchone()
+				temp["assignedTo"] = res[0]
+
+
+			sql = f"""
+				SELECT `name`
+				FROM `{self.employeeTable}`
+				WHERE `id` = %s
+			"""
+			vals = (row[1],)
+			conn.execute(sql,vals)
+			res = conn.fetchone()
+			temp["byEmp"] = res[0]
+
+			sql = f"""
+				SELECT `employeeStar`,`vendorStar`
+				FROM `{self.feedbackTable}`
+				WHERE `forComplaint` = %s
+			"""
+			vals = (row[0],)
+			conn.execute(sql,vals)
+			res = conn.fetchone()
+
+			if res:
+				if res[0] and res[1]:
+					temp["rating"] = (res[0]+res[1])/2
+
+			final.append(temp)
+
+		conn.close()
+		return {
+			"complaints": final,
+			"count": count
+		}
+
+	def searchAll(self,term,offset):
+		conn = self.conn.cursor();
+		term = term.lower()
+		sql = f"""
+			SELECT `id`,`eid`,`vid`,`allotmentDate`,`status`,`priority`,`shortBody`
+			FROM `{self.tableName}`
+			WHERE `id` = %s
+			OR `status` = %s
+			OR `priority` = %s
+			OR LOWER(`shortBody`) LIKE %s
+			ORDER BY `id` DESC
+			LIMIT 10
+			OFFSET %s
+		"""
+		vals = (term,term,term,'%'+term+'%',offset)
+		conn.execute(sql,vals)
+
+		final = []
+
+		rows = conn.fetchall()
+
+		if rows:
+			for row in rows:
+				temp = {
+					"id": row[0],
+					"status": row[4],
+					"priority": row[5],
+					"shortDesc": row[6]
+				}
+
+				sql = f"""
+					SELECT `name`
+					FROM `{self.employeeTable}`
+					WHERE `id` = %s
+				"""
+				vals = (row[1],)
+				conn.execute(sql,vals)
+				res = conn.fetchone()
+
+				temp["byEmp"] = res[0]
+
+				if row[3]:
+					temp["assignedOn"] = row[3].strftime("%d/%m/%y")
+
+				if row[2]:
+					sql = f"""
+						SELECT `name`
+						FROM `{self.vendorTable}`
+						WHERE `id` = %s
+					"""
+					vals = (row[2],)
+					conn.execute(sql,vals)
+					res = conn.fetchone()
+					temp["assignedTo"] = res[0]
+
+
+				sql = f"""
+					SELECT `employeeStar`,`vendorStar`
+					FROM `{self.feedbackTable}`
+					WHERE `forComplaint` = %s
+				"""
+				vals = (row[0],)
+				conn.execute(sql,vals)
+				res = conn.fetchone()
+
+				if res:
+					if res[0] and res[1]:
+						temp["rating"] = (res[0]+res[1])/2
+
+				final.append(temp)
+		return final
+
+	def view(self,id):
+		conn = self.conn.cursor()
+		sql = f"""
+			SELECT `eid`,`vid`,`body`,`ts`,`priority`,`status`,`msg`,`adminMsg`,`allotmentDate`
+			FROM `{self.tableName}`
+			WHERE `id` = %s
+		"""
+		vals = (id,)
+		conn.execute(sql,vals)
+
+		res = conn.fetchone()
+
+		if res:
+			final = {
+				"body": res[2],
+				"on": res[3].strftime("%d/%m/%y"),
+				"priority": res[4],
+				"status": res[5],
+				"msg": res[6],
+				"adminMsg": res[7]
+			}
+
+			if res[1]:
+				sql = f"""
+					SELECT `name`
+					FROM `{self.vendorTable}`
+					WHERE `id` = %s
+				"""
+				vals = (res[1],)
+				conn.execute(sql,vals)
+				v = conn.fetchone()
+				if v:
+					final["vendorName"] = v[0]
+					final["vendorId"] = res[1]
+
+			sql = f"""
+				SELECT `name`,`roomNo`
+				FROM `{self.employeeTable}`
+				WHERE `id` = %s
+			"""
+			vals = (res[0],)
+			conn.execute(sql,vals)
+			e = conn.fetchone()
+			if e:
+				final["emp"] = {
+					"id": res[0],
+					"name": e[0],
+					"roomNo": e[1]
+				}
+
+			if res[8]:
+				final["allotmentDate"] = res[8].strftime("%d/%m/%y")
+
+			sql = f"""
+				SELECT `path`
+				FROM `{self.imageTable}`
+				WHERE `cid` = %s
+			"""
+			vals = (id,)
+			conn.execute(sql,vals)
+			imgs = conn.fetchall()
+
+			if imgs:
+				final["imgs"] = []
+				for img in imgs:
+					final["imgs"].append(img[0])
+
+			sql = f"""
+				SELECT `vendorMsg`,`vendorStar`,`employeeMsg`,`employeeStar`
+				FROM `{self.feedbackTable}`
+				WHERE `forComplaint` = %s
+			"""
+			vals = (id,)
+			conn.execute(sql,vals)
+			feedback = conn.fetchone()
+
+			if feedback:
+				final["feedback"] = {}
+				if feedback[0] and feedback[1]:
+					final["feedback"]["vendor"] = {
+						"feedback": feedback[0],
+						"rating": feedback[1]
+					}
+
+				if feedback[2] and feedback[3]:
+					final["feedback"]["employee"] = {
+						"feedback": feedback[2],
+						"rating": feedback[3]
+					}
+			conn.close()
+			return success(final)
+		conn.close()
+		return error("NO_COMPLAINT_FOUND")

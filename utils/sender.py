@@ -4,7 +4,7 @@ from models.otp import OTP
 from utils.encryption import password_hash
 import smtplib
 from email.message import EmailMessage
-from globals import appName, email_host, email_username, email_password, email_port, otp_validity_minutes
+from globals import appName, email_host, email_username, email_password, email_port, otp_validity_minutes, URL as url
 from conn import connect
 
 # Dictionary of possible notifications
@@ -23,6 +23,42 @@ notifications = {
 		Hey, your complaint has been resolved.
 		<br><br>
 		<a href="%s/complaint/%s">Click here to view your complaint.</a>
+	""",
+	"CHANGE_DEPARTMENT": """
+		Hey, your department has been changed from <b>%s</b> to <b>%s</b>
+	""",
+	"ACCOUNT_ACTIVATED": f"""
+		Hey, your account has been activated, now you can login to start using {appName}
+	""",
+	"ACCOUNT_DEACTIVATED": """
+		Hey, your account has been deactivated
+	""",
+	"NEW_USER_EMPLOYEE": f"""
+		Welcome to {appName},
+		<br><br>
+		Your account has been created on {appName}
+		<br>
+		To learn how to use {appName} <a href="#employee">Click Here</a>
+		<br>
+		To login <a href="{url+"/login"}">Click Here</a>
+	""",
+	"NEW_USER_VENDOR": """
+		Welcome to """+appName+""",
+		<br><br>
+		Your account has been created on """+appName+"""
+		<br>
+		To learn how to use """+appName+""" <a href="#vendor">Click Here</a>
+		<br>
+		Department Alloted :- %s Department
+		<br>
+		To login <a href="{url+"/login"}">Click Here</a>
+	""",
+	"NEW_USER_ADMIN": f"""
+		Welcome to {appName},
+		<br><br>
+		Your account has been created on {appName}
+		<br>
+		To login <a href="{url+"/login"}">Click Here</a>
 	"""
 }
 
@@ -131,7 +167,7 @@ def sendMsg(args):
 
 	"""
 	types = {
-		"employee": "employees",
+		"employee": "employee",
 		"admin": "admin",
 		"vendor": "vendor"
 	}
@@ -198,8 +234,11 @@ def sendMsg(args):
 
 		notify = cursor.fetchone()
 
-		if notify:
-			sendMail(msg)
+		if args.get("force",False):
+			sendMail(msg)			
+		else:
+			if notify:
+				sendMail(msg)
 
 		cursor.close()
 		conn.close()

@@ -2,6 +2,9 @@
 appName = "CMS"
 
 # Encryption
+# Try to keep the below keep long, but not too much long
+# please reset the system before changing, 
+# changing while system is working will logout all the users
 key = b"8@95d2f4de57e436"
 
 # DB
@@ -27,5 +30,6 @@ max_file_size = 0 #(in megabytes) set 0 for no restriction
 allowed_file_types = ["jpeg","jpg","png","svg","gif","bmp","ico"]
 save_path = "images"
 
-# Cross origin
-url = "http://localhost:3000"
+# url - Cross origin
+# URL - for mails
+url = URL = "http://localhost:3000"
