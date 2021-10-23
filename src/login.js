@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import Head from "./components/Head";
 import styles from "./styles/login.module.css";
 import { Typography, TextField, Button, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 import PasswordField from "./components/PasswordField";
@@ -101,9 +101,9 @@ export default function Login(props){
 
 	return (
 		<>
-			<Helmet>
+			<Head>
 				<title>Login - {appName}</title>
-			</Helmet>
+			</Head>
 			{
 				allow && (
 					<>

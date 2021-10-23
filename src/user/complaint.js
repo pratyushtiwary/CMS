@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "../components/Header";
 import Dialog from "../components/Dialog";
-import { Helmet } from "react-helmet";
+import Head from "../components/Head";
 import { appName } from "../globals";
 import first from "../assets/user/main/first.png";
 import { Typography, TextField, Button, ListItemText, ListItemIcon, Icon, FormControl, Select, InputLabel, MenuItem } from "@material-ui/core";
@@ -13,6 +13,7 @@ import Session from "../components/Session";
 import Loading from "../components/Loading";
 import { Error, Success } from "../components/Message";
 import Carousel from "../components/Carousel";
+import Feedback from "../components/Feedback";
 
 const token = Session.login().token
 let err, suc;
@@ -32,6 +33,7 @@ export default function Complaint(props){
 	const [ids,setIds] = useState([0]);
 	const [departments,setDepartments] = useState(["-"]);
 	const [department,setDepartment] = useState(0);
+	const [deptLoaded,setDeptLoaded] = useState(false);
 
 
 	useEffect(()=>{
@@ -52,7 +54,7 @@ export default function Complaint(props){
 		hit("api/fetch/departments",{
 			"token": token
 		}).then((c)=>{
-			if(c.success.msg){
+			if(c.success){
 				const is = [];
 				const names = [];
 				const res = c.success.msg.departments;
@@ -62,6 +64,7 @@ export default function Complaint(props){
 				});
 				setIds((e)=>[...e,...is]);
 				setDepartments((e)=>[...e,...names]);
+				setDeptLoaded(true);
 			}
 		})
 		hit("api/employee/getComplaint",{
@@ -130,10 +133,8 @@ export default function Complaint(props){
 		const body = val;
 		const oldImgs = [];
 		const cid = id;
-		let dept = ids[department];
 		formData.append("cid",cid);
 		formData.append("body",body);
-		formData.append("dept",dept);
 		formData.append("token",token);
 		imgs.forEach((e,i)=>{
 			if(typeof e === "string"){
@@ -242,11 +243,19 @@ export default function Complaint(props){
 		setOpenDialog(true);
 	}
 
+
+	function changeFeedback(newFeedback) {
+		const oldComplaint = complaint;
+		oldComplaint.feedback = newFeedback;
+		setComplaint(oldComplaint);
+		setSuccessMsg("Feedback saved successfully!");
+	}
+
 	return (
 		<>
-			<Helmet>
+			<Head>
 				<title>Complaint {id} - {appName}</title>
-			</Helmet>
+			</Head>
 			<Header
 				title = {"Complaint"}
 				items = {["Home","Complaints","Announcements","Settings"]}
@@ -263,40 +272,69 @@ export default function Complaint(props){
 								<div className={styles.images}>
 									<Carousel imgs={complaint.imgs}/>
 								</div>
-								<div className={styles.main+" "+styles.first+" "+styles.inline}>
-									<Typography variant="subtitle2" className={styles.title}>Complaint ID :- </Typography>
-									<Typography variant="subtitle1">{id}</Typography>
-								</div>
-								<div className={styles.main}>
-									<Typography variant="subtitle2" className={styles.title}>Complaint Description :-</Typography>
-									<Typography variant="subtitle1">{complaint.longText}</Typography>
-								</div>
-								<div className={styles.main+" "+styles.inline}>
-									<Typography variant="subtitle2" className={styles.title}>Complaint Date :- </Typography>
-									<Typography variant="subtitle1">{complaint.date}</Typography>
-								</div>
-								<div className={styles.main+" "+styles.inline}>
-									<Typography variant="subtitle2" className={styles.title}>Complaint Status :- </Typography>
-									<Typography variant="subtitle1" className={styles.status+" "+styles[complaint.status]}>{complaint.status}</Typography>
-								</div>
-								{
-									complaint.status === "resolved" && complaint.msg && (
-										<div className={styles.main+" "+styles.inline}>
-											<Typography variant="subtitle2" className={styles.title}>Resolution :- </Typography>
-											<Typography variant="subtitle1" className={styles.bold}>{complaint.msg}</Typography>
+								<div className={styles.mainCont}>
+									<div className={styles.complaintMain}>
+										<div className={styles.main+" "+styles.first+" "+styles.inline}>
+											<Typography variant="subtitle2" className={styles.title}>Complaint ID :- </Typography>
+											<Typography variant="subtitle1">{id}</Typography>
 										</div>
-
-									)
-								}
-								{
-									complaint.status === "error" && complaint.msg && (
-										<div className={styles.main+" "+styles.inline}>
-											<Typography variant="subtitle2" className={styles.title}>Error :- </Typography>
-											<Typography variant="subtitle1" className={styles.bold}>{complaint.msg}</Typography>
+										<div className={styles.main}>
+											<Typography variant="subtitle2" className={styles.title}>Complaint Description :-</Typography>
+											<Typography variant="subtitle1">{complaint.longText}</Typography>
 										</div>
+										<div className={styles.main+" "+styles.inline}>
+											<Typography variant="subtitle2" className={styles.title}>Complaint Date :- </Typography>
+											<Typography variant="subtitle1">{complaint.date}</Typography>
+										</div>
+										<div className={styles.main+" "+styles.inline}>
+											<Typography variant="subtitle2" className={styles.title}>Complaint Status :- </Typography>
+											<Typography variant="subtitle1" className={styles.status+" "+styles[complaint.status]}>{complaint.status}</Typography>
+										</div>
+									</div>
+									{
+										complaint.vendor && (
+											<div className={styles.side}>
+												<div className={(complaint.status==="resolved"?styles.items:styles.item)}>
+													<div className={styles.sideCont}>
+														<Typography variant="subtitle1">Vendor Assigned :-</Typography>
+														<div className={styles.initial}>{complaint.vendor.name[0]}</div>
+														<div className={styles.name}>{complaint.vendor.name}</div>
+														{
+															complaint.vendor.allotmentDate && (
+																<Typography variant="subtitle1" className={styles.allotmentDate}><Icon>schedule</Icon>{complaint.vendor.allotmentDate}</Typography>
+															)
+														}
+														{
+															complaint.status === "resolved" && complaint.msg && (
+																<div className={styles.main+" "+styles.inline}>
+																	<Typography variant="subtitle2" className={styles.title}>Solution :- </Typography>
+																	<Typography variant="subtitle1" className={styles.bold}>{complaint.msg}</Typography>
+																</div>
 
-									)
-								}
+															)
+														}
+														{
+															complaint.status === "error" && complaint.msg && (
+																<div className={styles.main+" "+styles.inline}>
+																	<Typography variant="subtitle2" className={styles.title}>Error :- </Typography>
+																	<Typography variant="subtitle1" className={styles.bold}>{complaint.msg}</Typography>
+																</div>
+
+															)
+														}
+													</div>
+													{
+														complaint.status==="resolved" && (
+															<div className={styles.sideCont+" "+styles.feedback}>
+																<Feedback for="employee" feedback={complaint.feedback} onFeedback={changeFeedback} cid={id} onError={(e)=>setErrorMsg(e)}/>
+															</div>
+														)
+													}
+												</div>
+											</div>
+										)
+									}
+								</div>
 
 								<div className={styles.actions}>
 									{
@@ -307,10 +345,15 @@ export default function Complaint(props){
 											</Button>
 										)
 									}
-									<Button variant="outlined" color="primary" onClick={repost} className={styles.action}>
-										<ListItemIcon><Icon>restart_alt</Icon></ListItemIcon>
-										<ListItemText>Repost</ListItemText>
-									</Button>
+									{
+										deptLoaded && (
+											<Button variant="outlined" color="primary" onClick={repost} className={styles.action}>
+												<ListItemIcon><Icon>restart_alt</Icon></ListItemIcon>
+												<ListItemText>Repost</ListItemText>
+											</Button>
+										)
+									}
+									
 									<Button variant="outlined" color="primary" onClick={del} className={styles.action}>
 										<ListItemIcon><Icon>delete</Icon></ListItemIcon>
 										<ListItemText>Delete</ListItemText>
@@ -340,24 +383,28 @@ export default function Complaint(props){
 										onChange={changeTextField}
 										className={styles.input}
 									/>
-									<FormControl variant="outlined" className={styles.input}>
-								        <InputLabel htmlFor="departmentType" variant="outlined">Department</InputLabel>
-								        <Select
-								          id = "departmentType"
-								          color="primary"
-								          value={department}
-								          variant="outlined"
-								          label="Department"
-								          onChange={updateInput(setDepartment)}
-										  required
-								        >
-								        {
-								        	departments.map((e,i)=>(
-										          <MenuItem value={i} key={i}>{e}</MenuItem>
-								        	))
-								        }
-								        </Select>
-								    </FormControl>
+									{
+										dialogTitle === "Repost" && (
+											<FormControl variant="outlined" className={styles.input}>
+										        <InputLabel htmlFor="departmentType" variant="outlined">Department</InputLabel>
+										        <Select
+										          id = "departmentType"
+										          color="primary"
+										          value={department}
+										          variant="outlined"
+										          label="Department"
+										          onChange={updateInput(setDepartment)}
+												  required
+										        >
+										        {
+										        	departments.map((e,i)=>(
+												          <MenuItem value={i} key={i}>{e}</MenuItem>
+										        	))
+										        }
+										        </Select>
+										    </FormControl>
+										)
+									}
 									<div className={styles.image}>
 										<Typography variant="subtitle2" className={styles.title}>Images</Typography>
 										<Uploader 
@@ -400,10 +447,17 @@ export default function Complaint(props){
 					loaded===false && (
 						<div className={styles.skeleton}>
 							<div className={styles.images}></div>
-							<div className={styles.id}></div>
-							<div className={styles.desc}></div>
-							<div className={styles.date}></div>
-							<div className={styles.status}></div>
+							<div className={styles.mainCont}>
+								<div className={styles.complaintMain}>
+									<div className={styles.id}></div>
+									<div className={styles.desc}></div>
+									<div className={styles.date}></div>
+									<div className={styles.status}></div>
+								</div>
+								<div className={styles.side}>
+									<div className={styles.sideCont}></div>
+								</div>
+							</div>
 						</div>
 					)
 				}	

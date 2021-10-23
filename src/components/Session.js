@@ -44,16 +44,25 @@ Session.login = (token=undefined,type="")=>{
 	}
 	else{
 		let data = Session.getSafe("_id");
-		if(data){
-			data = JSON.parse(data);
-		}
-		else{
+		try{
+			if(data){
+				data = JSON.parse(data);
+			}
+			else{
+				data = {
+					token: false,
+					type: false
+				}
+			}
+			return data;
+		}catch {
 			data = {
 				token: false,
 				type: false
 			}
+			return data;
 		}
-		return data;
+		
 	}
 }
 

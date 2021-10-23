@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import Head from "./components/Head";
 import { Typography, TextField, Button, Select, FormControl, InputLabel, MenuItem } from "@material-ui/core";
 import styles from "./styles/register.module.css";
 import PasswordField from "./components/PasswordField";
@@ -373,9 +373,9 @@ export default function Register(props){
 
 	return (
 		<>
-			<Helmet>
+			<Head>
 				<title>Register - {appName}</title>
-			</Helmet>
+			</Head>
 			{
 				allow && (
 					<>

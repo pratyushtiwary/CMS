@@ -1,5 +1,5 @@
 import Header from "../components/Header";
-import { Helmet } from "react-helmet";
+import Head from "../components/Head";
 import { useState, useEffect } from "react";
 import { TextField, Button, FormControl, InputLabel, Select, MenuItem } from "@material-ui/core";
 import styles from "../styles/user/NewComplaint.module.css";
@@ -44,8 +44,7 @@ export default function NewComplaint(props){
 
 			if(c.error){
 				setLoaded(null);
-				setErrorMsg("Unable to load page, refreshing...");
-				window.location.reload();
+				setErrorMsg("Unable to load page, to continue please refresh...");
 			}
 		})
 		// eslint-disable-next-line react-hooks/exhaustive-deps
@@ -93,9 +92,9 @@ export default function NewComplaint(props){
 
 	return (
 		<>
-			<Helmet>
+			<Head>
 				<title>New Complaint - {appName}</title>
-			</Helmet>
+			</Head>
 			<Header
 				title = "New Complaint"
 				hideNewComplaint = {true}

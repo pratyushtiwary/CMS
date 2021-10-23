@@ -1,0 +1,101 @@
+.cont{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	margin-top: 80px;
+	width: 97.5vw;
+	max-width: 600px;
+}
+
+.input{
+	position: relative;
+	width: 100%;
+	margin: 10px 0 !important;
+}
+
+.btnGrp{
+	position: relative;
+	display: grid;
+	grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
+	margin: 10px 0;
+	width: 100%;
+	overflow: hidden;
+}
+
+.btnGrp .btn{
+	width: 90%;
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.btn{
+	padding: 10px !important;
+	margin: 10px 0;
+	width: 100%;
+}
+
+.btn.warning{
+	color: red;
+	border: 1px solid red;
+}
+
+@media screen and (max-width: 631px){
+	.btnGrp .btn{
+		width: 100%;
+		margin: 10px 0px;
+	}
+}
+
+.skeleton{
+	width: 90%;
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.skeleton .input,
+.skeleton .btn{
+	background: #afafaf;
+	width: 97.5%;
+}
+
+.skeleton .input{
+	height: 40px;
+	border-radius: 4px;
+	padding: 10px;
+}
+
+.skeleton .btn{
+	height: 30px;
+	border-radius: 4px;
+}
+
+.skeleton .btn.left{
+	margin-left: 0px !important;
+	margin-right: 10px;
+	width: 90%;
+}
+
+.skeleton .btn.right{
+	margin-right: 0px;
+	margin-left: 10px;
+	width: 90%;
+}
+
+
+.skeleton{
+	animation: skeletonAnimate 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonAnimate{
+	0%{
+		opacity: 0.25;
+	}
+	50%{
+		opacity: 1;
+	}
+	100%{
+		opacity: 0.25;
+	}
+}

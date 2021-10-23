@@ -3,10 +3,6 @@
 	background-color: green;
 	color: #ffffff;
 	border-radius: 4px;
-	width: 90%;
-	position: relative;
-	left: 50%;
-	transform: translate(-50%);
 	text-align: center;
 	padding: 5px;
 	margin: 5px 0;
@@ -14,6 +10,20 @@
 	grid-template-columns: auto auto;
 	align-items: center;
 	justify-content: center;
+	margin-bottom: 10px;
+}
+
+.errFloat,
+.successFloat{
+	background: red !important;
+	display: grid;
+	grid-template-columns: auto auto;
+	align-items: center;
+	justify-content: center;
+}
+
+.successFloat{
+	background: green !important;
 }
 
 .error{
@@ -21,25 +31,24 @@
 }
 
 .error .icon,
-.success .icon{
+.success .icon,
+.errFloat .icon,
+.successFloat .icon{
 	color: #ffffff !important;
 	margin-right: 5px;
 }
 
 
 .error .message,
-.success .message{
+.success .message,
+.errFloat .message{
 	display: inline;
 }
 
-.float{
-	position: fixed;
-	z-index: 100;
-	transform: none;
-	padding: 5px 10px;
-	box-shadow: 5px 5px 20px #afafaf;
-	border-radius: 4px;
-	bottom: 15px;
-	left: 10px;
-	width: fit-content;
+@media screen and (max-width: 475px){
+	.error,
+	.success{
+		margin-left: 0px;
+		width: 97.5%;
+	}
 }

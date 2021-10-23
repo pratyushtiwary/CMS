@@ -1,4 +1,4 @@
-import Helmet from "react-helmet";
+import Head from "../components/Head";
 import { appName } from "../globals";
 import Header from "../components/Header";
 import styles from "../styles/admin/NewAnnouncement.module.css";
@@ -26,6 +26,8 @@ export default function NewAnnouncement(props){
 
 	function post(e){
 		e.preventDefault();
+		setSuccessMsg(null);
+		setErrorMsg(null);
 		setLoadingMsg("Creating Announcement...");
 		const b = body;
 		hit("api/admin/createAnnouncement",{
@@ -44,9 +46,9 @@ export default function NewAnnouncement(props){
 
 	return (
 		<>
-			<Helmet>
+			<Head>
 				<title>New Announcement - {appName}</title>
-			</Helmet>
+			</Head>
 			<Header
 				title = "New Announcement"
 				items = {["Home","New User","New Department","Announcements","Departments","Complaints","Users","Settings"]}

@@ -48,17 +48,17 @@
 	text-overflow: ellipsis;
 }
 
-.cont .complaints{
+.cont .employees{
 	position: relative;
 	width: 100%;
 }
 
-.cont .complaints .title{
+.cont .employees .title{
 	position: relative;
 	width: 100%;
 }
 
-.cont .complaints .title .line{
+.cont .employees .title .line{
 	position: absolute;
 	top: 50%;
 	transform: translate(0%,-50%);
@@ -68,7 +68,7 @@
 	z-index: 1;
 }
 
-.cont .complaints .title .content{
+.cont .employees .title .content{
 	position: relative;
 	max-width: 75%;
 	overflow-x: hidden;
@@ -81,15 +81,15 @@
 	padding: 0 10px;
 }
 
-.cont .complaints .complaint{
+.cont .employees .employee{
 	margin: 10px 0;
 }
 
-.cont .complaints .complaint .inner{
+.cont .employees .employee .inner{
 	padding: 10px;
 }
 
-.cont .complaints .complaint .content{
+.cont .employees .employee .content{
 	position: relative;
 	width: 95%;
 	overflow: hidden;
@@ -97,21 +97,21 @@
 	text-overflow: ellipsis;
 }
 
-.cont .complaints .complaint .content span{
+.cont .employees .employee .content span{
 	text-transform: uppercase;
 }
 
-.cont .complaints .complaint .content .high,
-.cont .complaints .complaint .content .error{
+.cont .employees .employee .content .high,
+.cont .employees .employee .content .error{
 	color: red;
 }
 
-.cont .complaints .complaint .content .mid,
-.cont .complaints .complaint .content .pending{
+.cont .employees .employee .content .mid,
+.cont .employees .employee .content .pending{
 	color: orange;
 }
 
-.cont .complaints .complaint .content .resolved{
+.cont .employees .employee .content .resolved{
 	color: green;
 }
 
@@ -123,6 +123,31 @@
 	margin: 10px 0;
 }
 
+.cont .loadMore{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.cont .loadingNext{
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	justify-items: center;
+	width: fit-content;
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.cont .loadingNext .txt{
+	width: fit-content;
+}
+
+.cont .loadingNext .circle{
+	margin-right: 5px;
+}
+
 .options .input{
 	position: relative;
 	left: 50%;
@@ -130,4 +155,104 @@
 	padding: 10px;
 	width: 97.5%;
 	margin: 5px 0;
+}
+
+.cont .notFound{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	padding-bottom: 10px;
+	text-align: center;
+}
+
+.skeleton .initial,
+.skeleton .block1,
+.skeleton .block2,
+.skeleton .btn,
+.skeleton .employee,
+.skeleton .seperator,
+.skeleton .loadMore{
+	position: relative;
+	background: #afafaf;
+	border-radius: 4px;
+}
+
+.skeleton .main{
+	display: grid;
+	grid-template-columns: 60px auto;
+}
+
+.skeleton .initial{
+	width: 50px;
+	height: 50px;
+	padding: 10px;
+	border-radius: 50px;
+}
+
+.skeleton .content{
+	margin-left: 25px;
+}
+
+.skeleton .block1{
+	width: 80px;
+	height: 30px;
+}
+
+.skeleton .block2{
+	width: 150px;
+	height: 35px;
+	margin: 5px 0px;
+}
+
+.skeleton .options{
+	display: grid;
+	grid-template-columns: repeat(auto-fit,minmax(210px,1fr));
+	width: 100%;
+}
+
+.skeleton .options .btn{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	padding: 10px;
+	width: 80%;
+	height: 35px;
+	margin: 5px 0;
+}
+
+.skeleton .seperator{
+	position: relative;
+	width: 100%;
+	height: 35px;
+}
+
+.skeleton .employee{
+	position: relative;
+	width: 100%;
+	height: 100px;
+	margin: 7.5px 0;
+}
+
+.skeleton .loadMore{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	width: 100px;
+	height: 35px;
+}
+
+.skeleton{
+	animation: skeletonAnimate 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonAnimate{
+	0%{
+		opacity: 0.25;
+	}
+	50%{
+		opacity: 1;
+	}
+	100%{
+		opacity: 0.25;
+	}
 }

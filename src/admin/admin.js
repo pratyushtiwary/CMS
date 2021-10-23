@@ -1,4 +1,4 @@
-import Helmet from "react-helmet";
+import Head from "../components/Head";
 import { appName } from "../globals";
 import Header from "../components/Header";
 import { useEffect, useState } from "react";
@@ -22,9 +22,9 @@ export default function Admin(props){
 
 	return (
 		<>
-			<Helmet>
+			<Head>
 				<title>View admin - {appName}</title>
-			</Helmet>
+			</Head>
 			<Header
 				title = "View admin"
 				items = {["Home","New User","New Announcement","New Department","Announcements","Departments","Complaints","Users","Settings"]}

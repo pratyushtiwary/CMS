@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import Head from "../components/Head";
 import Header from "../components/Header";
 import { useState, useEffect } from "react";
 import styles from "../styles/user/Main.module.css";
@@ -53,9 +53,9 @@ export default function Main(props){
 
 	return (
 		<>
-			<Helmet>
+			<Head>
 				<title>Dashboard - {appName}</title>
-			</Helmet>
+			</Head>
 			<Header
 				title = "Dashboard"
 				items = {["Complaints","Announcements","Settings"]}

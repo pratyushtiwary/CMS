@@ -44,6 +44,17 @@
 .cont .complaintBody{
 	display: grid;
 	grid-template-columns: 1fr 0.35fr;
+	white-space: pre-line;
+}
+
+.cont .complaintBody .side .item{
+	position: sticky;
+	top: 80px;
+}
+
+.cont .complaintBody .side .items{
+	position: sticky;
+	top: 10px;
 }
 
 .cont .complaintBody .side .block{
@@ -51,8 +62,6 @@
 	padding: 10px;
 	border-radius: 10px;
 	margin-left: 25px;
-	position: sticky;
-	top: 80px;
 }
 
 .cont .complaintBody .side .block .content{

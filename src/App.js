@@ -9,8 +9,10 @@ import Vendor from "./vendor/index";
 import Admin from "./admin/index";
 import { useState, useEffect } from "react";
 import Session from "./components/Session";
-
+import { HelmetProvider } from 'react-helmet-async';
 import "./global.css";
+import { Offline } from "react-detect-offline";
+import { motion } from "framer-motion";
 
 const theme = createTheme({
   palette: {
@@ -28,7 +30,8 @@ const theme = createTheme({
 
 
 function App() {
-  const [content,setContent] = useState(null)
+  const [content,setContent] = useState(null);
+  const errorMsg = "No Internet Connection";
 
   useEffect(()=>{
     const loggedin = Session.login();
@@ -58,31 +61,45 @@ function App() {
     else{
       window.location.href = "/login";
     }
-  },[])
+  },[]);
 
   return (
     <>
-      <ThemeProvider theme={theme}>
-        <Router>
-          <Switch>
-            <Route path="/login">
-              <Login/>
-            </Route>
-            <Route path="/register">
-              <Register/>
-            </Route>
-            <Route path="/forget_password">
-              <ForgetPassword/>
-            </Route>
-            <Route path="/" exact>
-              {content}
-            </Route>
-            <Route path="/*">
-              {content}
-            </Route>
-          </Switch>
-        </Router>
-      </ThemeProvider>
+  	  <Offline>
+  	  	<motion.div 
+          className="offlineMsg"
+          initial={{x: "-100vw"}}
+          animate={{x:0}}
+        >{errorMsg}</motion.div>
+  	  </Offline>
+      <HelmetProvider>
+        <ThemeProvider theme={theme}>
+          <motion.div
+            initial = {{opacity: 0}}
+            animate = {{opacity: 1}}
+          >
+            <Router>
+              <Switch>
+                <Route path="/login">
+                  <Login/>
+                </Route>
+                <Route path="/register">
+                  <Register/>
+                </Route>
+                <Route path="/forget_password">
+                  <ForgetPassword/>
+                </Route>
+                <Route path="/" exact>
+                  {content}
+                </Route>
+                <Route path="/*">
+                  {content}
+                </Route>
+              </Switch>
+            </Router>
+          </motion.div>
+        </ThemeProvider>
+      </HelmetProvider>
     </>
   );
 }

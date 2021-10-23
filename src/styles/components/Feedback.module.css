@@ -1,0 +1,65 @@
+.stars{
+	margin-top: 5px;
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	width: fit-content;
+	display: grid;
+	grid-template-columns: repeat(5,1fr);
+}
+
+.star,
+.starOutline{
+	font-size: 1.75rem !important;
+}
+
+.submit,
+.edit,
+.cancel{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	margin-top: 5px !important;
+	margin-bottom: 10px !important;
+	width: 100%;
+}
+
+.input{
+	width: 100%;
+	margin: 5px 0 !important;
+}
+
+.error{
+	display: block;
+	position: relative;
+	color: red;
+	width: 100% !important;
+	font-size: 12px !important;
+	margin-bottom: 5px !important;
+	margin-left: 12.5px !important;
+}
+
+.feedback .stars span{
+	margin: 5px;
+	padding: 5px;
+}
+
+.feedback .desc{
+	display: block;
+	position: relative;
+	width: 100% !important;
+	margin: 5px 0 5px 10px !important;
+}
+
+.options{
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+}
+
+.options .submit{
+	margin-left: 5px;
+}
+
+.options .cancel{
+	margin-right: 5px;
+}

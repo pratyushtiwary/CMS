@@ -1,5 +1,5 @@
 import { appName } from "../globals";
-import Helmet from "react-helmet";
+import Head from "../components/Head";
 import Header from "../components/Header";
 import styles from "../styles/vendor/Complaints.module.css";
 import { Typography, Card, TextField, CardActionArea, Button, CircularProgress } from "@material-ui/core";
@@ -21,7 +21,6 @@ export default function Complaints(props){
 	const [notFound,setNotFound] = useState(null);
 
 	useEffect(()=>{
-		console.log(token);
 		hit("api/vendor/getComplaints",{
 			"token": token,
 			"offset": "0"
@@ -146,9 +145,9 @@ export default function Complaints(props){
 
 	return (
 		<>
-			<Helmet>
+			<Head>
 				<title>Complaints - {appName}</title>
-			</Helmet>
+			</Head>
 			<Header
 				title="Complaints"
 				hideNewComplaint

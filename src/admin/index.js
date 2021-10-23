@@ -10,6 +10,9 @@ import Users from "./users";
 import Departments from "./departments";
 import Department from "./department";
 import Announcements from "./announcements";
+import Complaints from "./complaints";
+import Settings from "./settings";
+import Complaint from "./complaint";
 
 export default function User(props){
 	return (
@@ -36,10 +39,17 @@ export default function User(props){
 				<Route path="/announcements" exact>
 					<Announcements/>
 				</Route>
+				<Route path="/complaints" exact>
+					<Complaints/>
+				</Route>
+				<Route path="/settings" exact>
+					<Settings/>
+				</Route>
 				<Route path="/employee/:id" component={Employee} />
 				<Route path="/vendor/:id" component={Vendor} />
 				<Route path="/admin/:id" component={Admin} />
 				<Route path="/department/:id" component={Department} />
+				<Route path="/complaint/:id" component={Complaint} />
 			</Switch>
 		</Router>
 	)

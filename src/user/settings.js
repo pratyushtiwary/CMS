@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import Head from "../components/Head";
 import { appName } from "../globals";
 import Header from "../components/Header";
 import styles from "../styles/user/Settings.module.css";
@@ -145,9 +145,9 @@ export default function Setttings(props){
 
 	return (
 		<>
-			<Helmet>
+			<Head>
 				<title>Settings - {appName}</title>
-			</Helmet>
+			</Head>
 			<Header
 				title = "Settings"
 				items = {["Home","Complaints","Announcements"]}

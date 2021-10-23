@@ -53,12 +53,11 @@
 .cont .complaints,
 .complaintSkeleton{
 	display: grid;
-	position: absolute;
 	align-items: center;
 	align-content: center;
 	justify-items: center;
 	margin-top: 75px;
-	height: calc(100% - 75px);
+	height: calc(100vh - 75px);
 	width: 100%;
 	grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
 }
@@ -103,6 +102,7 @@
 	min-width: 60vw;
 	max-width: 80%;
 	box-shadow: inset 0px 1px 5px #afafaf;
+	white-space: pre-line;
 }
 
 

@@ -1,4 +1,4 @@
-import { Typography, Dialog, DialogContent, DialogContentText, CircularProgress} from "@material-ui/core";
+import { Typography, Dialog, DialogContent, DialogContentText, CircularProgress, Zoom } from "@material-ui/core";
 import styles from "../styles/components/Loading.module.css";
 
 export default function Loading(props){
@@ -10,6 +10,7 @@ export default function Loading(props){
 				aria-labelledby="alert-dialog-title"
 				aria-describedby="alert-dialog-description"
 				className = {styles.loader}
+				TransitionComponent={Zoom}
 			>
 				<DialogContent>
 		          <DialogContentText id="alert-dialog-description" className={styles.cont}>

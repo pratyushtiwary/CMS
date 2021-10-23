@@ -1,5 +1,5 @@
 import { appName } from "../globals";
-import { Helmet } from "react-helmet";
+import Head from "../components/Head";
 import Header from "../components/Header";
 import styles from "../styles/user/Complaints.module.css";
 import { Button, Card, TextField, CardActionArea, Typography, CircularProgress } from "@material-ui/core"; 
@@ -164,9 +164,9 @@ export default function Complaints(props){
 
 	return (
 		<>
-			<Helmet>
+			<Head>
 				<title>Complaints - {appName}</title>
-			</Helmet>
+			</Head>
 			<Header
 				title="Complaints"
 				items = {["Home","Announcements","Settings"]}

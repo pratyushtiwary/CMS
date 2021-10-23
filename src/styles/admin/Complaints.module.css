@@ -29,45 +29,61 @@
 	width: 100%;
 	background: #ffffff;
 	z-index: 2;
+	padding-bottom: 10px;
 	padding: 10px 0;
 }
 
-.cont .departments{
-	display: grid;
-	grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+.cont .complaints .complaint{
+	margin: 10px 0;
 }
 
-.cont .departments .department{
-	margin: 10px;
-}
-
-.cont .departments .department .inner{
+.cont .complaints .complaint .inner{
 	padding: 10px;
-	height: 100%;
+	width: 97.5%;
 }
 
-.cont .departments .department .inner .title{
-	margin-bottom: 5px;
+.cont .complaints .complaint .title{
+	white-space: nowrap;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
 }
 
-.cont .departments .department .inner .emps{
+.cont .complaints .complaint .inner .meta{
+	white-space: nowrap;
+	overflow-x: hidden;
+	text-overflow: ellipsis;
 	display: grid;
-	align-items: center;
-	grid-template-columns: auto 1fr;	
+	grid-template-columns: auto 1fr;
 }
 
-.cont .departments .department .inner .emps .content{
-	margin-left: 5px;
+.cont .complaints .complaint .inner .meta span{
+	align-self: center;
+	margin-right: 5px;
 }
 
-.cont .departments .department .inner .rename,
-.cont .departments .department .inner .delete{
-	position: relative;
-	width: 92.5%;
-	padding: 5px;
-	margin: 2.5px 0;
+.cont .complaints .complaint .inner .meta.block{
+	text-transform: uppercase;
 }
 
+.high{
+	color: red;
+}
+
+.low{
+	color: orange;
+}
+
+.pending{
+	color: orange;
+}
+
+.error{
+	color: red;
+}
+
+.resolved{
+	color: green;
+}
 
 .cont .loadingNext{
 	display: grid;
@@ -92,6 +108,15 @@
 	position: relative;
 	left: 50%;
 	transform: translate(-50%);
+	margin-bottom: 5px;
+}
+
+
+.skeleton{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	width: 90%;
 }
 
 .skeleton .search,
@@ -107,20 +132,14 @@
 	width: 100%;
 }
 
-.skeleton .departments{
+.skeleton .complaints{
 	margin-top: 10px;
 	margin-bottom: 10px;
-	display: grid;
-	grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
-}
-
-.skeleton .search{
-	width: 92.5%;
 }
 
 .skeleton .block{
-	height: 200px;
-	width: 90%;
+	height: 175px;
+	width: 100%;
 	margin: 10px 0;
 }
 

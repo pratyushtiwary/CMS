@@ -1,4 +1,4 @@
-import { Helmet } from "react-helmet";
+import Head from "../components/Head";
 import Header from "../components/Header";
 import { useState, useEffect, createRef } from "react";
 import styles from "../styles/admin/Main.module.css";
@@ -35,11 +35,14 @@ export default function Main(props){
 					setUsers(null);
 				}
 			}
+			else{
+				setStatLoaded(false);
+				setUsers(null);
+			}
 		})
 		hit("api/fetch/latestAnnouncement",{
 			"token": token
 		}).then((c)=>{
-			console.log(c);
 			if(c.success){
 				setMore(c.success.msg.more);
 				setAnnouncement(c.success.msg);
@@ -65,9 +68,9 @@ export default function Main(props){
 
 	return (
 		<>
-			<Helmet>
+			<Head>
 				<title>Dashboard - {appName}</title>
-			</Helmet>
+			</Head>
 			<Header
 				title = "Dashboard"
 				items = {["New User","New Announcement","New Department","Announcements","Departments","Complaints","Users","Settings"]}

@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from "@material-ui/core";
+import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Zoom} from "@material-ui/core";
 
 export default function Alert(props){
 	function handleClose(){
@@ -13,11 +13,13 @@ export default function Alert(props){
 				aria-labelledby="alert-dialog-title"
 				aria-describedby="alert-dialog-description"
 				dismissable="true"
+				TransitionComponent={Zoom}
 			>
 				<DialogTitle id="alert-dialog-title">{props.title}</DialogTitle>
 				<DialogContent>
 		          <DialogContentText id="alert-dialog-description">
 		            {props.msg}
+		            {props.children}
 		          </DialogContentText>
 		        </DialogContent>
 		        <DialogActions>

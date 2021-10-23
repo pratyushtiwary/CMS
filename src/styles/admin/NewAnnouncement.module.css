@@ -13,6 +13,11 @@
 	margin-bottom: 10px;
 }
 
+.cont .body{
+	margin-top: 5px;
+}
+
+
 .cont .post{
 	position: relative;
 	width: 100%;

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Typography, TextField, Button, MenuItem, Select, FormControl, InputLabel, Icon } from "@material-ui/core";
 import styles from "../styles/vendor/Complaint.module.css";
 import { appName } from "../globals";
-import Helmet from "react-helmet";
+import Head from "../components/Head";
 import Header from "../components/Header";
 import Dialog from "../components/Dialog";
 import errorImg from "../assets/vendor/error.svg";
@@ -11,6 +11,7 @@ import Session from "../components/Session";
 import Loading from "../components/Loading";
 import { Error, Success } from "../components/Message";
 import Carousel from "../components/Carousel";
+import Feedback from "../components/Feedback";
 
 const token = Session.login().token;
 let err, suc;
@@ -28,7 +29,7 @@ export default function Complaint(props){
 	const [error,setError] = useState(null);
 	const [loading,setLoading] = useState(null);
 	const [successMsg,setSuccessMsg] = useState(null); 
-	const [errorMsg,setErrorMsg] = useState(null); 
+	const [errorMsg,setErrorMsg] = useState(null);
 
 	useEffect(()=>{
 		clearTimeout(suc)
@@ -152,11 +153,18 @@ export default function Complaint(props){
 		})
 	}
 
+	function changeFeedback(newFeedback) {
+		const oldComplaint = complaint;
+		oldComplaint.feedback = newFeedback;
+		setComplaint(oldComplaint);
+		setSuccessMsg("Feedback saved successfully!");
+	}
+
 	return (
 		<>
-			<Helmet>
+			<Head>
 				<title>Complaint - {appName}</title>
-			</Helmet>
+			</Head>
 			<Header
 				title = "Complaint"
 				items = {["Home","Announcements","Complaints","Settings"]}
@@ -238,7 +246,7 @@ export default function Complaint(props){
 										{
 											complaint.msg && complaint.status === "resolved" && (
 												<div className={styles.block}>
-													<Typography variant="subtitle2" className={styles.subtitle}>Resolution: -</Typography>
+													<Typography variant="subtitle2" className={styles.subtitle}>Solution: -</Typography>
 													<Typography variant="subtitle1" className={styles.body}>{complaint.msg}</Typography>
 												</div>
 											)
@@ -246,21 +254,30 @@ export default function Complaint(props){
 								</div>
 									</div>
 									<div className={styles.side}>
-										<div className={styles.block}>
-											<Typography variant="subtitle2" className={styles.subtitle}>By : -</Typography>
-											<div className={styles.content}>
-												<Typography variant="subtitle1" className={styles.initial}>{complaint.user.name[0]}</Typography>
-												<Typography variant="h6" title="Employee Name" className={styles.body}>
-													{complaint.user.name}
-												</Typography>
-												<Typography variant="subtitle1" title="Room No." className={styles.body+" "+styles.iconTxt}>
-													<Icon>meeting_room</Icon> {complaint.user.roomNo}
-												</Typography>
-												<Typography variant="subtitle1" title="Complaint On" className={styles.body+" "+styles.iconTxt}>
-													<Icon>schedule</Icon> {complaint.on}
-												</Typography>
+										<div className={(complaint.status==="resolved"?styles.items:styles.item)}>
+											<div className={styles.block}>
+												<Typography variant="subtitle2" className={styles.subtitle}>By : -</Typography>
+												<div className={styles.content}>
+													<Typography variant="subtitle1" className={styles.initial}>{complaint.user.name[0]}</Typography>
+													<Typography variant="h6" title="Employee Name" className={styles.body}>
+														{complaint.user.name}
+													</Typography>
+													<Typography variant="subtitle1" title="Room No." className={styles.body+" "+styles.iconTxt}>
+														<Icon>meeting_room</Icon> {complaint.user.roomNo}
+													</Typography>
+													<Typography variant="subtitle1" title="Complaint On" className={styles.body+" "+styles.iconTxt}>
+														<Icon>schedule</Icon> {complaint.on}
+													</Typography>
 
+												</div>
 											</div>
+											{
+												complaint.status==="resolved" && (
+													<div className={styles.block+" "+styles.feedback}>
+														<Feedback for="vendor" feedback={complaint.feedback} onFeedback={changeFeedback} cid={id} onError={(e)=>setErrorMsg(e)}/>
+													</div>
+												)
+											}
 										</div>
 									</div>
 								</div>
@@ -343,7 +360,7 @@ export default function Complaint(props){
 							        </Select>
 						    </FormControl>
 						    {
-						    	currStatus!==0 && (
+						    	currStatus!==0 && (currStatus !== 1 || complaint.status !== "error") && (
 						    		<TextField
 						    			label="Description"
 						    			variant="outlined"

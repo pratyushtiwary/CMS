@@ -100,7 +100,8 @@
 	border-radius: 5px;
 	background-color: #eeeeee;
 	max-width: 80%;
-	min-width: 350px;
+	min-width: 200px;
+	white-space: pre-line;
 }
 
 
@@ -171,6 +172,10 @@
 	width: 80%;
 }
 
+.cont .skeleton .block{
+	margin: 5px 0;
+}
+
 .skeleton .viewMore{
 	width: 125px;
 	height: 40px;
@@ -179,6 +184,8 @@
 
 .skeleton{
 	animation: skeletonAnimate 1.5s linear infinite;
+	margin-top: 80px;
+	min-height: calc(100vh - 80px) !important;
 }
 
 @keyframes skeletonAnimate{

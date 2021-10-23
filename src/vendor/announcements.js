@@ -1,5 +1,5 @@
 import Header from "../components/Header";
-import { Helmet } from "react-helmet";
+import Head from "../components/Head";
 import { appName } from "../globals";
 import { useState, useEffect } from "react";
 import second from "../assets/user/main/second.png";
@@ -63,9 +63,9 @@ export default function Announcements(props){
 
 	return (
 		<>
-			<Helmet>
+			<Head>
 				<title>Announcements - {appName}</title>
-			</Helmet>
+			</Head>
 			<Header
 				title = "Announcements"
 				items = {["Home","Complaints","Setting"]}

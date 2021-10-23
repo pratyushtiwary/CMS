@@ -69,7 +69,8 @@
 	margin-right: 5px;
 }
 
-.input{
+.input,
+.search{
 	position: sticky !important;
 	top: 0;
 	width: 100%;
@@ -77,6 +78,10 @@
 	margin-bottom: 10px !important;
 	z-index: 5;
 	background: #ffffff;
+}
+
+.search{
+	padding: 10px 0;
 }
 
 .cont .dept{
@@ -113,4 +118,76 @@
 .cont .notFound .msg .title{
 	font-weight: bold;
 	margin-bottom: 2.5px;
+}
+
+.cont .loadingNext{
+	display: grid;
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	justify-content: center;
+	width: fit-content;
+}
+
+.cont .loadingNext .circle{
+	margin-right: 10px;
+}
+
+.cont .loadingNext .txt{
+	width: fit-content;
+}
+
+.cont .loadMore{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.cont .active{
+	border: 1px solid green;
+}
+
+.cont .inactive{
+	border: 1px solid #afafaf;
+}
+
+.skeleton .search,
+.skeleton .block,
+.skeleton .loadMore{
+	position: relative !important;
+	left: 50%;
+	transform: translate(-50%);
+	background: #afafaf;
+	height: 40px;
+	padding: 10px;
+	border-radius: 4px;
+	width: 100%;
+}
+
+.skeleton .block{
+	height: 100px; 
+}
+
+.skeleton .loadMore{
+	width: 100px;
+	height: 25px;
+}
+
+
+.skeleton{
+	animation: skeletonAnimate 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonAnimate{
+	0%{
+		opacity: 0.25;
+	}
+	50%{
+		opacity: 1;
+	}
+	100%{
+		opacity: 0.25;
+	}
 }

@@ -27,7 +27,6 @@
 .cont .skeleton{
 	position: relative;
 	width: 90%;
-	max-width: 800px;
 	left: 50%;
 	transform: translate(-50%);
 	margin-bottom: 10px;
@@ -35,6 +34,77 @@
 
 .cont .complaint .main{
 	margin: 10px 0;
+	white-space: pre-line;
+}
+
+.cont .complaint .mainCont,
+.cont .skeleton .mainCont{
+	display: grid;
+	grid-template-columns: 1fr 0.35fr;
+	margin-top: 10px;
+}
+
+.cont .complaint .mainCont .side{
+	position: relative;
+	margin-left: 10px;
+}
+
+.cont .complaint .mainCont .side .item{
+	position: sticky;
+	top: 80px;
+}
+
+.cont .complaint .mainCont .side .items{
+	position: sticky;
+	top: 10px;
+}
+
+.cont .complaint .mainCont .side .sideCont{
+	border-radius: 4px;
+	background: #fafafa;
+	border: 1px solid #000000;
+	padding: 10px;
+	margin: 5px 0;
+}
+.cont .complaint .mainCont .side .sideCont .initial{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	padding: 10px;
+	height: 50px;
+	width: 50px;
+	display: grid;
+	align-content: center;
+	justify-content: center;
+	font-size: 32px;
+	border-radius: 50px;
+	margin-top: 5px;
+	background: #000000;
+	color: #ffffff;
+}
+
+.cont .complaint .mainCont .side .sideCont .name{
+	text-align: center;
+	font-size: 28px;
+}
+
+.cont .complaint .mainCont .side .sideCont .allotmentDate{
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+	justify-items: center;
+	width: fit-content;
+}
+
+.cont .complaint .mainCont .side .sideCont .allotmentDate span{
+	margin-right: 5px;
+}
+
+.cont .complaint .mainCont .side .sideCont .main{
+	text-align: center;
 }
 
 .bold{
@@ -83,6 +153,7 @@
 	position: relative;
 	width: 100%;
 }
+
 
 .update .cont{
 	position: relative;
@@ -154,7 +225,12 @@
 	background: rgba(255,255,255,0.5);
 }
 
-.cont .skeleton *{
+.cont .skeleton .images,
+.cont .skeleton .id,
+.cont .skeleton .desc,
+.cont .skeleton .date,
+.cont .skeleton .status,
+.cont .skeleton .side .sideCont{
 	background-color: #afafaf;
 	border-radius: 5px;
 	margin: 5px 0;
@@ -186,6 +262,19 @@
 	width: 165px;
 }
 
+.cont .skeleton .side{
+	position: relative;
+	margin-left: 10px;
+}
+
+.cont .skeleton .side .sideCont{
+	position: sticky;
+	top: 80px;
+	height: 200px;
+	width: 100%;
+	border: 1px solid #000000;
+}
+
 .cont .skeleton{
 	animation: skeletonAnimate 1.5s linear infinite;
 }
@@ -199,5 +288,39 @@
 	}
 	100%{
 		opacity: 0.25;
+	}
+}
+
+
+@media screen and (max-width: 1061px){
+	.cont .complaint .mainCont,
+	.cont .skeleton .mainCont{
+		grid-template-columns: 1fr 0.45fr;
+	}
+}
+
+@media screen and (max-width: 873px){
+	.cont .complaint .mainCont,
+	.cont .skeleton .mainCont{
+		grid-template-columns: 1fr 0.5fr;
+	}
+}
+
+@media screen and (max-width: 811px){
+	.cont .complaint .mainCont,
+	.cont .skeleton .mainCont{
+		grid-template-columns: 1fr;
+	}
+	.cont .complaint .mainCont .side{
+		margin-left: 0px;
+		position: relative;
+		left: 50%;
+		transform: translate(-50%);
+		width: 95%;
+	}
+	.cont .complaint .mainCont .side .sideCont,
+	.cont .skeleton .mainCont .side .sideCont{
+		position: relative;
+		top: auto;
 	}
 }

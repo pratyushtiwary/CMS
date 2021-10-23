@@ -7,6 +7,10 @@
 	margin-top: 80px;
 }
 
+.cont .input{
+	margin-top: 5px;
+}
+
 .cont .input,
 .cont .button{
 	position: relative;

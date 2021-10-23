@@ -1,4 +1,4 @@
-import Helmet from "react-helmet"
+import Head from "./components/Head";
 import { appName } from "./globals"
 import styles from "./styles/forget_password.module.css"
 import { Typography, TextField, Button, useMediaQuery, FormControl, InputLabel, Select, MenuItem} from  "@material-ui/core"
@@ -229,9 +229,9 @@ export default function ForgetPassword(props){
 
 	return (
 		<>
-			<Helmet>
+			<Head>
 				<title>Forget Password - {appName}</title>
-			</Helmet>
+			</Head>
 			{
 				allow && (
 					<>
