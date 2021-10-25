@@ -35,11 +35,17 @@ function App() {
 
   useEffect(()=>{
     const loggedin = Session.login();
-    const path = window.location.href.split("/").pop();
+    let path = window.location.href.split("?")[0];
+    path = path.split("/").pop();
     const validPaths = {
       "login": 1,
       "register": 1,
       "forget_password": 1
+    }
+    const temp = window.location.href.split("/").slice(3).join("/")
+    let redirectPath = "/login";
+    if(temp!==""){
+      redirectPath += "?redirect_url="+temp;
     }
     if(loggedin.token){
       if(loggedin.type==="employee"){
@@ -52,14 +58,14 @@ function App() {
         setContent(<Admin/>)
       }
       else{
-        window.location.href = "/login";
+        window.location.href = redirectPath;
       }
     }
     else if(validPaths[path]){
       return;
     }
     else{
-      window.location.href = "/login";
+      window.location.href = redirectPath;
     }
   },[]);
 

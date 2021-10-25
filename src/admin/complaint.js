@@ -4,7 +4,7 @@ import Header from "../components/Header";
 import styles from "../styles/admin/Complaint.module.css";
 import Carousel from "../components/Carousel";
 import Feedback from "../components/Feedback";
-import { Typography, useMediaQuery, Button, FormControl, InputLabel, Select, MenuItem, TextField, Card, CardActionArea } from "@material-ui/core";
+import { Typography, useMediaQuery, Button, FormControl, InputLabel, Select, MenuItem, TextField, Card, CardActionArea, CircularProgress } from "@material-ui/core";
 import Alert from "../components/Alert";
 import Dialog from "../components/Dialog";
 import { useState, useEffect } from "react";
@@ -12,9 +12,13 @@ import errorImg2 from "../assets/admin/errorImg2.svg";
 import { Error, Success } from "../components/Message";
 import Session from "../components/Session";
 import hit from "../components/hit";
+import Loading from "../components/Loading";
 
 const token = Session.login().token;
 let err, suc;
+const limit = 10;
+let offset = 0;
+let sV;
 export default function Complaint(props) {
 	const id = props.match.params.id;
 	const maxWidth = useMediaQuery("(max-width: 539px)");
@@ -34,6 +38,12 @@ export default function Complaint(props) {
 	const [openChangePriorityDialog,setChangePriorityDialog] = useState(false);
 	const [complaint,setComplaint] = useState(null);
 	const [loaded,setLoaded] = useState(null);
+	const [loadingMsg,setLoadingMsg] = useState(null);
+	const [adminMsg,setAdminMsg] = useState("");
+	const [more,setMore] = useState(false);
+	const [loadingMore,setLoadingMore] = useState(null);
+	const [vendorSearchVal,setVendorSearchVal] = useState("");
+	const [searchingVs,setSearchingVs] = useState(false);
 
 	useEffect(()=>{
 		clearTimeout(suc)
@@ -74,17 +84,83 @@ export default function Complaint(props) {
 				setDeptLoaded(false);
 			}
 		})
-		setVendors([
-			{
-				"id": 1,
-				"name": "John Doe",
-				"complaintCount": 3
-			}
-		])
 	},[id])
 
 	let updateInput = (func) => (e)=> {
 		func(e.target.value);
+	}
+
+	function openSendMsg() {
+		setAdminMsg(complaint.adminMsg||"");
+		setSendMessageDialog(true);
+	}
+
+	function openChangeDept() {
+		departments.forEach((e,i)=>{
+			if(e.id === complaint.dept){
+				setDepartment(i);
+			}
+		})
+		setChangeDeptDialog(true);
+	}
+
+	function openAssignVendor() {
+		setSuccessMsg(null);
+		setErrorMsg(null);
+		setLoadingMsg("Loading Vendors...");
+		offset = 0;
+		hit("api/admin/loadDepartmentEmployees",{
+			"token": token,
+			"id": complaint.dept,
+			"offset": offset
+		}).then((c)=>{
+			setLoadingMsg(null);
+			if(c.success){
+				if(c.success.msg.count===0){
+					setVendors(null);
+				}
+				else{
+					offset += limit;
+					if(c.success.msg.count > offset){
+						setMore(true);
+					}
+					else{
+						setMore(false);
+					}
+					setVendors(c.success.msg.employees);
+					c.success.msg.employees.forEach((e,i)=>{
+						if(e.id === complaint.vendorId){
+							setSelected(i);
+						}
+					})
+					setAssignVendorDialog(true);
+				}	
+			}
+			else{
+				setErrorMsg(c.error.msg);
+			}
+		})
+	}
+
+	function loadMoreVendors() {
+		setLoadingMore("Loading...");
+		hit("api/admin/loadDepartmentEmployees",{
+			"token": token,
+			"id": complaint.dept,
+			"offset": offset
+		}).then((c)=>{
+			setLoadingMore(null);
+			if(c.success){
+				offset += limit;
+				if(c.success.msg.count > offset){
+					setMore(true);
+				}
+				else{
+					setMore(false);
+				}
+				setVendors((e)=>[...e,...c.success.msg.employees]);
+			}	
+		})
 	}
 
 	function dismissDeleteAlert() {
@@ -108,29 +184,213 @@ export default function Complaint(props) {
 	}
 
 	function doDelete(){
-
+		setSuccessMsg(null);
+		setErrorMsg(null);
+		dismissDeleteAlert();
+		setLoadingMsg("Deleting Complaint...");
+		hit("api/admin/deleteComplaint",{
+			"token": token,
+			"id": id
+		}).then((c)=>{
+			setLoadingMsg(null);
+			if(c.success){
+				setSuccessMsg(c.success.msg);
+				setLoaded(false);
+				setComplaint(null);				
+			}
+			else{
+				setErrorMsg(c.error.msg);
+			}
+		})
 	}
 
 	function changeDepartment() {
+		dismissChangeDeptDialog();
+		setSuccessMsg(null);
+		setErrorMsg(null);
+		setLoadingMsg("Changing Department...");
+		const dept = departments[department];
+		if(complaint.dept === dept.id){
+			setLoadingMsg(null);
+		}
+		else{
+			hit("api/admin/changeComplaintDepartment",{
+				"token": token,
+				"id": id,
+				"dept": dept.id
+			}).then((c)=>{
+				setLoadingMsg(null);
+				if(c.success){
+					let oldComplaint = complaint;
+					oldComplaint.dept = dept.id;
+					oldComplaint.deptName = dept.name;
+					oldComplaint.vendorName = undefined;
+					setComplaint(oldComplaint);
+					setSuccessMsg(c.success.msg);
+				}
+				else{
+					setErrorMsg(c.error.msg);
+				}
+			})
+		}
+		
 	}
 
 	function sendMessage() {
+		dismissSendMessageDialog();
+		setSuccessMsg(null);
+		setErrorMsg(null);
+		setLoadingMsg("Sending Message...");
+		if(adminMsg === complaint.adminMsg){
+			setLoadingMsg(null);
+		}
+		else{
+			hit("api/admin/sendComplaintMessage",{
+				"token": token,
+				"id": id,
+				"msg": adminMsg
+			}).then((c)=>{
+				setLoadingMsg(null);
+				if(c.success){
+					let oldComplaint = complaint;
+					oldComplaint.adminMsg = adminMsg;
+					setComplaint(oldComplaint);
+					setSuccessMsg(c.success.msg);
+				}
+				else{
+					setErrorMsg(c.error.msg);
+				}
+			})
+		}
 	}
 
 	function setNewPriority() {
+		closeChangePriorityDialog();
+		setSuccessMsg(null);
+		setErrorMsg(null);
+		setLoadingMsg("Changing Priority...");
+		if(complaint.priority === priority[currPriority].toLowerCase()){
+			setLoadingMsg(null);
+		}
+		else{
+			hit("api/admin/changeComplaintPriority",{
+				"token": token,
+				"id": id,
+				"newPriority": priority[currPriority].toLowerCase()
+			}).then((c)=>{
+				setLoadingMsg(null);
+				if(c.success){
+					let oldComplaint = complaint;
+					oldComplaint.priority = priority[currPriority].toLowerCase();
+					setComplaint(oldComplaint);
+					setSuccessMsg(c.success.msg)
+				}
+				else{
+					setErrorMsg(c.error.msg);
+				}
+			})
+		}
 	}
 
 	function assignVendor() {
 		if(selected===null){
 			setErrorMsg("Please select a vendor first");
 		}
+		else if(vendors[selected].id === complaint.vendorId){
+			dismissAssignVendorDialog();
+		}
 		else{
 			setErrorMsg(null);
+			dismissAssignVendorDialog();
+			setSuccessMsg(null);
+			setErrorMsg(null);
+			setLoadingMsg("Processing...");
+			const v = vendors[selected];
+			hit("api/admin/assignVendor",{
+				"token": token,
+				"id": id,
+				"vid": v.id
+			}).then((c)=>{
+				setLoadingMsg(null);
+				if(c.success){
+					let currDate = new Date();
+					const month = currDate.getMonth()+1;
+					const date = currDate.getDate();
+					const year = currDate.getFullYear();
+					let oldComplaint = complaint;
+					oldComplaint.vendorName = v.name;
+					oldComplaint.vendorId = v.id;
+					oldComplaint.allotmentDate = date + "/" + (month<10?("0"+month):month) + "/" + year;
+					setComplaint(oldComplaint);
+					setSuccessMsg(c.success.msg);
+				}
+				else{
+					setErrorMsg(c.error.msg);
+				}
+			})
 		}
 	}
 
 	let selectVendor = (i) => ()=>{
 		setSelected(i);
+	}
+
+	function searchVs(val) {
+		hit("api/admin/searchDepartmentEmployees",{
+			"token": token,
+			"id": complaint.dept,
+			"offset": offset,
+			"term": val
+		}).then((c)=>{
+			setLoadingMore(null);
+			if(c.success){
+				if(c.success.msg.length === 0 && offset === 0){
+					setVendors(false);
+				}
+				else{
+					setVendors((e)=>[...e,...c.success.msg])
+				}
+				offset += limit;
+				if(c.success.msg.length === limit){
+					setMore(true);
+				}
+				else{
+					setMore(false);
+				}
+
+			}
+			else{
+				setMore(false);
+				if(offset === 0){
+					setVendors(false);
+				}
+			}
+		})
+	}
+
+	function searchVendors(e) {
+		const val = e.currentTarget.value;
+		setVendorSearchVal(val);
+		clearTimeout(sV)
+		sV = setTimeout(()=>{
+			setVendors([]);
+			offset = 0;
+			setMore(true);
+			if(val !== ""){
+				setLoadingMore("Searching...")
+				setSearchingVs(true);
+				searchVs(val);
+			}
+			else{
+				setLoadingMore("Loading...")
+				setSearchingVs(false);
+				loadMoreVendors();
+			}
+		},1000)
+	}
+
+	function searchMoreVs() {
+		searchVs(vendorSearchVal);
 	}
 
 	return (
@@ -185,25 +445,33 @@ export default function Complaint(props) {
 												color="primary"
 												onClick={()=>setDeleteAlert(true)}
 											>Delete</Button>
-											<Button
-												variant="outlined"
-												color="primary"
-												onClick={()=>setAssignVendorDialog(true)}
-											>Assign Vendor</Button>
 											{
-												deptLoaded && (
+												complaint.status !== "resolved" && (
 													<Button
 														variant="outlined"
 														color="primary"
-														onClick={()=>setChangeDeptDialog(true)}
+														onClick={openAssignVendor}
+													>Assign Vendor</Button>
+												)
+											}
+											{
+												deptLoaded && complaint.status!=="resolved" && (
+													<Button
+														variant="outlined"
+														color="primary"
+														onClick={openChangeDept}
 													>Change Department</Button>
 												)
 											}
-											<Button
-												variant="outlined"
-												color="primary"
-												onClick={()=>setSendMessageDialog(true)}
-											>Send Message</Button>
+											{
+												complaint.status !== "resolved" && (
+													<Button
+														variant="outlined"
+														color="primary"
+														onClick={openSendMsg}
+													>Send Message</Button>
+												)
+											}
 										</div>
 									)
 								}
@@ -219,11 +487,15 @@ export default function Complaint(props) {
 									<div className={styles.block+" "+styles.inline}>
 										<Typography variant="h6">Complaint Priority :- </Typography>
 										<Typography className={styles.p+" "+styles[complaint.priority]}>{complaint.priority}</Typography>
-										<Button
-											variant="outlined"
-											color="primary"
-											onClick={()=>setChangePriorityDialog(true)}
-										>Change Priority</Button>
+										{
+											complaint.status !== "resolved" && (
+												<Button
+													variant="outlined"
+													color="primary"
+													onClick={()=>setChangePriorityDialog(true)}
+												>Change Priority</Button>
+											)
+										}
 									</div>
 									<div className={styles.block+" "+styles.inline}>
 										<Typography variant="h6">Complaint Date :- </Typography>
@@ -237,7 +509,22 @@ export default function Complaint(props) {
 											</div>
 										)
 									}
-									
+									{
+										complaint.deptName && (
+											<div className={styles.block}>
+												<Typography variant="h6">Complaint Department :- </Typography>
+												<Typography className={styles.p}>{complaint.deptName}</Typography>
+												{
+													complaint.dept && (
+														<Button 
+															variant="outlined"
+															href={"/department/"+complaint.dept}
+														>View Department</Button>
+													)
+												}
+											</div>
+										)
+									}
 									<div className={styles.block}>
 										<Typography variant="h6">Complaint By :- </Typography>
 										<Typography className={styles.p}>Name :- {complaint.emp.name}</Typography>
@@ -259,25 +546,33 @@ export default function Complaint(props) {
 														color="primary"
 														onClick={()=>setDeleteAlert(true)}
 													>Delete</Button>
-													<Button
-														variant="outlined"
-														color="primary"
-														onClick={()=>setAssignVendorDialog(true)}
-													>Assign Vendor</Button>
 													{
-														deptLoaded && (
+														complaint.status !== "resolved" && (
 															<Button
 																variant="outlined"
 																color="primary"
-																onClick={()=>setChangeDeptDialog(true)}
+																onClick={openAssignVendor}
+															>Assign Vendor</Button>
+														)
+													}
+													{
+														deptLoaded && complaint.status!=="resolved" && (
+															<Button
+																variant="outlined"
+																color="primary"
+																onClick={openChangeDept}
 															>Change Department</Button>
 														)
 													}
-													<Button
-														variant="outlined"
-														color="primary"
-														onClick={()=>setSendMessageDialog(true)}
-													>Send Message</Button>
+													{
+														complaint.status !== "resolved" && (
+															<Button
+																variant="outlined"
+																color="primary"
+																onClick={openSendMsg}
+															>Send Message</Button>
+														)
+													}
 												</div>
 											)
 										}
@@ -396,40 +691,48 @@ export default function Complaint(props) {
 				onClose = {dismissDeleteAlert}
 				open = {openDeleteAlert}
 			/>
-			<Dialog
-				title = {"Change Department"}
-				open = {openChangeDeptDialog}
-				className={styles.dialog}
-				buttons = {[{
-					onClick: dismissChangeDeptDialog,
-					content: "Dismiss"
-				},{
-					onClick: changeDepartment,
-					content: "Change"
-				}]}
-			>
-				<Typography className={styles.txt}><b>Changing Department will reassign the vendor to NULL</b></Typography>
-				<br/>
-				<FormControl variant="outlined" className={styles.input}>
-			        <InputLabel htmlFor="departmentType" variant="outlined">Department</InputLabel>
-			        <Select
-			          id = "departmentType"
-			          color="primary"
-			          value={department}
-			          variant="outlined"
-			          label="Department"
-			          className={styles.input}
-			          onChange={updateInput(setDepartment)}
-					  required
-			        >
-			        {
-			        	departments.map((e,i)=>(
-					          <MenuItem value={i} key={i}>{e.name}</MenuItem>
-			        	))
-			        }
-			        </Select>
-			    </FormControl>
-			</Dialog>
+			{
+				complaint && (
+					<Dialog
+						title = {"Change Department"}
+						open = {openChangeDeptDialog}
+						className={styles.dialog}
+						buttons = {[{
+							onClick: dismissChangeDeptDialog,
+							content: "Dismiss"
+						},{
+							onClick: changeDepartment,
+							content: "Change"
+						}]}
+					>
+						<Typography className={styles.txt}><b>Changing Department will reassign the vendor to NULL</b></Typography>
+						<br/>
+						<FormControl variant="outlined" className={styles.input}>
+					        <InputLabel htmlFor="departmentType" variant="outlined">Department</InputLabel>
+					        <Select
+					          id = "departmentType"
+					          color="primary"
+					          value={department}
+					          variant="outlined"
+					          label="Department"
+					          className={styles.input}
+					          onChange={updateInput(setDepartment)}
+							  required
+					        >
+					        {
+					        	departments.map((e,i)=>{
+					        		if(e.id === complaint.dept){
+
+							        	return (<MenuItem value={i} key={i} active>{e.name}</MenuItem>)
+					        		}
+						          return (<MenuItem value={i} key={i}>{e.name}</MenuItem>)
+					        	})
+					        }
+					        </Select>
+					    </FormControl>
+					</Dialog>
+				)
+			}
 			<Dialog
 				title = {"Send Message"}
 				open = {openSendMessageDialog}
@@ -452,6 +755,8 @@ export default function Complaint(props) {
 					color="primary"
 					label="Message"
 					rows={6}
+					value={adminMsg}
+					onChange={(e)=>setAdminMsg(e.currentTarget.value)}
 					required
 				/>
 			</Dialog>
@@ -472,7 +777,7 @@ export default function Complaint(props) {
 				<div className={styles.assignCont}>
 					<center><Typography><b>Vendors are listed according to the department that this complaint belongs to.</b></Typography></center>
 					{
-						!vendors && (
+						vendors===null && (
 							<div className={styles.notFound}>
 								<img 
 									src = {errorImg2}
@@ -488,15 +793,33 @@ export default function Complaint(props) {
 						)
 					}
 					{
-						vendors && (
+						vendors!==null && (
 							<TextField
 								placeholder="Search..."
 								variant="outlined"
 								className={styles.search}
+								value={vendorSearchVal}
+								onChange={searchVendors}
 							/>
 						)
 					}
 					<div className={styles.vendors}>
+						{
+							vendors===false && (
+								<div className={styles.notFound}>
+									<img 
+										src = {errorImg2}
+										alt = "No Vendors Found Illustration"
+										width = "300px"
+										heigth = "300px"
+										className = {styles.img}
+									/>
+									<div className={styles.msg}>
+										<Typography variant="h5" className={styles.title}>No Vendors Found</Typography>
+									</div>
+								</div>
+							)
+						}
 						{
 							vendors && vendors.map((e,i)=>{
 								if(i===selected){
@@ -525,6 +848,19 @@ export default function Complaint(props) {
 									</Card>
 								)
 							})
+						}
+						{
+							vendors && more && !Boolean(loadingMore) && (
+								<Button variant="outlined" className={styles.loadMore} color="primary" onClick={searchingVs?searchMoreVs:loadMoreVendors}>Load More</Button>
+							)
+						}
+						{
+							vendors && more && Boolean(loadingMore) && (
+								<div className={styles.loadingNext}>
+									<CircularProgress size={24} color="primary" className={styles.circle} />
+									<Typography variant="subtitle1" className={styles.txt}>{loadingMore}</Typography>
+								</div>	
+							)
 						}
 					</div>
 				</div>
@@ -576,6 +912,10 @@ export default function Complaint(props) {
 					</Dialog>
 				)
 			}
+			<Loading
+				open = {Boolean(loadingMsg)}
+				msg = {loadingMsg}
+			/>
 		</>
 	)
 }

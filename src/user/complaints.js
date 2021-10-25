@@ -11,7 +11,7 @@ import hit from "../components/hit";
 const limit = 10;
 let current = limit;
 let timer = null;
-
+let sOffset = 0;
 export default function Complaints(props){
 	const [complaints,setComplaints] = useState(null);
 	const [loaded,setLoaded] = useState(false);
@@ -121,32 +121,39 @@ export default function Complaints(props){
 		setNoComplaints(false);
 		hit("api/employee/searchComplaint",{
 			"token": token,
-			"term": val
+			"term": val,
+			"offset": sOffset
 		}).then((c)=>{
-			setNext(false);
 			setLoadingNext(false);
 			if(c.success){
-				const cs = c.success.msg
-				if(cs.length>0){
-					setSearching(false);
-					setComplaints([...cs]);
-				}
-				else{
+				if(c.success.msg.length === 0 && sOffset === 0){
 					setNoComplaints(true);
 				}
-			}
-			else{
-				setNoComplaints(true);
+				else{
+					sOffset += limit;
+					if(c.success.msg.length === limit){
+						setNext(true);
+					}
+					else{
+						setNext(false);
+					}
+
+					const cs = c.success.msg;
+					setComplaints((e)=>[...e,...cs]);
+				}
 			}
 		})
 	}
 
 	function search(e){
 		const val = e.currentTarget.value;
+		setSearchVal(val);
 		clearTimeout(timer);
 		timer = setTimeout(()=>{
-			setSearching(true);
+			setComplaints([]);
 			if(val.replace(/ /g,"")!==""){
+				sOffset = 0;
+				setSearching(true);
 				setNext(true);
 				setLoadingNext(true);
 				setLoadingMsg("Searching");
@@ -159,7 +166,10 @@ export default function Complaints(props){
 				loadAllComplaints()
 			}
 		},1500);
-		setSearchVal(val);
+	}
+
+	function searchMore() {
+		doSearch(searchVal);
 	}
 
 	return (
@@ -223,7 +233,7 @@ export default function Complaints(props){
 					)
 				}
 				{
-					complaints && loaded===true && !searching && complaints.map((e,i)=>(
+					complaints && loaded===true && complaints.map((e,i)=>(
 						<Card variant="outlined" key={i} className={styles.complaint} title="Click to view complaint">
 							<CardActionArea className={styles.main} href={"/complaint/"+e.complaintId}>
 								<div className={styles.all}>
@@ -242,7 +252,7 @@ export default function Complaints(props){
 				}
 				{
 					loaded === true && next && !loadingNext && (
-						<Button className={styles.loadMore} variant="outlined" color="primary" onClick={loadMore}>Load More</Button>
+						<Button className={styles.loadMore} variant="outlined" color="primary" onClick={searching?searchMore:loadMore}>Load More</Button>
 					)
 				}
 				{

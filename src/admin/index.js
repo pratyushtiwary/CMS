@@ -13,6 +13,7 @@ import Announcements from "./announcements";
 import Complaints from "./complaints";
 import Settings from "./settings";
 import Complaint from "./complaint";
+import NotFound from "./404";
 
 export default function User(props){
 	return (
@@ -50,6 +51,9 @@ export default function User(props){
 				<Route path="/admin/:id" component={Admin} />
 				<Route path="/department/:id" component={Department} />
 				<Route path="/complaint/:id" component={Complaint} />
+				<Route path="/*">
+					<NotFound/>
+				</Route>
 			</Switch>
 		</Router>
 	)

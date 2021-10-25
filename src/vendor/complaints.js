@@ -13,12 +13,15 @@ const limit = 10;
 let current = limit;
 const searchAfter = 1000;
 let beginSearch;
+let sOffset = 0;
 export default function Complaints(props){
 	const [complaints,setComplaints] = useState(null);
 	const [loaded,setLoaded] = useState(null);
 	const [moreComplaints,setMoreComplaints] = useState(null);
-	const [searching,setSearching] = useState(null);
+	const [loaderMsg,setLoaderMsg] = useState(null);
 	const [notFound,setNotFound] = useState(null);
+	const [searching,setSearching] = useState(false);
+	const [searchVal,setSearchVal] = useState("");
 
 	useEffect(()=>{
 		hit("api/vendor/getComplaints",{
@@ -57,7 +60,7 @@ export default function Complaints(props){
 			"offset": "0"
 		}).then((c)=>{
 			if(c.success){
-				setSearching(null);
+				setLoaderMsg(null);
 				if(c.success.msg.count > 0){
 
 					if(c.success.msg.count > limit){
@@ -84,18 +87,27 @@ export default function Complaints(props){
 
 	function loadMore(){
 		setMoreComplaints(false);
-		setSearching("Loading...");
+		setLoaderMsg("Loading...");
 		hit("api/vendor/getComplaints",{
 			"token": token,
 			"offset": current
 		}).then((c)=>{
-			setSearching(null);
+			setLoaderMsg(null);
 			current += limit;
 			if(c.success){
-				if(c.success.msg.count > current){
-					setMoreComplaints(false);
+				if(c.success.msg.length === 0 && sOffset === 0){
+					setComplaints([]);
+					setNotFound(true);
+				}
+				else{
+					if(c.success.msg.length === limit){
+						setMoreComplaints(true);						
+					}
+					else{
+						setMoreComplaints(false);
+					}
 					setLoaded(true);
-					setComplaints([...c.success.msg.complaints]);					
+					setComplaints((e)=>[...e,...c.success.msg.complaints]);					
 				}
 			}
 		});
@@ -104,43 +116,52 @@ export default function Complaints(props){
 	function doSearch(val){
 		hit("api/vendor/searchComplaint",{
 			"token": token,
-			"term": val
+			"term": val,
+			"offset": sOffset
 		}).then((c)=>{
-			setMoreComplaints(false);
-			setNotFound(false);
-			setSearching(null);
+			setLoaderMsg(null);
 			if(c.success){
 				const cs = c.success.msg
-				if(cs.length>0){
-					setComplaints([...cs]);
-				}
-				else{
-					setComplaints([]);
+				if(cs.length === 0 && sOffset === 0){
 					setNotFound(true);
 				}
-			}
-			else{
-				setComplaints([]);
-				setNotFound(true);
+				else{
+					sOffset += limit;
+					if(cs.length === limit){
+						setMoreComplaints(true);
+					}
+					else{
+						setMoreComplaints(false);
+					}
+					setComplaints((e)=>[...e,...cs]);
+				}
 			}
 		})
 	}
 
 	function search(e){
 		const val = e.currentTarget.value;
+		setSearchVal(val);
 		clearTimeout(beginSearch);
 		beginSearch = setTimeout(()=>{
-			if(!val.match(/^[\s]*$/)){
-				setComplaints([]);
-				setSearching("Searching...");
+			setComplaints([]);
+			if(val !== ""){
+				sOffset = 0;
+				setSearching(true);
+				setMoreComplaints(false);
+				setLoaderMsg("Searching...");
 				doSearch(val);
 			}
 			else{
-				setComplaints([]);
-				setSearching("Loading...");
+				setSearching(false);
+				setLoaderMsg("Loading...");
 				loadAllComplaints();
 			}
 		},searchAfter);
+	}
+
+	function searchMore() {
+		doSearch(searchVal)
 	}
 
 	return (
@@ -164,6 +185,7 @@ export default function Complaints(props){
 									placeholder="Search..."
 									variant="outlined"
 									className={styles.searchInput}
+									value={searchVal}
 									onChange={search}
 								/>
 							</div>
@@ -183,16 +205,16 @@ export default function Complaints(props){
 							</div>
 							{
 								moreComplaints && (
-									<Button className={styles.loadMore} variant="outlined" onClick={loadMore}>
+									<Button className={styles.loadMore} variant="outlined" onClick={(searching===true)?searchMore:loadMore}>
 										Load More
 									</Button>
 								)
 							}
 							{
-								Boolean(searching) && (
+								Boolean(loaderMsg) && (
 									<div className={styles.searching}>
 										<CircularProgress size={24} color="primary" className={styles.circle} />
-										<Typography variant="subtitle1" className={styles.txt}>{searching}</Typography>
+										<Typography variant="subtitle1" className={styles.txt}>{loaderMsg}</Typography>
 									</div>
 								)
 							}

@@ -5,6 +5,7 @@ import Announcements from "./announcements";
 import Complaints from "./complaints";
 import Complaint from "./complaint";
 import Settings from "./settings";
+import NotFound from "./404";
 
 export default function User(props){
 	return (
@@ -25,6 +26,9 @@ export default function User(props){
 				<Route path="/complaint/:id" component={Complaint} />
 				<Route path="/settings">
 					<Settings/>
+				</Route>
+				<Route path="/*">
+					<NotFound/>
 				</Route>
 			</Switch>
 		</Router>

@@ -148,6 +148,7 @@
 
 .assignCont .vendors{
 	position: relative;
+	padding-bottom: 10px;
 	overflow-y: auto;
 }
 
@@ -175,6 +176,32 @@
 	color: #ffffff;
 	position: relative;
 }
+
+.dialog .loadMore{
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.dialog .loadingNext{
+	display: grid;
+	grid-template-columns: auto 1fr;
+	align-items: center;
+	justify-items: center;
+	width: fit-content;
+	position: relative;
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.dialog .loadingNext .txt{
+	width: fit-content;
+}
+
+.dialog .loadingNext .circle{
+	margin-right: 5px;
+}
+
 
 .assignCont .vendor .inner .initial span{
 	position: absolute;

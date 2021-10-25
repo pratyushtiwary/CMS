@@ -9,6 +9,7 @@ import Loading from "./components/Loading";
 import Session from './components/Session';
 import { Success, Error } from "./components/Message";
 import ResendOtp from "./components/ResendOtp";
+import { extract } from "./components/URLParams";
 
 export default function Login(props){
 	const userTypes = ["Employee","Vendor","Admin"];
@@ -21,6 +22,7 @@ export default function Login(props){
 	const [otp,setOtp] = useState("\0");
 	const [allow,setAllow] = useState(false);
 	const [logged,setLogged] = useState(false);
+	const redirectUrl = extract(window.location.href)["redirect_url"];
 
 	useEffect(()=>{
 		const loggedin = Session.login().token;
@@ -88,7 +90,7 @@ export default function Login(props){
 				setSuccessMsg("Login successfull! Redirecting...");
 				Session.login(c.success.msg,userTypes[UserType].toLowerCase());
 				setTimeout((e)=>{
-					window.location.href = "/";
+					window.location.href = ("/"+(redirectUrl||""));
 				},2500);
 			}
 
@@ -112,7 +114,7 @@ export default function Login(props){
 							<div className={styles.overlay}></div>
 							<form className={styles.main} onSubmit={otp==="\0"?sendOTP:submit}>
 								<Typography variant="h4" className={styles.title}>Login</Typography>
-								<Typography variant="subtitle2" className={styles.subtitle}>Don't have an account? <a href="/register">Register Now</a></Typography>
+								<Typography variant="subtitle2" className={styles.subtitle}>Don't have an account? <a href={"/register"+(redirectUrl!==undefined?("?redirect_url="+redirectUrl):"")}>Register Now</a></Typography>
 								<Success open={Boolean(successMsg)} message={successMsg} />
 								<Error open={Boolean(errorMsg)} message={errorMsg} />
 								{
@@ -153,7 +155,7 @@ export default function Login(props){
 												 value={password}
 												 onChange={(e)=>setPassword(e.currentTarget.value)}
 												/>
-												<a href="forget_password" className={styles.link}>Forgot Password?</a>
+												<a href={"forget_password"+(redirectUrl!==undefined?("?redirect_url="+redirectUrl):"")} className={styles.link}>Forgot Password?</a>
 											</div>
 											{
 												otp!=="\0" && (

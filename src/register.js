@@ -9,7 +9,7 @@ import ResendOtp from "./components/ResendOtp";
 import Loading from "./components/Loading";
 import hit from "./components/hit";
 import Session from './components/Session';
-
+import { extract } from "./components/URLParams";
 
 function Form1(props){
 	const userTypes = ["Employee","Vendor"];
@@ -195,7 +195,17 @@ function Form2(props){
 			}
 		}
 		else{
-			props.onRegister && props.onRegister();
+			const r = [pwd,cpwd];
+			if(r[0]===r[1]){
+				props.error && props.error(null);
+				props.onRegister && props.onRegister({
+					"phone": ph,
+					"password": r[0]
+				});
+			}
+			else{
+				props.error && props.error("Passwords don't match");
+			}
 		}
 
 		
@@ -288,6 +298,7 @@ export default function Register(props){
 	const [otp,setOtp] = useState("\0");
 	const [allow,setAllow] = useState(false); 
 	const [registered,setRegistered] = useState(false);
+	const redirectUrl = extract(window.location.href)["redirect_url"];
 
 	useEffect(()=>{
 		const loggedin = Session.login().token;
@@ -344,8 +355,8 @@ export default function Register(props){
 		})
 	}
 
-	function register(){
-		const finalD = finalData;
+	function register(data){
+		let finalD = Object.assign({},finalData,data);
 		finalD["otp"] = otp;
 		setLoaderMsg("Registering...")
 		hit("api/register",finalD)
@@ -357,7 +368,7 @@ export default function Register(props){
 				setRegistered(true);
 				setSuccessMsg("Registered successfully! Redirecting...");
 				setTimeout(()=>{
-					window.location.href = "/login"					
+					window.location.href = ("/login"+(redirectUrl!==undefined?("?redirect_url="+redirectUrl):""))					
 				},2500);
 			}
 
@@ -384,7 +395,7 @@ export default function Register(props){
 							<div className={styles.opacity}></div>
 							<div className={styles.mainCont}>
 								<Typography variant="h4" className={styles.title}>Register</Typography>
-								<Typography variant="subtitle2" className={styles.subtitle}>Already have an account? <a href="/login">Login</a></Typography>
+								<Typography variant="subtitle2" className={styles.subtitle}>Already have an account? <a href={"/login"+(redirectUrl!==undefined?("?redirect_url="+redirectUrl):"")}>Login</a></Typography>
 								<Success open={Boolean(successMsg)} message={successMsg}/>
 								<Error open={Boolean(errorMsg)} message={errorMsg}/>
 								{

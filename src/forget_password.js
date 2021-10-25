@@ -9,6 +9,7 @@ import ResendOtp from "./components/ResendOtp";
 import Loading from "./components/Loading";
 import hit from "./components/hit";
 import Session from "./components/Session";
+import { extract } from "./components/URLParams";
 
 function Form1(props){
 	const [ph,setPh] = useState("");
@@ -159,6 +160,7 @@ export default function ForgetPassword(props){
 	const [finalData,setFinalData] = useState({});
 	const [allow,setAllow] = useState(false); 
 	const [reset,setReset] = useState(false);
+	const redirectUrl = extract(window.location.href)["redirect_url"];
 
 	useEffect(()=>{
 		const loggedin = Session.login().token;
@@ -216,7 +218,7 @@ export default function ForgetPassword(props){
 				setReset(true);
 				setSuccessMsg("Password reset successfully! Redirecting...");
 				setTimeout(()=>{
-					window.location.href="/login"
+					window.location.href= ("/login"+(redirectUrl!==undefined?("?redirect_url="+redirectUrl):""))
 				},2500);
 			}
 

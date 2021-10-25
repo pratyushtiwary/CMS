@@ -201,6 +201,14 @@ export default function Complaint(props){
 											<Typography variant="subtitle2" className={styles.subtitle}>Complaint Description: -</Typography>
 											<Typography variant="subtitle1" className={styles.body}>{complaint.desc}</Typography>
 										</div>
+										{
+											complaint.allotmentDate && (
+												<div className={styles.block}>
+													<Typography variant="subtitle2" className={styles.subtitle}>Alloted On: -</Typography>
+													<Typography variant="subtitle1" className={styles.body}>{complaint.allotmentDate}</Typography>
+												</div>
+											)
+										}
 										<div className={styles.block}>
 											<Typography variant="subtitle2" className={styles.subtitle}>Priority: -</Typography>
 											<div className={styles.status}>
@@ -222,14 +230,6 @@ export default function Complaint(props){
 													)
 												}
 										</div>
-										{
-											complaint.adminMsg && (
-												<div className={styles.block}>
-													<Typography variant="subtitle2" className={styles.subtitle}>Message from Admin: -</Typography>
-													<Typography variant="subtitle1" className={styles.body+" "+styles.adminMsg}>{complaint.adminMsg}</Typography>
-												</div>
-											)
-										}
 										{
 											complaint.msg && complaint.status === "error" && (
 												<div className={styles.block}>
@@ -255,6 +255,14 @@ export default function Complaint(props){
 									</div>
 									<div className={styles.side}>
 										<div className={(complaint.status==="resolved"?styles.items:styles.item)}>
+											{
+												complaint.adminMsg && (
+													<div className={styles.block}>
+														<Typography variant="subtitle2" className={styles.subtitle}>Message from Admin: -</Typography>
+														<Typography variant="subtitle1" className={styles.body+" "+styles.adminMsg}>{complaint.adminMsg}</Typography>
+													</div>
+												)
+											}
 											<div className={styles.block}>
 												<Typography variant="subtitle2" className={styles.subtitle}>By : -</Typography>
 												<div className={styles.content}>
