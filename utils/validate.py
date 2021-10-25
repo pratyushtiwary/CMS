@@ -1,4 +1,9 @@
 def exists(keys: list, d: dict,parseDifferent:bool=False):
+	"""
+		Takes in keys:list, d:dict
+		search whether provided keys exists in the dictionary
+		`parseDifferent` 3rd param is used for parsing data received from request.form (default to False)
+	"""
 	if parseDifferent:
 		total = len(keys)
 		dkeys = list(d.keys())

@@ -30,4 +30,4 @@ And we are done, now run frontend code and they will be able to communicate with
 - run.py
 
 ## Documentation
-(W.I.P) Look for comments for each functions. If you are using VSCode or any ide that supports intellisense, just hover over any function to see its description. Again it's a W.I.P thing so you might not see it on every function for now.
+(W.I.P) Look for comments in each functions. If you are using VSCode or any ide that supports intellisense, just hover over any function to see its description. Again it's a W.I.P thing so you might not see it on every function for now.

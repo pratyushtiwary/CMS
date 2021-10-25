@@ -95,6 +95,10 @@ notifications = {
 }
 
 def sendMail(msg):
+	"""
+		Sends mail to the receiver provided in the `msg` param
+		`msg` should be of type `EmailMessage`
+	"""
 	s = smtplib.SMTP(email_host, email_port)
 	s.starttls()
 	s.login(email_username,email_password)

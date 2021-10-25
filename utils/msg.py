@@ -26,6 +26,11 @@ eCode = {
 }
 
 def error(code: str):
+	"""
+		Returns a json encoded error string,
+		takes specified code for error,
+		if code not found then will just return the json encoded string with the code passed
+	"""
 	msg = {
 		"error": {
 			"code": code,
@@ -35,6 +40,10 @@ def error(code: str):
 	return dumps(msg)
 
 def success(msg):
+	"""
+		Returns a json encoded success string,
+		Takes a success message
+	"""
 	return dumps({
 		"success":{
 			"msg": msg

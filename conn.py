@@ -23,6 +23,11 @@ class DB:
 			self.conn.close()
 
 def connect():
+	"""
+		A handy function to connect with the db,
+		if you are not using OOP then use this
+		Returns a db connector instance
+	"""
 	return mysql.connector.connect(
 		host=dbhost,
 		user=dbusername,
