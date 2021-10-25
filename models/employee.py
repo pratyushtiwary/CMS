@@ -5,6 +5,7 @@ from utils.msg import error, success
 from utils.validate import exists
 from utils.sender import sendOTP, sendMsg
 from models.complaint import Complaint
+from globals import appName
 
 class Employee(DB,GetSet):
 	def __init__(self,email,password):
@@ -88,7 +89,15 @@ class Employee(DB,GetSet):
 		vals = (pwd,self.email,phone)
 
 		conn.execute(sql,vals)
-
+		sendMsg({
+			"email": self.email,
+			"phone": phone,
+			"code": "PASSWORD_CHANGE",
+			"subject": "Password Changed(Employee)",
+			"id": 0,
+			"type": "employee",
+			"force": True
+		})
 		self.conn.commit()
 
 		conn.close()
@@ -117,7 +126,15 @@ class Employee(DB,GetSet):
 			vals = (name,email,phone,roomNo,accomodation,pwd,empId)
 
 			conn.execute(sql,vals)
-
+			sendMsg({
+				"email": email,
+				"phone": phone,
+				"code": "NEW_USER_EMPLOYEE",
+				"subject": f"Welcome to {appName}",
+				"id": 0,
+				"type": "employee",
+				"force": True	
+			})
 			self.conn.commit()
 
 			conn.close()

@@ -230,9 +230,20 @@ class Department(DB):
 		employees = []
 		if rows:
 			for row in rows:
+				complaintCount = 0
+				sql = f"""
+					SELECT COUNT(*)
+					FROM `{self.complaintTable}`
+					WHERE `vid` = %s
+				"""
+				vals = (row[0],)
+				conn.execute(sql,vals)
+				res = conn.fetchone()
+				complaintCount = res[0]
 				employees.append({
 					"id": row[0],
-					"name": row[1]	
+					"name": row[1],
+					"complaintCount": complaintCount
 				})
 
 		final = {
@@ -271,4 +282,58 @@ class Department(DB):
 					"count": count	
 				}) 
 
+		return final
+
+	def searchVendor(self,dept,term,offset):
+		conn = self.conn.cursor()
+		term = term.lower()
+		if dept == -1:
+			sql = f"""
+				SELECT `id`,`name`
+				FROM `{self.vendorTable}`
+				WHERE `dept` IS NULL
+				AND (
+					LOWER(`name`) LIKE %s
+					OR `id` = %s
+				)
+				LIMIT 10
+				OFFSET %s
+			"""
+			vals = ('%'+term+'%',term,offset)
+		else:
+			sql = f"""
+				SELECT `id`,`name`
+				FROM `{self.vendorTable}`
+				WHERE `dept` = %s
+				AND (
+					LOWER(`name`) LIKE %s
+					OR `id` = %s
+				)
+				LIMIT 10
+				OFFSET %s
+			"""
+			vals = (dept,'%'+term+'%',term,offset)
+		conn.execute(sql,vals)
+		rows = conn.fetchall()
+
+		final = []
+
+		if rows:
+			for row in rows:
+				complaintCount = 0
+				sql = f"""
+					SELECT COUNT(*)
+					FROM `{self.complaintTable}`
+					WHERE `vid` = %s
+				"""
+				vals = (row[0],)
+				conn.execute(sql,vals)
+				res = conn.fetchone()
+				complaintCount = res[0]
+				final.append({
+					"id": row[0],
+					"name": row[1],
+					"complaintCount": complaintCount	
+				})
+		conn.close()
 		return final

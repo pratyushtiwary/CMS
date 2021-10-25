@@ -15,6 +15,7 @@ class Complaint(DB):
 		self.employeeTable = "employee"
 		self.vendorTable = "vendor"
 		self.feedbackTable = "feedback"
+		self.departmentTable = "department"
 		self.conn = DB.__init__(self)
 
 
@@ -60,7 +61,8 @@ class Complaint(DB):
 					"code": "NEW_COMPLAINT",
 					"subject": "Opened a new complaint successfully!",
 					"id": eid,
-					"type": "employee"	
+					"type": "employee",
+					"extras": (cid,)	
 				})
 				self.conn.commit()
 				files.commit()
@@ -93,10 +95,23 @@ class Complaint(DB):
 
 		return data
 
-	def searchEmployeeComplaint(self,eid,term):
+	def searchEmployeeComplaint(self,eid,term,offset):
 		conn = self.conn.cursor()
-		sql = f"SELECT `id`,`shortBody`,`status`,`ts` FROM `{self.tableName}` WHERE `eid` = %s AND (LOWER(`shortBody`) LIKE %s OR `id` = %s OR `status` = %s)"
-		vals = (eid,"%"+term+"%",term,term)
+		sql = f"""
+			SELECT `id`,`shortBody`,`status`,`ts` 
+			FROM `{self.tableName}` 
+			WHERE `eid` = %s 
+			AND 
+				(
+					LOWER(`shortBody`) LIKE %s 
+					OR `id` = %s 
+					OR `status` = %s
+				)
+			ORDER BY `id` DESC
+			LIMIT 10
+			OFFSET %s
+		"""
+		vals = (eid,"%"+term+"%",term,term,offset)
 		conn.execute(sql,vals)
 		results = conn.fetchall()
 		complaints = []
@@ -112,10 +127,24 @@ class Complaint(DB):
 		conn.close()
 		return complaints
 
-	def searchVendorComplaint(self,vid,term):
+	def searchVendorComplaint(self,vid,term,offset):
 		conn = self.conn.cursor()
-		sql = f"SELECT `id`,`shortBody`,`status`, `priority`,`ts` FROM `{self.tableName}` WHERE `vid` = %s AND (LOWER(`shortBody`) LIKE %s OR `id` = %s or `status` = %s or `priority` = %s)"
-		vals = (vid,"%"+term+"%",term,term,term)
+		sql = f"""
+			SELECT `id`,`shortBody`,`status`, `priority`,`ts` 
+			FROM `{self.tableName}` 
+			WHERE `vid` = %s 
+			AND 
+				(
+					LOWER(`shortBody`) LIKE %s 
+					OR `id` = %s 
+					OR `status` = %s 
+					OR `priority` = %s
+				)
+			ORDER BY `id` DESC
+			LIMIT 10
+			OFFSET %s
+		"""
+		vals = (vid,"%"+term+"%",term,term,term,offset)
 		conn.execute(sql,vals)
 		results = conn.fetchall()
 		complaints = []
@@ -265,7 +294,7 @@ class Complaint(DB):
 		final = {}
 
 		sql = f"""
-			select c.`body`, c.`ts`, c.`status`, c.`priority`, c.`adminMsg`, c.`msg`, e.`name`, e.`roomNo`
+			select c.`body`, c.`ts`, c.`status`, c.`priority`, c.`adminMsg`, c.`msg`, e.`name`, e.`roomNo`,c.`allotmentDate`
 			from complaint c, (
 				select `id`, `name`, `roomNo`
 			    from `{self.employeeTable}`
@@ -290,6 +319,9 @@ class Complaint(DB):
 					"roomNo": res[7]
 				}
 			}
+
+			if res[8]:
+				final["allotmentDate"] = res[8].strftime("%d/%m/%y")
 
 			sql = f"SELECT `id`,`path` FROM `{self.imageTable}` WHERE `cid` = %s"
 			vals = (cid,)
@@ -573,6 +605,25 @@ class Complaint(DB):
 			self.conn.rollback()
 			return error("SERVER_ERROR")
 
+	def changePriority(self,id,newPriority):
+		conn = self.conn.cursor()
+		try:
+			newPriority = newPriority.lower()
+			sql = f"""
+				update {self.tableName}
+				set `priority` = %s
+				where id = %s
+			"""
+			vals = (newPriority,id)
+			conn.execute(sql,vals)
+			self.conn.commit()
+			conn.close()
+			return True
+		except Exception as e:
+			print(e)
+			self.conn.rollback()
+			return error("SERVER_ERROR")
+
 	def listAll(self,offset):
 		conn = self.conn.cursor()
 		sql = f"""
@@ -724,7 +775,7 @@ class Complaint(DB):
 	def view(self,id):
 		conn = self.conn.cursor()
 		sql = f"""
-			SELECT `eid`,`vid`,`body`,`ts`,`priority`,`status`,`msg`,`adminMsg`,`allotmentDate`
+			SELECT `eid`,`vid`,`body`,`ts`,`priority`,`status`,`msg`,`adminMsg`,`allotmentDate`, `dept`
 			FROM `{self.tableName}`
 			WHERE `id` = %s
 		"""
@@ -742,6 +793,22 @@ class Complaint(DB):
 				"msg": res[6],
 				"adminMsg": res[7]
 			}
+
+			final["dept"] = -1
+			final["deptName"] = "No Department"
+
+			if res[9]:
+				sql = f"""
+					SELECT `name`
+					FROM `{self.departmentTable}`
+					WHERE `id` = %s
+				"""
+				vals = (res[9],)
+				conn.execute(sql,vals)
+				dept = conn.fetchone()
+				if dept:
+					final["dept"] = res[9]
+					final["deptName"] = dept[0]
 
 			if res[1]:
 				sql = f"""
@@ -814,3 +881,185 @@ class Complaint(DB):
 			return success(final)
 		conn.close()
 		return error("NO_COMPLAINT_FOUND")
+
+	def changeDept(self,id,dept):
+		conn = self.conn.cursor()
+		try:
+			sql = f"""
+				SELECT `eid`
+				FROM `{self.tableName}`
+				WHERE `id` = %s
+			"""
+			vals = (id,)
+			conn.execute(sql,vals)
+			res = conn.fetchone()
+			if res:
+				eid = res[0]
+				sql = f"""
+					SELECT `email`, `phone`
+					FROM `{self.employeeTable}`
+					WHERE `id` = %s
+				"""
+				vals = (eid,)
+				conn.execute(sql,vals)
+				res = conn.fetchone()
+				if res:
+					email,phone = res[0], res[1]
+
+					if dept == -1:
+						sql = f"""
+							UPDATE `{self.tableName}`
+							SET `dept` = NULL,
+								`vid` = NULL
+							WHERE `id` = %s
+						"""
+						vals = (id,)
+					else:
+						sql = f"""
+							UPDATE `{self.tableName}`
+							SET `dept` = %s,
+								`vid` = NULL
+							WHERE `id` = %s
+						"""
+						vals = (dept,id)
+					conn.execute(sql,vals)
+
+					sendMsg({
+						"email": email,
+						"phone": phone,
+						"code": "COMPLAINT_DEPT_CHANGED",
+						"subject": "Complaint "+id+" Department Changed",
+						"id": eid,
+						"type": "employee",
+						"extras": (id,)
+					})
+
+					self.conn.commit()
+					conn.close()
+					return True
+			raise Exception(error("NO_COMPLAINT_FOUND"))
+		except Exception as e:
+			print(e)
+			self.conn.rollback()
+			return error("SERVER_ERROR")
+
+	def sendMessage(self,id,msg):
+		conn = self.conn.cursor()
+		try:
+
+			sql = f"""
+				UPDATE `{self.tableName}`
+				SET `adminMsg` = %s
+				WHERE `id` = %s
+			"""
+			vals = (msg,id)
+			conn.execute(sql,vals)
+
+
+			sql = f"""
+				SELECT `vid`
+				FROM `{self.tableName}`
+				WHERE `id` = %s
+			"""
+			vals = (id,)
+			conn.execute(sql,vals)
+			res = conn.fetchone()
+			if res:
+				vid = res[0]
+				sql = f"""
+					SELECT `email`,`phone`
+					FROM `{self.vendorTable}`
+					WHERE `id` = %s
+				"""
+				vals = (vid,)
+				conn.execute(sql,vals)
+				res = conn.fetchone()
+
+				if res:
+					email,phone = res[0], res[1]
+
+					sendMsg({
+						"email": email,
+						"phone": phone,
+						"code": "ADMIN_MESSAGE",
+						"subject": "Message from admin",
+						"id": vid,
+						"type": "vendor",
+						"extras": (id,)
+					})
+			self.conn.commit()
+			conn.close()
+			return True
+		except Exception as e:
+			print(e)
+			self.conn.rollback()
+			return error("SERVER_ERROR")
+
+	def allotVendor(self,cid,vid):
+		conn = self.conn.cursor()
+		try:
+			sql = f"""
+				SELECT `eid`
+				FROM `{self.tableName}`
+				WHERE `id` = %s
+			"""
+			vals = (cid,)
+			conn.execute(sql,vals)
+			res = conn.fetchone()
+			eid = res[0]
+
+			sql = f"""
+				SELECT `email`,`phone`
+				FROM `{self.employeeTable}`
+				WHERE `id` = %s
+			"""
+			vals = (eid,)
+			conn.execute(sql,vals)
+			res = conn.fetchone()
+			emp_email,emp_phone = res[0], res[1]
+
+			sql = f"""
+				SELECT `email`,`phone`
+				FROM `{self.vendorTable}`
+				WHERE `id` = %s
+			"""
+			vals = (vid,)
+			conn.execute(sql,vals)
+			res = conn.fetchone()
+			vendor_email,vendor_phone = res[0],res[1]
+
+			sql = f"""
+				UPDATE `{self.tableName}`
+				SET `vid` = %s,
+					`allotmentDate` = CURRENT_TIMESTAMP()
+				WHERE `id` = %s
+			"""
+			vals = (vid,cid)
+			conn.execute(sql,vals)
+
+			sendMsg({
+				"email": vendor_email,
+				"phone": vendor_phone,
+				"code": "COMPLAINT_ALLOTED",
+				"subject": "New Complaint Alloted",
+				"id": vid,
+				"type": "vendor",
+				"extras": (cid,)
+			})
+
+			sendMsg({
+				"email": emp_email,
+				"phone": emp_phone,
+				"code": "VENDOR_CHANGED",
+				"subject": "Complaint Vendor Changed",
+				"id": eid,
+				"type": "employee",
+				"extras": (cid,)
+			})
+			self.conn.commit()
+			conn.close()
+			return True
+		except Exception as e:
+			print(e)
+			self.conn.rollback()
+			return error("SERVER_ERROR")

@@ -55,11 +55,19 @@ class Admin(DB,GetSet):
 		conn = self.conn.cursor()
 		pwd = password_hash(newPwd)
 
-		sql = f"UPDATE `{self.tableName}` SET `password` = %s WHERE `email` = %s and `phone`=%s and `active` = 1"
+		sql = f"UPDATE `{self.tableName}` SET `password` = %s WHERE `email` = %s and `phone`=%s"
 		vals = (pwd,self.email,phone)
 
 		conn.execute(sql,vals)
-
+		sendMsg({
+			"email": self.email,
+			"phone": phone,
+			"code": "PASSWORD_CHANGE",
+			"subject": "Password Changed(Admin)",
+			"type": "admin",
+			"id": 0,
+			"force": True
+		})
 		self.conn.commit()
 
 		conn.close()

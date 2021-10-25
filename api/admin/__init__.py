@@ -31,3 +31,9 @@ from api.admin.searchEmployee import searchEmployee
 from api.admin.searchVendor import searchVendor
 from api.admin.searchComplaint import searchComplaint
 from api.admin.viewComplaint import viewComplaint
+from api.admin.deleteComplaint import deleteComplaint
+from api.admin.changeComplaintDepartment import changeComplaintDepartment
+from api.admin.sendComplaintMessage import sendComplaintMessage
+from api.admin.changeComplaintPriority import changeComplaintPriority
+from api.admin.searchDepartmentEmployees import searchDepartmentEmployees
+from api.admin.assignVendor import assignVendor

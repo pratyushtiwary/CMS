@@ -4,6 +4,7 @@ from utils.encryption import password_hash,password_verify
 from utils.msg import error, success
 from utils.sender import sendOTP, sendMsg
 from models.department import Department
+from globals import appName
 
 class Vendor(DB,GetSet):
 	def __init__(self,email,password):
@@ -55,6 +56,16 @@ class Vendor(DB,GetSet):
 		vals = (pwd,self.email,phone)
 
 		conn.execute(sql,vals)
+
+		sendMsg({
+			"email": self.email,
+			"phone": phone,
+			"code": "PASSWORD_CHANGE",
+			"subject": "Password Changed(Vendor)",
+			"type": "vendor",
+			"id": 0,
+			"force": True
+		})
 
 		self.conn.commit()
 
@@ -116,7 +127,15 @@ class Vendor(DB,GetSet):
 			vals = (name,phone,email,pwd,vendorId)
 
 			conn.execute(sql,vals)
-
+			sendMsg({
+				"email": email,
+				"phone": phone,
+				"code": "NEW_USER_VENDOR_REGISTER",
+				"subject": f"Welcome to {appName}",
+				"id": 0,
+				"type": "vendor",
+				"force": True	
+			})
 			self.conn.commit()
 
 			conn.close()

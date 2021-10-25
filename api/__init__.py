@@ -573,3 +573,57 @@ def admin_viewcomplaint():
 		req = request.json
 		return Admin.viewComplaint(req)
 	return abort(405)
+
+@api.route("/admin/deleteComplaint",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@authN(access_level="admin")
+def admin_deletecomplaint():
+	if request.method == "POST":
+		req = request.json
+		return Admin.deleteComplaint(req)
+	return abort(405)
+
+@api.route("/admin/changeComplaintDepartment",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@authN(access_level="admin")
+def admin_changecomplaintdepartment():
+	if request.method == "POST":
+		req = request.json
+		return Admin.changeComplaintDepartment(req)
+	return abort(405)
+
+@api.route("/admin/sendComplaintMessage",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@authN(access_level="admin")
+def admin_sendcomplaintmessage():
+	if request.method == "POST":
+		req = request.json
+		return Admin.sendComplaintMessage(req)
+	return abort(405)
+
+@api.route("/admin/changeComplaintPriority",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@authN(access_level="admin")
+def admin_changecomplaintpriority():
+	if request.method == "POST":
+		req = request.json
+		return Admin.changeComplaintPriority(req)
+	return abort(405)
+
+@api.route("/admin/searchDepartmentEmployees",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@authN(access_level="admin")
+def admin_searchdepartmentemployees():
+	if request.method == "POST":
+		req = request.json
+		return Admin.searchDepartmentEmployees(req)
+	return abort(405)
+
+@api.route("/admin/assignVendor",methods=["POST","GET"])
+@cross_origin(origin = [url],methods = ["GET","POST"])
+@authN(access_level="admin")
+def admin_assignvendor():
+	if request.method == "POST":
+		req = request.json
+		return Admin.assignVendor(req)
+	return abort(405)

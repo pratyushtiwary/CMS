@@ -9,10 +9,15 @@ from conn import connect
 
 # Dictionary of possible notifications
 notifications = {
+	"PASSWORD_CHANGE": """
+		Hey, this is to notify you that someone(hopefully you) have changed your account's password
+	""",
 	"NEW_COMPLAINT": """
 		Hey, this is to notify you that someone(hopefully you) have opened a new complaint
 		<br><br>
 		Now relax and chill we'll keep you updated with the status of this complaint
+		<br>
+		<a href='"""+url+"""/complaint/%s'>Click here to view your complaint</a>
 	""",
 	"ERROR_STATUS": """
 		Hey, looks like there is some error in your complaint.
@@ -40,7 +45,7 @@ notifications = {
 		<br>
 		To learn how to use {appName} <a href="#employee">Click Here</a>
 		<br>
-		To login <a href="{url+"/login"}">Click Here</a>
+		To login <a href='"""+url+"""/login'>Click Here</a>
 	""",
 	"NEW_USER_VENDOR": """
 		Welcome to """+appName+""",
@@ -51,7 +56,16 @@ notifications = {
 		<br>
 		Department Alloted :- %s Department
 		<br>
-		To login <a href="{url+"/login"}">Click Here</a>
+		To login <a href='"""+url+"""/login'>Click Here</a>
+	""",
+	"NEW_USER_VENDOR_REGISTER": """
+		Welcome to """+appName+""",
+		<br><br>
+		Your account has been created on """+appName+"""
+		<br>
+		To learn how to use """+appName+""" <a href="#vendor">Click Here</a>
+		<br>
+		To login <a href='"""+url+"""/login'>Click Here</a>
 	""",
 	"NEW_USER_ADMIN": f"""
 		Welcome to {appName},
@@ -59,6 +73,24 @@ notifications = {
 		Your account has been created on {appName}
 		<br>
 		To login <a href="{url+"/login"}">Click Here</a>
+	""",
+	"COMPLAINT_DEPT_CHANGED": """
+		Complaint department changed!
+		<br>
+		<a href='"""+url+"""/complaint/%s'>Click here to view your complaint</a>
+	""",
+	"ADMIN_MESSAGE": """
+		Hey, admin has sent a message on one of your alloted complaint
+		<br>
+		<a href='"""+url+"""/complaint/%s'>Click here to view that complaint</a>
+	""",
+	"COMPLAINT_ALLOTED": """
+		Hey, you've been alloted a new complaint,
+		<a href='"""+url+"""/complaint/%s'>Click here to view that complaint</a>
+	""",
+	"VENDOR_CHANGED": """
+		Hey, one of your complaint have it's vendor changed,
+		<a href='"""+url+"""/complaint/%s'>Click here to view that complaint</a>
 	"""
 }
 

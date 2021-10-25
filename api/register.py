@@ -47,6 +47,4 @@ def register(req):
 			else:
 				return verfotp
 
-		
-
 	return Response(response=error("INVALID_REQUEST"),status=400)
