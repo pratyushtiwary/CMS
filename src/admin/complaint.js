@@ -806,7 +806,7 @@ export default function Complaint(props) {
 					}
 					<div className={styles.vendors}>
 						{
-							!vendors && (
+							vendors===false && (
 								<div className={styles.notFound}>
 									<img 
 										src = {errorImg2}
