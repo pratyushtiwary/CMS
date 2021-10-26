@@ -55,7 +55,7 @@ class Complaint(DB):
 				"""
 				vals = (eid,shortBody,body,priority,status,dept)
 				if int(dept) == 0:
-					sql = f"""INSERT INTO `{self.tableName}`(`id`, `eid`, `vid`,`shortBody` ,`body`, `ts`, `priority`, `status`, `msg`, `adminMsg`,`dept`,`repostFrom`,`repostCount`.`allotmentDate`) 
+					sql = f"""INSERT INTO `{self.tableName}`(`id`, `eid`, `vid`,`shortBody` ,`body`, `ts`, `priority`, `status`, `msg`, `adminMsg`,`dept`,`repostFrom`,`repostCount`,`allotmentDate`) 
 						VALUES(NULL,%s,NULL,%s,%s,CURRENT_TIMESTAMP(),%s,%s,NULL,NULL,NULL,NULL,0,NULL)
 					"""
 					vals = (eid,shortBody,body,priority,status)

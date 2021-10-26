@@ -49,7 +49,7 @@ CREATE TABLE `complaint` (
   `dept` int(11) DEFAULT NULL,
   `repostFrom` int(11) DEFAULT NULL,
   `repostCount` int(11) DEFAULT '0',
-  `allotmentDate` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00'
+  `allotmentDate` timestamp DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- --------------------------------------------------------
