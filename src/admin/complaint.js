@@ -225,6 +225,7 @@ export default function Complaint(props) {
 					oldComplaint.dept = dept.id;
 					oldComplaint.deptName = dept.name;
 					oldComplaint.vendorName = undefined;
+					oldComplaint.vendorId = undefined;
 					setComplaint(oldComplaint);
 					setSuccessMsg(c.success.msg);
 				}
@@ -805,7 +806,7 @@ export default function Complaint(props) {
 					}
 					<div className={styles.vendors}>
 						{
-							vendors===false && (
+							!vendors && (
 								<div className={styles.notFound}>
 									<img 
 										src = {errorImg2}
