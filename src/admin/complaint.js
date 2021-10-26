@@ -133,8 +133,8 @@ export default function Complaint(props) {
 							setSelected(i);
 						}
 					})
-					setAssignVendorDialog(true);
-				}	
+				}
+				setAssignVendorDialog(true);	
 			}
 			else{
 				setErrorMsg(c.error.msg);
