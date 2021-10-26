@@ -2,7 +2,7 @@ def run():
 	try:
 		from conn import connect
 		from getpass import getpass
-		from queries import tableCreationQueries
+		from run.queries import tableCreationQueries
 		from utils.encryption import password_hash
 	except Exception as e:
 		print("Library Missing")
