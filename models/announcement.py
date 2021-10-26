@@ -3,12 +3,22 @@ from utils.msg import error
 
 class Announcement(DB):
 	def __init__(self):
+		"""
+			Class representing announcement table
+		"""
 		self.tableName = "announcement"
 		self.adminTable = "admin"
 		self.conn = DB.__init__(self)
 
 
 	def load(self,offset,forAdmin=False,adminId=0):
+		"""
+			Lists all the annoucements in chronological order
+			Takes in offset, forAdmin[defaults to False], adminId[defaults to 0]
+			offset is used for load more funtionality
+			forAdmin bool defined whether the announcements are loaded for Admin
+			adminId needs to be provided if forAdmin is True
+		"""
 		try:
 			conn = self.conn.cursor()
 			adminId = int(adminId)
@@ -50,6 +60,9 @@ class Announcement(DB):
 			return False
 
 	def fetchLatest(self):
+		"""
+			Fetch the latest annoucement from the db
+		"""
 		conn = self.conn.cursor()
 		sql = f"""
 				SELECT a.`body`,a.`ts`,b.`adminName`, c.totcount
@@ -80,6 +93,10 @@ class Announcement(DB):
 		return False
 
 	def create(self,body,aid):
+		"""
+			Creates a new annoucement
+			Takes in body and adminId
+		"""
 		conn = self.conn.cursor()
 		try:
 			sql = f"""
@@ -97,6 +114,10 @@ class Announcement(DB):
 			return error("SERVER_ERROR")
 
 	def delete(self,id):
+		"""
+			Deletes an annoucement
+			Takes in id of the annocement to be deleted
+		"""
 		try:
 			conn = self.conn.cursor()
 			print(id)
@@ -115,6 +136,11 @@ class Announcement(DB):
 			return error("SERVER_ERROR")
 
 	def update(self,id,newBody):
+		"""
+			Updates the annoucement
+			Takes in id of the annoucement to be updated
+			And newBody
+		"""
 		try:
 			conn = self.conn.cursor()
 			sql = f"""

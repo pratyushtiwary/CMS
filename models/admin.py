@@ -23,6 +23,9 @@ class Admin(DB,GetSet):
 		self.password = password
 
 	def sendotp(self):
+		"""
+			Sends otp to the user
+		"""
 		email = self.email
 		conn = self.conn.cursor()
 		phone,id = self.get(["phone","id"])
@@ -37,6 +40,10 @@ class Admin(DB,GetSet):
 			return error("UNABLE_TO_SEND_OTP")
 
 	def notify(self,msg):
+		"""
+			Can be used to send mail and message to the user
+			Takes in a message:str
+		"""
 		email = self.email
 		phone, id = self.get(["phone","id"])
 		res = sendMsg({
@@ -52,6 +59,10 @@ class Admin(DB,GetSet):
 			return error("UNABLE_TO_SEND_MSG")
 
 	def resetPass(self,newPwd,phone):
+		"""
+			Resets user password with new password
+			Takes in newPwd:str and phone:str
+		"""
 		conn = self.conn.cursor()
 		pwd = password_hash(newPwd)
 
@@ -93,6 +104,9 @@ class Admin(DB,GetSet):
 		return error("NO_USER_FOUND")
 
 	def exists(self):
+		"""
+			Checks whether user already exists or not
+		"""
 		conn = self.conn.cursor()
 		sql = f"SELECT 1 FROM `{self.tableName}` WHERE `email`= %s LIMIT 1"
 		vals = (self.email,)
@@ -104,6 +118,10 @@ class Admin(DB,GetSet):
 		return False
 
 	def getAllUsers(self):
+		"""
+			Get stats for all the users
+			Used in admin's dashboard page
+		"""
 		conn = self.conn.cursor()
 
 		sql = f"""
@@ -126,6 +144,36 @@ class Admin(DB,GetSet):
 
 
 	def createUser(self,args,type="employee"):
+		"""
+			Create new user
+			takes in args and type of user
+			possible type values ["employee","vendor","admin"]
+			respective args value
+			args[for Employee] = {
+				"name": "",
+				"email": "",
+				"phone": "",
+				"roomNo": "",
+				"eid": "",
+				"password": "",
+				"accomodationType": ""
+			}
+			args[for Vendor] = {
+				"name": "",
+				"email": "",
+				"phone": "",
+				"vid": "",
+				"dept": "",
+				"password": ""
+			}
+			args[for Admin] = {
+				"name": "",
+				"email": "",
+				"phone": "",
+				"password": "",
+				"aid": ""
+			}
+		"""
 		conn = self.conn.cursor()
 		if type=="employee":
 			if exists(["name","email","phone","roomNo","eid","password","accomodationType"],args):
@@ -279,6 +327,10 @@ class Admin(DB,GetSet):
 		return error("INVALID_PARAMS")
 
 	def getValues(self,id):
+		"""
+			Returns values for name, email, phone and adminId columns from the db
+			Used in settings page
+		"""
 		conn = self.conn.cursor()
 		sql = f"""
 			SELECT `name`,`email`,`phone`,`adminId`
@@ -301,6 +353,10 @@ class Admin(DB,GetSet):
 			return error("NO_USER_FOUND")
 
 	def delete(self,id):
+		"""
+			Delete current admin account
+			Takes in admin id
+		"""
 		conn = self.conn.cursor()
 		try:
 			sql = f"""
@@ -325,6 +381,10 @@ class Admin(DB,GetSet):
 			return error("SERVER_ERROR")
 
 	def save(self,id,args):
+		"""
+			Save the updated value for name, phone, email and adminId in the db
+			Used in settings page
+		"""
 		if exists(["name","phone","email","aid"],args):
 			name,phone,email,aid = args["name"],args["phone"],args["email"],args["aid"]
 			conn = self.conn.cursor()

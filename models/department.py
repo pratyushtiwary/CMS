@@ -3,6 +3,9 @@ from utils.msg import success,error
 
 class Department(DB):
 	def __init__(self):
+		"""
+			Class representing the department table
+		"""
 		self.tableName = "department"
 		self.vendorTable = "vendor"
 		self.complaintTable = "complaint"
@@ -10,6 +13,10 @@ class Department(DB):
 
 
 	def add(self,name):
+		"""
+			Adds a new department
+			Takes in name
+		"""
 		conn = self.conn.cursor()
 		try:
 			sql = f"""
@@ -30,28 +37,10 @@ class Department(DB):
 			self.conn.rollback()
 			return error("SERVER_ERROR")
 
-	def remove(self,id):
-		conn = self.conn.cursor()
-		try:
-			sql = """
-				DELETE FROM `{self.tableName}`
-				WHERE `id`=%s
-			"""
-
-			vals = (id,)
-
-			conn.execute(sql,vals)
-
-			self.conn.commit()
-
-			conn.close()
-
-			return True
-		except:
-			self.conn.rollback()
-			return error("SERVER_ERROR")
-
 	def fetchAll(self):
+		"""
+			Fetch all the departments(id,name)
+		"""
 		conn = self.conn.cursor()
 		sql = f"SELECT `id`,`name` FROM `{self.tableName}`";
 
@@ -70,6 +59,10 @@ class Department(DB):
 		return res
 
 	def listAll(self,offset):
+		"""
+			List all the departments(id,name,employeeCount)
+			Takes in offset
+		"""
 		conn = self.conn.cursor()
 		offset = int(offset)
 		sql = f"""
@@ -115,6 +108,10 @@ class Department(DB):
 		return final
 
 	def delete(self,id):
+		"""
+			Delete a department
+			Takes in id
+		"""
 		conn = self.conn.cursor()
 		try:
 			sql = f"""
@@ -124,7 +121,9 @@ class Department(DB):
 			conn.execute(sql,vals)
 
 			sql = f"""
-				UPDATE `{self.complaintTable}` SET `dept` = NULL WHERE `dept` = %s
+				UPDATE `{self.complaintTable}` 
+				SET `dept` = NULL
+				WHERE `dept` = %s
 			"""
 			vals = (id,)
 			conn.execute(sql,vals)
@@ -142,6 +141,10 @@ class Department(DB):
 			return error("SERVER_ERROR")
 
 	def rename(self,id,name):
+		"""
+			Renames a department
+			Takes in id and name
+		"""
 		conn = self.conn.cursor()
 		try:
 			sql = f"""
@@ -157,6 +160,10 @@ class Department(DB):
 			return error("SERVER_ERROR")
 
 	def view(self,id):
+		"""
+			Returns details of a particular department
+			Takes in id
+		"""
 		conn = self.conn.cursor()
 		if int(id) == -1:
 			sql = f"""
@@ -195,6 +202,10 @@ class Department(DB):
 				return error("NO_DEPARTMENT_FOUND")
 
 	def viewEmployees(self,id,offset):
+		"""
+			Returns list of vendors(employee of the department)
+			Takes in id and offset
+		"""
 		count = 0
 		conn = self.conn.cursor()
 		if int(id) == -1:
@@ -253,6 +264,10 @@ class Department(DB):
 		return final
 
 	def search(self,term,offset):
+		"""
+			Searches department from the db
+			Takes in term and offset
+		"""
 		conn = self.conn.cursor()
 		sql = f"""
 			SELECT `id`,`name`
@@ -285,6 +300,10 @@ class Department(DB):
 		return final
 
 	def searchVendor(self,dept,term,offset):
+		"""
+			Search vendor in the department
+			Takes in dept, term and offset
+		"""
 		conn = self.conn.cursor()
 		term = term.lower()
 		if dept == -1:

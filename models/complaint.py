@@ -10,6 +10,9 @@ from models.feedback import Feedback
 
 class Complaint(DB):
 	def __init__(self):
+		"""
+			Class representing the complaint table
+		"""
 		self.tableName = "complaint"
 		self.imageTable = "image"
 		self.employeeTable = "employee"
@@ -20,6 +23,18 @@ class Complaint(DB):
 
 
 	def create(self,args):
+		"""
+			Creates a new complaint
+			Takes in args
+			args = {
+				"eid": "",
+				"body": "",
+				"prioirty": "",
+				"status": "",
+				"images": [],
+				"dept": ""
+			}
+		"""
 		if exists(["eid","body","priority","status","images","dept"],args):
 			files = Files()
 			try:
@@ -78,6 +93,11 @@ class Complaint(DB):
 			return error("SERVER_ERROR")
 
 	def fetchNoOfStatus(self,eid):
+		"""
+			Fetch complaints status for a particular employee
+			Used in employee's dashboard
+			Takes in eid for the employee
+		"""
 		conn = self.conn.cursor()
 		sql = f"SELECT COUNT(*),`status` FROM `{self.tableName}` WHERE `eid` = %s GROUP BY `status`"
 		vals = (eid,)
@@ -96,6 +116,10 @@ class Complaint(DB):
 		return data
 
 	def searchEmployeeComplaint(self,eid,term,offset):
+		"""
+			Searches complaint for a particular employee
+			Takes in eid, term, offset
+		"""
 		conn = self.conn.cursor()
 		sql = f"""
 			SELECT `id`,`shortBody`,`status`,`ts` 
@@ -128,6 +152,10 @@ class Complaint(DB):
 		return complaints
 
 	def searchVendorComplaint(self,vid,term,offset):
+		"""
+			Searches complaint for a particular vendor
+			Takes in vid, term, offset
+		"""
 		conn = self.conn.cursor()
 		sql = f"""
 			SELECT `id`,`shortBody`,`status`, `priority`,`ts` 
@@ -163,6 +191,10 @@ class Complaint(DB):
 
 
 	def fetchVendorComplaints(self,vid,offset):
+		"""
+			Returns complaints alloted to a vendor
+			Takes in vid and offset
+		"""
 		conn = self.conn.cursor()
 		sql = f"""
 				SELECT `id`, `shortBody`, `status`, `priority`,`ts` 
@@ -200,6 +232,10 @@ class Complaint(DB):
 
 
 	def fetchEmployeeComplaints(self,eid,offset):
+		"""
+			Returns complaints of an employee
+			Takes in eid and offset
+		"""
 		conn = self.conn.cursor()
 		sql = f"""
 				SELECT `id`, `shortBody`, `status`, `ts` 
@@ -235,6 +271,10 @@ class Complaint(DB):
 		}
 
 	def fetchoneEmployeeComplaint(self,eid,cid):
+		"""
+			Fetch details of a specific employee complaint
+			Takes in eid and cid
+		"""
 		conn = self.conn.cursor()
 		final = {}
 
@@ -290,6 +330,10 @@ class Complaint(DB):
 			return (False,error("NO_COMPLAINT_FOUND"))
 
 	def fetchoneVendorComplaint(self,vid,cid):
+		"""
+			Fetch details of a specific employee complaint
+			Takes in vid and cid
+		"""
 		conn = self.conn.cursor()
 		final = {}
 
@@ -345,6 +389,17 @@ class Complaint(DB):
 
 
 	def repost(self,args):
+		"""
+			Reposts a specific complaint
+			Takes in args
+			args = {
+				"eid": "",
+				"body": "",
+				"images": [],
+				"dept": "",
+				"cid": ""
+			}
+		"""
 		if exists(["eid","body","images","dept","cid"],args):
 			conn = self.conn.cursor()
 			eid,body,images,dept,cid = args["eid"], args["body"], args["images"], args["dept"],args["cid"]
@@ -433,6 +488,16 @@ class Complaint(DB):
 				return error("SERVER_ERROR")
 
 	def update(self,args):
+		"""
+			Updates a complaint
+			Takes in args
+			args = {
+				"eid": "",
+				"cid": "",
+				"body": "",
+				"finalImgs": []
+			}
+		"""
 		if exists(["eid","cid","body","finalImgs"],args):
 			conn = self.conn.cursor()
 			eid, cid, body, finalImgs = args["eid"], args["cid"], args["body"], args["finalImgs"]
@@ -478,6 +543,10 @@ class Complaint(DB):
 				return error("SERVER_ERROR")
 
 	def delete(self,cid):
+		"""
+			Deletes a complaint
+			Takes in cid
+		"""
 		conn = self.conn.cursor()
 		try:
 			sql = f"SELECT `repostFrom`,`repostCount` FROM `{self.tableName}` WHERE `id` = %s"
@@ -545,6 +614,10 @@ class Complaint(DB):
 			return error("SERVER_ERROR")
 
 	def changeVendorStatus(self,vid,cid,newStatus,msg):
+		"""
+			Change status of a complaint
+			Takes in vid, cid, newStatus, msg
+		"""
 		conn = self.conn.cursor()
 		try:
 			newStatus = newStatus.lower()
@@ -586,6 +659,10 @@ class Complaint(DB):
 			return error("SERVER_ERROR")
 
 	def changeVendorPriority(self,vid,cid,newPriority):
+		"""
+			Changes complaint priority
+			Takes in vid, cid, newPriority
+		"""
 		conn = self.conn.cursor()
 		try:
 			newPriority = newPriority.lower()
@@ -606,6 +683,10 @@ class Complaint(DB):
 			return error("SERVER_ERROR")
 
 	def changePriority(self,id,newPriority):
+		"""
+			Changes complaint priority
+			Takes in id, newPriority
+		"""
 		conn = self.conn.cursor()
 		try:
 			newPriority = newPriority.lower()
@@ -625,6 +706,10 @@ class Complaint(DB):
 			return error("SERVER_ERROR")
 
 	def listAll(self,offset):
+		"""
+			List all complaints
+			Takes in offset
+		"""
 		conn = self.conn.cursor()
 		sql = f"""
 			SELECT COUNT(*)
@@ -701,6 +786,10 @@ class Complaint(DB):
 		}
 
 	def searchAll(self,term,offset):
+		"""
+			Search all complaints in the db
+			Takes in term and offset
+		"""
 		conn = self.conn.cursor();
 		term = term.lower()
 		sql = f"""
@@ -773,6 +862,10 @@ class Complaint(DB):
 		return final
 
 	def view(self,id):
+		"""
+			Returns details of a complaint
+			Takes in id
+		"""
 		conn = self.conn.cursor()
 		sql = f"""
 			SELECT `eid`,`vid`,`body`,`ts`,`priority`,`status`,`msg`,`adminMsg`,`allotmentDate`, `dept`
@@ -883,6 +976,10 @@ class Complaint(DB):
 		return error("NO_COMPLAINT_FOUND")
 
 	def changeDept(self,id,dept):
+		"""
+			Changes department of a particular complaint
+			Takes in id and dept
+		"""
 		conn = self.conn.cursor()
 		try:
 			sql = f"""
@@ -944,6 +1041,10 @@ class Complaint(DB):
 			return error("SERVER_ERROR")
 
 	def sendMessage(self,id,msg):
+		"""
+			Sets adminMsg column value for a particular complaint
+			Takes in id and msg
+		"""
 		conn = self.conn.cursor()
 		try:
 
@@ -996,6 +1097,10 @@ class Complaint(DB):
 			return error("SERVER_ERROR")
 
 	def allotVendor(self,cid,vid):
+		"""
+			Allots a new vendor for a particular complaint
+			Take in cid and vid
+		"""
 		conn = self.conn.cursor()
 		try:
 			sql = f"""
