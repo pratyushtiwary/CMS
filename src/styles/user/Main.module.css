@@ -57,7 +57,7 @@
 	align-content: center;
 	justify-items: center;
 	margin-top: 75px;
-	height: calc(100vh - 75px);
+	min-height: calc(100vh - 75px);
 	width: 100%;
 	grid-template-columns: repeat(auto-fit,minmax(300px,1fr));
 }
