@@ -100,12 +100,17 @@ export default function Feedback(props) {
 			setStarsErr("Please select a rating!");
 		}
 		else{
-			if(feedback===""){
-				setFeedbackErr("Please enter a valid feedback!");
+			if(feedback){
+				if(feedback!==""){
+					setFeedbackErr(null);
+					finalSubmit();
+				}
+				else{
+					setFeedbackErr("Please enter a valid feedback!");
+				}
 			}
 			else{
-				setFeedbackErr(null);
-				finalSubmit();
+				setFeedbackErr("Please enter a valid feedback!");
 			}
 		}
 	}
