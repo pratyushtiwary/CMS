@@ -123,6 +123,8 @@ export default function Complaints(props){
 			if(c.success){
 				const cs = c.success.msg
 				if(cs.length === 0 && sOffset === 0){
+					setMoreComplaints(false);
+					setSearching(false);
 					setNotFound(true);
 				}
 				else{
@@ -149,6 +151,7 @@ export default function Complaints(props){
 				sOffset = 0;
 				setSearching(true);
 				setMoreComplaints(false);
+				setNotFound(false);
 				setLoaderMsg("Searching...");
 				doSearch(val);
 			}

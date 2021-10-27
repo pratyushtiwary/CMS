@@ -127,6 +127,8 @@ export default function Complaints(props){
 			setLoadingNext(false);
 			if(c.success){
 				if(c.success.msg.length === 0 && sOffset === 0){
+					setSearching(false);
+					setNext(false);
 					setNoComplaints(true);
 				}
 				else{
@@ -157,6 +159,7 @@ export default function Complaints(props){
 				setNext(true);
 				setLoadingNext(true);
 				setLoadingMsg("Searching");
+				setNoComplaints(false);
 				doSearch(val);
 			}
 			else{
@@ -201,23 +204,6 @@ export default function Complaints(props){
 					</div>
 				) 
 			}
-			{
-				noComplaints && (
-					<div className={styles.notFound}>
-						<img 
-							src = {first}
-							alt = "No Complaints Found Illustration"
-							width = "300px"
-							heigth = "300px"
-							className = {styles.img}
-						/>
-						<div className={styles.msg}>
-							<Typography variant="h5" className={styles.title}>No Complaints Found</Typography>
-							<Typography variant="subtitle2" className={styles.subtitle}>Try rephrasing the search query.</Typography>
-						</div>
-					</div>
-				) 
-			}
 			<div className={styles.cont}>
 				{
 					complaints && loaded===true && (
@@ -231,6 +217,23 @@ export default function Complaints(props){
 							/>
 						</div>
 					)
+				}
+				{
+					noComplaints && (
+						<div className={styles.notFound}>
+							<img 
+								src = {first}
+								alt = "No Complaints Found Illustration"
+								width = "300px"
+								heigth = "300px"
+								className = {styles.img}
+							/>
+							<div className={styles.msg}>
+								<Typography variant="h5" className={styles.title}>No Complaints Found</Typography>
+								<Typography variant="subtitle2" className={styles.subtitle}>Try rephrasing the search query.</Typography>
+							</div>
+						</div>
+					) 
 				}
 				{
 					complaints && loaded===true && complaints.map((e,i)=>(
