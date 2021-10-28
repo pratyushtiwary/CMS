@@ -528,10 +528,18 @@ class Complaint(DB):
 							conn.execute(sql,vals)
 
 				shortBody = body[0:50]
-
-				sql = f"UPDATE `{self.tableName}` SET `body` = %s, `shortBody` = %s, `status`='pending' WHERE `id` = %s"
-				vals = (body,shortBody,cid)
+				sql = f"""
+					SELECT `status`
+					FROM `{self.tableName}`
+					WHERE `id` = %s
+				"""
+				vals = (cid,)
 				conn.execute(sql,vals)
+				res = conn.fetchone()
+				if res[0] != "resolved":
+					sql = f"UPDATE `{self.tableName}` SET `body` = %s, `shortBody` = %s, `status`='pending' WHERE `id` = %s"
+					vals = (body,shortBody,cid)
+					conn.execute(sql,vals)
 
 				files.commit()
 				deleteFiles.commit()
@@ -1104,7 +1112,7 @@ class Complaint(DB):
 		conn = self.conn.cursor()
 		try:
 			sql = f"""
-				SELECT `eid`
+				SELECT `eid`,`dept`
 				FROM `{self.tableName}`
 				WHERE `id` = %s
 			"""
@@ -1112,7 +1120,7 @@ class Complaint(DB):
 			conn.execute(sql,vals)
 			res = conn.fetchone()
 			eid = res[0]
-
+			dept = res[1]
 			sql = f"""
 				SELECT `email`,`phone`
 				FROM `{self.employeeTable}`
@@ -1122,48 +1130,63 @@ class Complaint(DB):
 			conn.execute(sql,vals)
 			res = conn.fetchone()
 			emp_email,emp_phone = res[0], res[1]
+			final = False
+			if dept:
+				sql = f"""
+					SELECT `email`,`phone`
+					FROM `{self.vendorTable}`
+					WHERE `id` = %s
+					AND `dept` = %s
+				"""
+				vals = (vid,dept)
+				conn.execute(sql,vals)
+				res = conn.fetchone()
+				vendor_email,vendor_phone = res[0],res[1]
+				final = True
+			else:
+				sql = f"""
+					SELECT `email`,`phone`
+					FROM `{self.vendorTable}`
+					WHERE `id` = %s
+					AND `dept` IS NULL
+				"""
+				vals = (vid,)
+				conn.execute(sql,vals)
+				res = conn.fetchone()
+				vendor_email,vendor_phone = res[0],res[1]
+				final = True
+			if final:
+				sql = f"""
+					UPDATE `{self.tableName}`
+					SET `vid` = %s,
+						`allotmentDate` = CURRENT_TIMESTAMP()
+					WHERE `id` = %s
+				"""
+				vals = (vid,cid)
+				conn.execute(sql,vals)
+				sendMsg({
+					"email": vendor_email,
+					"phone": vendor_phone,
+					"code": "COMPLAINT_ALLOTED",
+					"subject": "New Complaint Alloted",
+					"id": vid,
+					"type": "vendor",
+					"extras": (cid,)
+				})
 
-			sql = f"""
-				SELECT `email`,`phone`
-				FROM `{self.vendorTable}`
-				WHERE `id` = %s
-			"""
-			vals = (vid,)
-			conn.execute(sql,vals)
-			res = conn.fetchone()
-			vendor_email,vendor_phone = res[0],res[1]
-
-			sql = f"""
-				UPDATE `{self.tableName}`
-				SET `vid` = %s,
-					`allotmentDate` = CURRENT_TIMESTAMP()
-				WHERE `id` = %s
-			"""
-			vals = (vid,cid)
-			conn.execute(sql,vals)
-
-			sendMsg({
-				"email": vendor_email,
-				"phone": vendor_phone,
-				"code": "COMPLAINT_ALLOTED",
-				"subject": "New Complaint Alloted",
-				"id": vid,
-				"type": "vendor",
-				"extras": (cid,)
-			})
-
-			sendMsg({
-				"email": emp_email,
-				"phone": emp_phone,
-				"code": "VENDOR_CHANGED",
-				"subject": "Complaint Vendor Changed",
-				"id": eid,
-				"type": "employee",
-				"extras": (cid,)
-			})
-			self.conn.commit()
-			conn.close()
-			return True
+				sendMsg({
+					"email": emp_email,
+					"phone": emp_phone,
+					"code": "VENDOR_CHANGED",
+					"subject": "Complaint Vendor Changed",
+					"id": eid,
+					"type": "employee",
+					"extras": (cid,)
+				})
+				self.conn.commit()
+				conn.close()
+				return True
+			return error("SERVER_ERROR")
 		except Exception as e:
 			print(e)
 			self.conn.rollback()
