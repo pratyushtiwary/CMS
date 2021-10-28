@@ -14,7 +14,7 @@ import "./global.css";
 import { Offline } from "react-detect-offline";
 import { motion } from "framer-motion";
 
-const theme = createTheme({
+let theme = createTheme({
   palette: {
     primary: {
       main: "#000000",
