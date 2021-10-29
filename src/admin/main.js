@@ -94,7 +94,7 @@ export default function Main(props){
 							/>
 							<div className={styles.msg}>
 								<Typography variant="h5" className={styles.title}>No users Found</Typography>
-								<Typography variant="subtitle2" className={styles.subtitle}>To register a complaint click on the "+" button above</Typography>
+								<Typography variant="subtitle2" className={styles.subtitle}>To create a new user, <a href="/new_user">Click Here</a></Typography>
 							</div>
 						</div>
 					) 
@@ -110,7 +110,8 @@ export default function Main(props){
 								className = {styles.img}
 							/>
 							<div className={styles.msg}>
-								<Typography variant="h5" className={styles.title}>No Users Found</Typography>
+								<Typography variant="h5" className={styles.title}>No users Found</Typography>
+								<Typography variant="subtitle2" className={styles.subtitle}>To create a new user, <a href="/new_user">Click Here</a></Typography>
 							</div>
 						</div>
 					) 

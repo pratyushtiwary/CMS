@@ -68,7 +68,8 @@ export default function Setttings(props){
 
 
 			} else{
-				window.location.reload();
+				setLoaded(false);
+				setErrorMsg(c.error.msg);
 			}
 		})
 	},[]);
@@ -154,11 +155,11 @@ export default function Setttings(props){
 				links = {["/","/complaints","/announcements"]}
 				icons = {["home","segment","campaign"]}
 			/>
+			<Success open={Boolean(successMsg)} message={successMsg} float/>
+			<Error open={Boolean(errorMsg)} message={errorMsg} float/>
 			{
 				loaded===true && (
 					<>
-						<Success open={Boolean(successMsg)} message={successMsg} float/>
-						<Error open={Boolean(errorMsg)} message={errorMsg} float/>
 						<form className={styles.cont} onSubmit={submit}>
 							<FormControl variant="outlined" className={styles.input}>
 						        <InputLabel htmlFor="userType" variant="outlined">Accomodation Type</InputLabel>
