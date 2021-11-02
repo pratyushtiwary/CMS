@@ -123,23 +123,29 @@ class Admin(DB,GetSet):
 			Used in admin's dashboard page
 		"""
 		conn = self.conn.cursor()
-
+		emp = 0
 		sql = f"""
-					SELECT COUNT(DISTINCT e.id), COUNT(DISTINCT v.id)
-					FROM {self.employeeTable} e, {self.vendorTable} v
+					SELECT COUNT(DISTINCT e.id)
+					FROM {self.employeeTable} e
 			"""
 		conn.execute(sql)
 		res = conn.fetchone()
-		final = {
-			"employees": 0,
-			"vendors": 0,
-			"total": 0
-		}
 		if res:
-			final["employees"] = res[0]
-			final["vendors"] = res[1]
-			final["total"] = res[0] + res[1]
-
+			emp = res[0]
+		vendor = 0
+		sql = f"""
+					SELECT COUNT(DISTINCT v.id)
+					FROM {self.vendorTable} v
+			"""
+		conn.execute(sql)
+		res = conn.fetchone()
+		if res:
+			vendor = res[0]
+		final = {
+			"employees": emp,
+			"vendors": vendor,
+			"total": (emp+vendor)
+		}
 		return final
 
 
