@@ -4,7 +4,7 @@ tableCreationQueries = """
 CREATE TABLE `admin` (
   `id` int(11) NOT NULL,
   `name` text NOT NULL,
-  `email` text NOT NULL UNIQUE,
+  `email` varchar(216) NOT NULL UNIQUE,
   `password` text NOT NULL,
   `phone` bigint(10) NOT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -52,7 +52,7 @@ CREATE TABLE `department` (
 CREATE TABLE `employee` (
   `id` int(11) NOT NULL,
   `name` text NOT NULL,
-  `email` text NOT NULL UNIQUE,
+  `email` varchar(216) NOT NULL UNIQUE,
   `phone` bigint(10) NOT NULL,
   `roomNo` text NOT NULL,
   `accomodation` varchar(8) NOT NULL DEFAULT 'bachelor',
@@ -91,7 +91,7 @@ CREATE TABLE `otp` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `code` text NOT NULL,
   `phone` bigint(10) NOT NULL,
-  `email` text NOT NULL UNIQUE,
+  `email` varchar(216) NOT NULL UNIQUE,
   `type` varchar(9) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -102,7 +102,7 @@ CREATE TABLE `vendor` (
   `name` text NOT NULL,
   `phone` bigint(10) NOT NULL,
   `dept` int(11) DEFAULT NULL,
-  `email` text NOT NULL UNIQUE,
+  `email` varchar(216) NOT NULL UNIQUE,
   `password` text NOT NULL,
   `vendorid` text NOT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
