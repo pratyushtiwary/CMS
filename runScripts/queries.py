@@ -3,13 +3,13 @@ tableCreationQueries = """
 
 CREATE TABLE `admin` (
   `id` int(11) NOT NULL,
-  `name` text NOT NULL,
-  `email` varchar(216) NOT NULL UNIQUE,
-  `password` text NOT NULL,
+  `name` text CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL,
+  `email` varchar(216) CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL UNIQUE,
+  `password` text CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL,
   `phone` bigint(10) NOT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `notify` tinyint(1) NOT NULL DEFAULT '1',
-  `adminid` text NOT NULL
+  `adminid` text CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Table structure for table `announcement`
@@ -17,7 +17,7 @@ CREATE TABLE `admin` (
 CREATE TABLE `announcement` (
   `id` int(11) NOT NULL,
   `byAdmin` int(11) DEFAULT NULL,
-  `body` text,
+  `body` text CHARACTER SET utf16 COLLATE utf16_unicode_ci,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -27,13 +27,13 @@ CREATE TABLE `complaint` (
   `id` int(11) NOT NULL,
   `eid` int(11) DEFAULT NULL,
   `vid` int(11) DEFAULT NULL,
-  `shortBody` varchar(50) NOT NULL,
-  `body` text,
+  `shortBody` varchar(50) CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL,
+  `body` text CHARACTER SET utf16 COLLATE utf16_unicode_ci,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `priority` varchar(4) DEFAULT NULL,
-  `status` varchar(8) DEFAULT NULL,
-  `msg` text,
-  `adminMsg` text,
+  `priority` varchar(4) CHARACTER SET utf16 COLLATE utf16_unicode_ci DEFAULT NULL,
+  `status` varchar(8) CHARACTER SET utf16 COLLATE utf16_unicode_ci DEFAULT NULL,
+  `msg` text CHARACTER SET utf16 COLLATE utf16_unicode_ci,
+  `adminMsg` text CHARACTER SET utf16 COLLATE utf16_unicode_ci,
   `dept` int(11) DEFAULT NULL,
   `repostFrom` int(11) DEFAULT NULL,
   `repostCount` int(11) DEFAULT '0',
@@ -44,20 +44,20 @@ CREATE TABLE `complaint` (
 
 CREATE TABLE `department` (
   `id` int(11) NOT NULL,
-  `name` text NOT NULL
+  `name` text CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Table structure for table `employee`
 
 CREATE TABLE `employee` (
   `id` int(11) NOT NULL,
-  `name` text NOT NULL,
-  `email` varchar(216) NOT NULL UNIQUE,
+  `name` text CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL,
+  `email` varchar(216) CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL UNIQUE,
   `phone` bigint(10) NOT NULL,
-  `roomNo` text NOT NULL,
-  `accomodation` varchar(8) NOT NULL DEFAULT 'bachelor',
-  `password` text NOT NULL,
-  `empid` text NOT NULL,
+  `roomNo` text CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL,
+  `accomodation` varchar(8) CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL DEFAULT 'bachelor',
+  `password` text CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL,
+  `empid` text CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `notify` tinyint(1) NOT NULL DEFAULT '1',
   `active` tinyint(1) DEFAULT '0'
@@ -68,9 +68,9 @@ CREATE TABLE `employee` (
 CREATE TABLE `feedback` (
   `id` int(11) NOT NULL,
   `forComplaint` int(11) DEFAULT NULL,
-  `vendorMsg` longtext,
+  `vendorMsg` longtext CHARACTER SET utf16 COLLATE utf16_unicode_ci,
   `vendorStar` int(11) DEFAULT NULL,
-  `employeeMsg` longtext,
+  `employeeMsg` longtext CHARACTER SET utf16 COLLATE utf16_unicode_ci,
   `employeeStar` int(11) DEFAULT NULL,
   `vendorOn` timestamp NULL DEFAULT NULL,
   `employeeOn` timestamp NULL DEFAULT NULL
@@ -81,7 +81,7 @@ CREATE TABLE `feedback` (
 CREATE TABLE `image` (
   `id` int(11) NOT NULL,
   `cid` int(11) DEFAULT NULL,
-  `path` text
+  `path` text CHARACTER SET utf16 COLLATE utf16_unicode_ci
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Table structure for table `otp`
@@ -89,22 +89,22 @@ CREATE TABLE `image` (
 CREATE TABLE `otp` (
   `id` int(10) NOT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `code` text NOT NULL,
+  `code` text CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL,
   `phone` bigint(10) NOT NULL,
-  `email` varchar(216) NOT NULL UNIQUE,
-  `type` varchar(9) NOT NULL
+  `email` varchar(216) CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL UNIQUE,
+  `type` varchar(9) CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 -- Table structure for table `vendor`
 
 CREATE TABLE `vendor` (
   `id` int(11) NOT NULL,
-  `name` text NOT NULL,
+  `name` text CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL,
   `phone` bigint(10) NOT NULL,
   `dept` int(11) DEFAULT NULL,
-  `email` varchar(216) NOT NULL UNIQUE,
-  `password` text NOT NULL,
-  `vendorid` text NOT NULL,
+  `email` varchar(216) CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL UNIQUE,
+  `password` text CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL,
+  `vendorid` text CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL,
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `notify` tinyint(1) NOT NULL DEFAULT '1',
   `active` tinyint(1) DEFAULT '0'
