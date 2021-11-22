@@ -18,8 +18,35 @@
       "sizes": "512x512"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
+  "shortcuts": [
+    {
+      "name": "Complaints",
+      "short_name": "Complaints",
+      "description": "View Complaints",
+      "url": "/complaints",
+      "icons": [
+        {
+          "src": "/icons/complaints.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Announcements",
+      "short_name": "Announcements",
+      "description": "View Announcements",
+      "url": "/announcements",
+      "icons": [
+        {
+          "src": "/icons/announcements.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ],
   "display": "standalone",
+  "orientation": "portrait",
   "theme_color": "#000000",
   "background_color": "#ffffff"
 }
