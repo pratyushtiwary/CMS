@@ -4,7 +4,6 @@ from models.vendor import Vendor
 from models.admin import Admin
 from utils.msg import error, success
 from utils.validate import exists
-from flask import Response
 
 def sendotp(req):
 	if exists(["email","type","by"],req):

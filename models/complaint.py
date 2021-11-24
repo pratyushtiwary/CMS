@@ -144,7 +144,7 @@ class Complaint(DB):
 			complaints.append({
 				"complaintId": result[0],
 				"shortTitle": result[1],
-				"date": result[3].strftime("%d/%m/%y"),
+				"date": result[3].strftime("%d/%m/%Y"),
 				"status": result[2]	
 			})
 
@@ -181,7 +181,7 @@ class Complaint(DB):
 			complaints.append({
 				"id": result[0],
 				"title": result[1],
-				"on": result[4].strftime("%d/%m/%y"),
+				"on": result[4].strftime("%d/%m/%Y"),
 				"status": result[2],
 				"priority": result[3]	
 			})
@@ -220,7 +220,7 @@ class Complaint(DB):
 				complaints.append({
 					"id": row[0],
 					"title": row[1],
-					"on": row[4].strftime("%d/%m/%y"),
+					"on": row[4].strftime("%d/%m/%Y"),
 					"status": row[2],
 					"priority": row[3]
 				})
@@ -261,7 +261,7 @@ class Complaint(DB):
 				complaints.append({
 					"complaintId": row[0],
 					"shortTitle": row[1],
-					"date": row[3].strftime("%d/%m/%y"),
+					"date": row[3].strftime("%d/%m/%Y"),
 					"status": row[2]
 				})
 		conn.close()
@@ -290,7 +290,7 @@ class Complaint(DB):
 		if res:
 			final = {
 				"longText": res[0],
-				"date": res[1].strftime("%d/%m/%y"),
+				"date": res[1].strftime("%d/%m/%Y"),
 				"status": res[2],
 				"dept": res[3],
 				"msg": res[4]
@@ -308,7 +308,7 @@ class Complaint(DB):
 					"name": vendor[0],
 				}
 				if res[5]:
-					final["vendor"]["allotmentDate"] = res[5].strftime("%d/%m/%y")
+					final["vendor"]["allotmentDate"] = res[5].strftime("%d/%m/%Y")
 
 			sql = f"SELECT `id`,`path` FROM `{self.imageTable}` WHERE `cid` = %s"
 			vals = (cid,)
@@ -353,7 +353,7 @@ class Complaint(DB):
 		if res:
 			final = {
 				"desc": res[0],
-				"on": res[1].strftime("%d/%m/%y"),
+				"on": res[1].strftime("%d/%m/%Y"),
 				"status": res[2],
 				"priority": res[3],
 				"adminMsg": res[4],
@@ -365,7 +365,7 @@ class Complaint(DB):
 			}
 
 			if res[8]:
-				final["allotmentDate"] = res[8].strftime("%d/%m/%y")
+				final["allotmentDate"] = res[8].strftime("%d/%m/%Y")
 
 			sql = f"SELECT `id`,`path` FROM `{self.imageTable}` WHERE `cid` = %s"
 			vals = (cid,)
@@ -748,7 +748,7 @@ class Complaint(DB):
 				"shortDesc": row[6]
 			}
 			if row[3]:
-				temp["assignedOn"] = row[3].strftime("%d/%m/%y")
+				temp["assignedOn"] = row[3].strftime("%d/%m/%Y")
 
 			if row[2]:
 				sql = f"""
@@ -839,7 +839,7 @@ class Complaint(DB):
 				temp["byEmp"] = res[0]
 
 				if row[3]:
-					temp["assignedOn"] = row[3].strftime("%d/%m/%y")
+					temp["assignedOn"] = row[3].strftime("%d/%m/%Y")
 
 				if row[2]:
 					sql = f"""
@@ -888,7 +888,7 @@ class Complaint(DB):
 		if res:
 			final = {
 				"body": res[2],
-				"on": res[3].strftime("%d/%m/%y"),
+				"on": res[3].strftime("%d/%m/%Y"),
 				"priority": res[4],
 				"status": res[5],
 				"msg": res[6],
@@ -940,7 +940,7 @@ class Complaint(DB):
 				}
 
 			if res[8]:
-				final["allotmentDate"] = res[8].strftime("%d/%m/%y")
+				final["allotmentDate"] = res[8].strftime("%d/%m/%Y")
 
 			sql = f"""
 				SELECT `path`

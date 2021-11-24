@@ -220,7 +220,7 @@ class Employee(DB,GetSet):
 					"name": row[1],
 					"email": row[2],
 					"room": row[3],
-					"on": row[4].strftime("%d/%m/%y"),
+					"on": row[4].strftime("%d/%m/%Y"),
 					"active": row[5]
 				})
 			employees["count"] = res[0][6]
@@ -243,7 +243,7 @@ class Employee(DB,GetSet):
 				"name": res[0],
 				"phone": res[1],
 				"email": res[2],
-				"on": res[3].strftime("%d/%m/%y"),
+				"on": res[3].strftime("%d/%m/%Y"),
 				"active": res[4],
 				"roomNo": res[5]
 			}
@@ -276,7 +276,7 @@ class Employee(DB,GetSet):
 				complaints.append({
 					"id": row[0],
 					"title": row[1],
-					"on": row[2].strftime("%d/%m/%y"),
+					"on": row[2].strftime("%d/%m/%Y"),
 					"status": row[3],
 					"priority": row[4]	
 				})
@@ -397,7 +397,7 @@ class Employee(DB,GetSet):
 					"name": row[1],
 					"email": row[2],
 					"room": row[3],
-					"on": row[4].strftime("%d/%m/%y"),
+					"on": row[4].strftime("%d/%m/%Y"),
 					"active": row[5]	
 				})
 

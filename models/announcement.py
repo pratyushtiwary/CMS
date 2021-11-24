@@ -41,7 +41,7 @@ class Announcement(DB):
 				for row in rows:
 					final = {
 						"body": row[0],
-						"on": row[1].strftime("%d/%m/%y"),
+						"on": row[1].strftime("%d/%m/%Y"),
 						"author": row[2]
 					}
 					if forAdmin:
@@ -84,7 +84,7 @@ class Announcement(DB):
 			count = res[3]
 			announcement = {
 				"text": res[0],
-				"on": res[1].strftime("%d/%m/%y"),
+				"on": res[1].strftime("%d/%m/%Y"),
 				"author": res[2],
 				"more": count>1
 			}

@@ -168,7 +168,7 @@ class Vendor(DB,GetSet):
 				vendors[i]["vendors"].append({
 					"id": row[0],
 					"name": row[1],
-					"on": row[2].strftime("%d/%m/%y"),
+					"on": row[2].strftime("%d/%m/%Y"),
 					"email": row[3],
 					"phone": row[4],
 					"active": row[5]
@@ -188,7 +188,7 @@ class Vendor(DB,GetSet):
 				vendors[len(vendors)-1]["vendors"].append({
 					"id": row[0],
 					"name": row[1],
-					"on": row[2].strftime("%d/%m/%y"),
+					"on": row[2].strftime("%d/%m/%Y"),
 					"email": row[3],
 					"phone": row[4],
 					"active": row[5]
@@ -234,7 +234,7 @@ class Vendor(DB,GetSet):
 				"name": res[0],
 				"phone": res[1],
 				"email": res[2],
-				"on": res[3].strftime("%d/%m/%y"),
+				"on": res[3].strftime("%d/%m/%Y"),
 				"department": dept,
 				"deptId": deptId,
 				"active": res[5]
@@ -268,7 +268,7 @@ class Vendor(DB,GetSet):
 				complaints.append({
 					"id": row[0],
 					"title": row[1],
-					"on": row[2].strftime("%d/%m/%y"),
+					"on": row[2].strftime("%d/%m/%Y"),
 					"status": row[3],
 					"priority": row[4]	
 				})
@@ -440,7 +440,7 @@ class Vendor(DB,GetSet):
 					final[j]["vendors"].append({
 						"id": row[0],
 						"name": row[1],
-						"on": row[2].strftime("%d/%m/%y"),
+						"on": row[2].strftime("%d/%m/%Y"),
 						"email": row[3],
 						"phone": row[4],
 						"active": row[6]
@@ -453,7 +453,7 @@ class Vendor(DB,GetSet):
 							{
 								"id": row[0],
 								"name": row[1],
-								"on": row[2].strftime("%d/%m/%y"),
+								"on": row[2].strftime("%d/%m/%Y"),
 								"email": row[3],
 								"phone": row[4],
 								"active": row[6]
