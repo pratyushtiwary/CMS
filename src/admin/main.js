@@ -186,7 +186,7 @@ export default function Main(props){
 					}
 					{
 						announcementLoaded===null && (
-							<div className={styles.skeleton}>
+							<div className={styles.aSkeleton}>
 								<div className={styles.bigBlock}></div>
 								<div className={styles.viewMore}></div>
 							</div>

@@ -4,6 +4,7 @@
 	min-height: 100vh;
 }
 
+
 .cont .notFound,
 .announcement .notFound{
 	position: absolute;
@@ -87,7 +88,8 @@
 	text-align: center;
 }
 
-.announcement .content{
+.announcement .content,
+.cont .aSkeleton{
 	position: relative;
 	width: 100%;
 	height: 100%;
@@ -158,34 +160,45 @@
 
 .skeleton .block,
 .skeleton .bigBlock,
-.skeleton .viewMore{
+.skeleton .viewMore,
+.aSkeleton .block,
+.aSkeleton .bigBlock,
+.aSkeleton .viewMore{
 	background: #afafaf;
 	width: 250px;
 	height: 250px;
 	border-radius: 10px;
 }
 
-.skeleton .bigBlock{
+.skeleton .bigBlock,
+.aSkeleton .bigBlock{
 	position: relative;
 	left: 50%;
 	transform: translate(-50%);
 	width: 80%;
 }
 
-.cont .skeleton .block{
+.cont .skeleton .block,
+.cont .aSkeleton .block{
 	margin: 5px 0;
 }
 
-.skeleton .viewMore{
+.skeleton .viewMore,
+.aSkeleton .viewMore{
 	width: 125px;
 	height: 40px;
 	margin-top: 10px;
 }
 
-.skeleton{
+.skeleton,
+.aSkeleton{
 	animation: skeletonAnimate 1.5s linear infinite;
 	margin-top: 80px;
 	min-height: calc(100vh - 80px) !important;
+}
+
+.aSkeleton {
+	margin-top: 0px !important;
 }
 
 @keyframes skeletonAnimate{
