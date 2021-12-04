@@ -23,9 +23,13 @@ export default function Alert(props){
 		          </DialogContentText>
 		        </DialogContent>
 		        <DialogActions>
-					<Button onClick={handleClose} color="primary">
-						Dismiss
-					</Button>
+					{
+						props.dismissable !== false && (
+							<Button onClick={handleClose} color="primary">
+								Dismiss
+							</Button>
+						)
+					}
 		        	{
 		        		props.buttons && props.buttons.map((e,i)=>(
 							<Button onClick={e.onClick} key={i} color="primary">

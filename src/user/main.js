@@ -156,7 +156,7 @@ export default function Main(props){
 						announcement && announcementLoaded && (
 							<div className={styles.content}>
 								<div className={styles.block}>
-									<Typography variant="subtitle" className={styles.text}>{announcement.text}</Typography>
+									<Typography variant="subtitle1" className={styles.text}>{announcement.text}</Typography>
 									<div className={styles.attr}>
 										<Typography variant="subtitle2">{announcement.on}</Typography>
 										<Typography variant="subtitle2" className={styles.author}>- {announcement.author}</Typography>

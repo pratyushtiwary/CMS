@@ -1,8 +1,11 @@
 import { URL } from "../globals"
 import Session from "./Session"
-const axios = require("axios")
+import axios from "axios"
 
-export default async function hit(path,params,haveFiles=false){
+let isOffline = false;
+
+export default async function Hit(path,params,haveFiles=false){
+
 	return await new Promise((r,e)=>{
 		if(!haveFiles){
 				axios.post(URL+path,params)
@@ -12,6 +15,13 @@ export default async function hit(path,params,haveFiles=false){
 				.catch((err)=>{
 					const error = err.response;
 					let code = 0;
+					if(error===undefined||code===0){
+						isOffline = true;
+					}
+					else{
+						isOffline = false;
+					}
+
 					if(error){
 						code = error.status;
 					}
@@ -66,6 +76,13 @@ export default async function hit(path,params,haveFiles=false){
 			.catch((err)=>{
 				const error = err.response;
 				let code = 0;
+				if(error===undefined||code===0){
+					isOffline = true;
+				}
+				else{
+					isOffline = false;
+				}
+
 				if(error){
 					code = error.status;
 				}

@@ -119,7 +119,7 @@ export default function Announcements(props){
 		setErrorMsg(null);
 		const id = announcements[currAnnouncement].id;
 		const newBody = announcementCont;
-		setLoadingMsg("Deleting Announcement...");
+		setLoadingMsg("Updating Announcement...");
 		hit("api/admin/updateAnnouncement",{
 			"token": token,
 			"id": id,
