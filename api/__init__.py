@@ -38,7 +38,7 @@ api = Blueprint("api",__name__,url_prefix="/api")
 CORS(api)
 
 @api.route("/login",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 def Login():
 	if request.method == "POST":
 		req = request.json
@@ -47,7 +47,7 @@ def Login():
 	return abort(405)
 		
 @api.route("/sendotp",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 def sendOTP():
 	if request.method == "POST":
 		req = request.json
@@ -55,7 +55,7 @@ def sendOTP():
 	return abort(405)
 
 @api.route("/register",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 def Register():
 	if request.method == "POST":
 		req = request.json
@@ -63,7 +63,7 @@ def Register():
 	return abort(405)
 
 @api.route("/forget_password",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 def forgetpassword():
 	if request.method == "POST":
 		req = request.json
@@ -78,7 +78,7 @@ def forgetpassword():
 # ---------------
 
 @api.route("/fetch/departments",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @auth
 def fetchdepartments():
 	if request.method == "POST":
@@ -87,7 +87,7 @@ def fetchdepartments():
 
 
 @api.route("/fetch/latestAnnouncement",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @auth
 def latestannouncement():
 	if request.method == "POST":
@@ -101,7 +101,7 @@ def latestannouncement():
 # ---------------
 
 @api.route("/employee/newComplaint",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="employee")
 def employee_newcomplaint():
 	if request.method == "POST":
@@ -110,7 +110,7 @@ def employee_newcomplaint():
 
 
 @api.route("/employee/getComplaintsByStatus",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="employee")
 def employee_getcomplaintsbystatus():
 	if request.method == "POST":
@@ -119,7 +119,7 @@ def employee_getcomplaintsbystatus():
 	return abort(405)
 
 @api.route("/employee/loadAnnouncements",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="employee")
 def employee_loadannouncements():
 	if request.method == "POST":
@@ -128,7 +128,7 @@ def employee_loadannouncements():
 	return abort(405)
 
 @api.route("/employee/getComplaints",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="employee")
 def employee_getcomplaints():
 	if request.method == "POST":
@@ -137,7 +137,7 @@ def employee_getcomplaints():
 	return abort(405)
 
 @api.route("/employee/repostComplaint",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="employee")
 def employee_repostcomplaint():
 	if request.method == "POST":
@@ -145,7 +145,7 @@ def employee_repostcomplaint():
 	return abort(405)
 
 @api.route("/employee/updateComplaint",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="employee")
 def employee_updatecomplaint():
 	if request.method == "POST":
@@ -153,7 +153,7 @@ def employee_updatecomplaint():
 	return abort(405)
 
 @api.route("/employee/getComplaint",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="employee")
 def employee_getcomplaint():
 	if request.method == "POST":
@@ -162,7 +162,7 @@ def employee_getcomplaint():
 	return abort(405)
 
 @api.route("/employee/deleteComplaint",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="employee")
 def employee_deletecomplaint():
 	if request.method == "POST":
@@ -171,7 +171,7 @@ def employee_deletecomplaint():
 	return abort(405)
 
 @api.route("/employee/fetchDetails",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="employee")
 def employee_fetchdetails():
 	if request.method == "POST":
@@ -180,7 +180,7 @@ def employee_fetchdetails():
 	return abort(405)
 
 @api.route("/employee/setDetails",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="employee")
 def employee_setdetails():
 	if request.method == "POST":
@@ -189,7 +189,7 @@ def employee_setdetails():
 	return abort(405)
 
 @api.route("/employee/searchComplaint",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="employee")
 def employee_searchcomplaint():
 	if request.method == "POST":
@@ -198,7 +198,7 @@ def employee_searchcomplaint():
 	return abort(405)
 
 @api.route("/employee/saveFeedback",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="employee")
 def employee_savefeedback():
 	if request.method == "POST":
@@ -212,7 +212,7 @@ def employee_savefeedback():
 # ---------------
 
 @api.route("/vendor/getComplaints",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="vendor")
 def vendor_getcomplaints():
 	if request.method == "POST":
@@ -221,7 +221,7 @@ def vendor_getcomplaints():
 	return abort(405)
 
 @api.route("/vendor/loadAnnouncements",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="vendor")
 def vendor_loadannouncements():
 	if request.method == "POST":
@@ -230,7 +230,7 @@ def vendor_loadannouncements():
 	return abort(405)
 
 @api.route("/vendor/searchComplaint",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="vendor")
 def vendor_searchcomplaint():
 	if request.method == "POST":
@@ -239,7 +239,7 @@ def vendor_searchcomplaint():
 	return abort(405)
 
 @api.route("/vendor/getComplaint",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="vendor")
 def vendor_getcomplaint():
 	if request.method == "POST":
@@ -248,7 +248,7 @@ def vendor_getcomplaint():
 	return abort(405)
 
 @api.route("/vendor/changePriority",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="vendor")
 def vendor_changepriority():
 	if request.method == "POST":
@@ -257,7 +257,7 @@ def vendor_changepriority():
 	return abort(405)
 
 @api.route("/vendor/changeStatus",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="vendor")
 def vendor_changestatus():
 	if request.method == "POST":
@@ -266,7 +266,7 @@ def vendor_changestatus():
 	return abort(405)
 
 @api.route("/vendor/saveFeedback",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="vendor")
 def vendor_savefeedback():
 	if request.method == "POST":
@@ -279,7 +279,7 @@ def vendor_savefeedback():
 # |   Admin     |
 # ---------------
 @api.route("/admin/getUsersByStat",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_getusersbystat():
 	if request.method == "POST":
@@ -287,7 +287,7 @@ def admin_getusersbystat():
 	return abort(405)
 
 @api.route("/admin/createAnnouncement",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_createannouncement():
 	if request.method == "POST":
@@ -296,7 +296,7 @@ def admin_createannouncement():
 	return abort(405)
 
 @api.route("/admin/createDepartment",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_createdepartment():
 	if request.method == "POST":
@@ -305,7 +305,7 @@ def admin_createdepartment():
 	return abort(405)
 
 @api.route("/admin/loadAnnouncements",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_loadannouncements():
 	if request.method == "POST":
@@ -314,7 +314,7 @@ def admin_loadannouncements():
 	return abort(405)
 
 @api.route("/admin/updateAnnouncement",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_updateannouncement():
 	if request.method == "POST":
@@ -323,7 +323,7 @@ def admin_updateannouncement():
 	return abort(405)
 
 @api.route("/admin/deleteAnnouncement",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_deleteannouncement():
 	if request.method == "POST":
@@ -332,7 +332,7 @@ def admin_deleteannouncement():
 	return abort(405)
 
 @api.route("/admin/listAllEmployees",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_listallemployees():
 	if request.method == "POST":
@@ -341,7 +341,7 @@ def admin_listallemployees():
 	return abort(405)
 
 @api.route("/admin/listAllVendors",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_listallvendors():
 	if request.method == "POST":
@@ -350,7 +350,7 @@ def admin_listallvendors():
 	return abort(405)
 
 @api.route("/admin/listAllDepartments",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_listalldepartments():
 	if request.method == "POST":
@@ -359,7 +359,7 @@ def admin_listalldepartments():
 	return abort(405)
 
 @api.route("/admin/deleteDepartment",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_deletedepartment():
 	if request.method == "POST":
@@ -368,7 +368,7 @@ def admin_deletedepartment():
 	return abort(405)
 
 @api.route("/admin/renameDepartment",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_renamedepartment():
 	if request.method == "POST":
@@ -377,7 +377,7 @@ def admin_renamedepartment():
 	return abort(405)
 
 @api.route("/admin/loadDepartment",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_loaddepartment():
 	if request.method == "POST":
@@ -386,7 +386,7 @@ def admin_loaddepartment():
 	return abort(405)
 
 @api.route("/admin/loadDepartmentEmployees",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_loaddepartmentemployees():
 	if request.method == "POST":
@@ -395,7 +395,7 @@ def admin_loaddepartmentemployees():
 	return abort(405)
 
 @api.route("/admin/loadVendor",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_loadvendor():
 	if request.method == "POST":
@@ -404,7 +404,7 @@ def admin_loadvendor():
 	return abort(405)
 
 @api.route("/admin/loadVendorComplaints",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_loadvendorcomplaints():
 	if request.method == "POST":
@@ -413,7 +413,7 @@ def admin_loadvendorcomplaints():
 	return abort(405)
 
 @api.route("/admin/changeVendorDepartment",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_changevendordepartment():
 	if request.method == "POST":
@@ -422,7 +422,7 @@ def admin_changevendordepartment():
 	return abort(405)
 
 @api.route("/admin/deleteVendor",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_deletevendor():
 	if request.method == "POST":
@@ -431,7 +431,7 @@ def admin_deletevendor():
 	return abort(405)
 
 @api.route("/admin/toggleVendorAccountActivation",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_togglevendoraccountactivation():
 	if request.method == "POST":
@@ -440,7 +440,7 @@ def admin_togglevendoraccountactivation():
 	return abort(405)
 
 @api.route("/admin/loadEmployee",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_loademployee():
 	if request.method == "POST":
@@ -449,7 +449,7 @@ def admin_loademployee():
 	return abort(405)
 
 @api.route("/admin/loadEmployeeComplaints",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_loademployeecomplaints():
 	if request.method == "POST":
@@ -458,7 +458,7 @@ def admin_loademployeecomplaints():
 	return abort(405)
 
 @api.route("/admin/changeEmployeeRoomNo",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_changeemployeeroomno():
 	if request.method == "POST":
@@ -467,7 +467,7 @@ def admin_changeemployeeroomno():
 	return abort(405)
 
 @api.route("/admin/deleteEmployee",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_deleteemployee():
 	if request.method == "POST":
@@ -476,7 +476,7 @@ def admin_deleteemployee():
 	return abort(405)
 
 @api.route("/admin/toggleEmployeeAccountActivation",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_toggleemployeeaccountactivation():
 	if request.method == "POST":
@@ -485,7 +485,7 @@ def admin_toggleemployeeaccountactivation():
 	return abort(405)
 
 @api.route("/admin/listAllComplaints",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_listallcomplaints():
 	if request.method == "POST":
@@ -494,7 +494,7 @@ def admin_listallcomplaints():
 	return abort(405)
 
 @api.route("/admin/createNewUser",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_createnewuser():
 	if request.method == "POST":
@@ -503,7 +503,7 @@ def admin_createnewuser():
 	return abort(405)
 
 @api.route("/admin/fetchDetails",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_fetchdetails():
 	if request.method == "POST":
@@ -512,7 +512,7 @@ def admin_fetchdetails():
 	return abort(405)
 
 @api.route("/admin/deleteAccount",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_deleteaccount():
 	if request.method == "POST":
@@ -521,7 +521,7 @@ def admin_deleteaccount():
 	return abort(405)
 
 @api.route("/admin/saveSettings",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_savesettings():
 	if request.method == "POST":
@@ -530,7 +530,7 @@ def admin_savesettings():
 	return abort(405)
 
 @api.route("/admin/searchDepartment",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_searchdepartment():
 	if request.method == "POST":
@@ -539,7 +539,7 @@ def admin_searchdepartment():
 	return abort(405)
 
 @api.route("/admin/searchEmployee",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_searchemployee():
 	if request.method == "POST":
@@ -548,7 +548,7 @@ def admin_searchemployee():
 	return abort(405)
 
 @api.route("/admin/searchVendor",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_searchvendor():
 	if request.method == "POST":
@@ -557,7 +557,7 @@ def admin_searchvendor():
 	return abort(405)
 
 @api.route("/admin/searchComplaint",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_searchcomplaint():
 	if request.method == "POST":
@@ -566,7 +566,7 @@ def admin_searchcomplaint():
 	return abort(405)
 
 @api.route("/admin/viewComplaint",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_viewcomplaint():
 	if request.method == "POST":
@@ -575,7 +575,7 @@ def admin_viewcomplaint():
 	return abort(405)
 
 @api.route("/admin/deleteComplaint",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_deletecomplaint():
 	if request.method == "POST":
@@ -584,7 +584,7 @@ def admin_deletecomplaint():
 	return abort(405)
 
 @api.route("/admin/changeComplaintDepartment",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_changecomplaintdepartment():
 	if request.method == "POST":
@@ -593,7 +593,7 @@ def admin_changecomplaintdepartment():
 	return abort(405)
 
 @api.route("/admin/sendComplaintMessage",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_sendcomplaintmessage():
 	if request.method == "POST":
@@ -602,7 +602,7 @@ def admin_sendcomplaintmessage():
 	return abort(405)
 
 @api.route("/admin/changeComplaintPriority",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_changecomplaintpriority():
 	if request.method == "POST":
@@ -611,7 +611,7 @@ def admin_changecomplaintpriority():
 	return abort(405)
 
 @api.route("/admin/searchDepartmentEmployees",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_searchdepartmentemployees():
 	if request.method == "POST":
@@ -620,7 +620,7 @@ def admin_searchdepartmentemployees():
 	return abort(405)
 
 @api.route("/admin/assignVendor",methods=["POST","GET"])
-@cross_origin(origin = [url],methods = ["GET","POST"])
+@cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="admin")
 def admin_assignvendor():
 	if request.method == "POST":
