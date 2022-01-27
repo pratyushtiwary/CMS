@@ -401,8 +401,9 @@ class Admin(DB,GetSet):
 						`email` = %s,
 						`phone` = %s,
 						`adminid` = %s
+					WHERE `id` = %s
 				"""
-				vals = (name,email,phone,aid)
+				vals = (name,email,phone,aid,id)
 				conn.execute(sql,vals)
 
 				self.conn.commit()
