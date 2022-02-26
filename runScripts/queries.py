@@ -91,7 +91,7 @@ CREATE TABLE `otp` (
   `ts` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `code` text CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL,
   `phone` bigint(10) NOT NULL,
-  `email` varchar(216) CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL UNIQUE,
+  `email` varchar(216) CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL,
   `type` varchar(9) CHARACTER SET utf16 COLLATE utf16_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
