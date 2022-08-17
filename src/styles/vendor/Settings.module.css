@@ -1,0 +1,64 @@
+.cont,
+.skeleton{
+	position: relative;
+	margin-top: 90px;
+	width: 90%;
+	max-width: 600px;
+	left: 50%;
+	transform: translate(-50%);
+}
+
+.cont .input{
+	width: 100%;
+	margin: 10px 0;
+}
+
+.cont .button{
+	width: 100%;
+	margin: 10px 0;
+	padding: 10px 0;
+}
+
+.skeleton *{
+	background: #afafaf;
+}
+
+.skeleton .option{
+	margin: 5px 0;
+	padding: 5px;
+	border-radius: 5px;
+	width: 100%;
+	height: 40px;
+}
+
+.skeleton .notify{
+	margin: 5px 0;
+	padding: 5px;
+	border-radius: 5px;
+	width: 100%;
+	height: 20px;
+}
+
+.skeleton .button{
+	padding: 5px;
+	border-radius: 5px;
+	margin: 5px 0;
+	width: 100%;
+	height: 40px;
+}
+
+.skeleton{
+	animation: skeletonAnimate 1.5s linear infinite;
+}
+
+@keyframes skeletonAnimate{
+	0%{
+		opacity: 0.25;
+	}
+	50%{
+		opacity: 1;
+	}
+	100%{
+		opacity: 0.25;
+	}
+}
