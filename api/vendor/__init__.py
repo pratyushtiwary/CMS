@@ -1,3 +1,6 @@
+from api.vendor.getComplaintsByStatus import getComplaintsByStatus
+from api.vendor.fetchDetails import fetchDetails
+from api.vendor.setDetails import setDetails
 from api.vendor.getComplaints import getComplaints
 from api.vendor.loadAnnouncements import loadAnnouncements
 from api.vendor.searchComplaint import searchComplaint

@@ -211,6 +211,33 @@ def employee_savefeedback():
 # |  Vendors    |
 # ---------------
 
+@api.route("/vendor/getComplaintsByStatus",methods=["POST","GET"])
+@cross_origin(origin = url,methods = ["GET","POST"])
+@authN(access_level="vendor")
+def vendor_getcomplaintsbystatus():
+	if request.method == "POST":
+		req = request.json
+		return Vendor.getComplaintsByStatus(req)
+	return abort(405)
+
+@api.route("/vendor/fetchDetails",methods=["POST","GET"])
+@cross_origin(origin = url,methods = ["GET","POST"])
+@authN(access_level="vendor")
+def vendor_fetchdetails():
+	if request.method == "POST":
+		req = request.json
+		return Vendor.fetchDetails(req)
+	return abort(405)
+
+@api.route("/vendor/setDetails",methods=["POST","GET"])
+@cross_origin(origin = url,methods = ["GET","POST"])
+@authN(access_level="vendor")
+def vendor_setdetails():
+	if request.method == "POST":
+		req = request.json
+		return Vendor.setDetails(req)
+	return abort(405)
+
 @api.route("/vendor/getComplaints",methods=["POST","GET"])
 @cross_origin(origin = url,methods = ["GET","POST"])
 @authN(access_level="vendor")

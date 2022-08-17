@@ -3,6 +3,7 @@ from utils.getset import GetSet
 from utils.encryption import password_hash,password_verify
 from utils.msg import error, success
 from utils.sender import sendOTP, sendMsg
+from utils.validate import exists
 from models.department import Department
 from globals import appName
 
@@ -462,3 +463,53 @@ class Vendor(DB,GetSet):
 					})
 					i += 1
 		return final
+
+	def fetchDetail(self,id):
+		conn = self.conn.cursor()
+		try:
+			eid = id
+			sql = f"""
+					SELECT `name`,`email`,`phone`,`vendorid`,`notify`
+					FROM `{self.tableName}`
+					WHERE `id` = %s
+			"""
+			vals = (eid,)
+			conn.execute(sql,vals)
+
+			res = conn.fetchone()
+			conn.close()
+			if res:
+				final = {
+					"name": res[0],
+					"email": res[1],
+					"phone": res[2],
+					"vendorid": res[3],
+					"notify": res[4]
+				}
+				return (True,final)
+			else:
+				return (False,error("NO_USER_FOUND"))
+		except Exception as e:
+			self.conn.rollback()
+			return (False,error("SERVER_ERROR"))
+
+	def setDetail(self,args):
+		if exists(["id","name","email","phone","vendorid","notify"],args):
+			conn = self.conn.cursor()
+			id, name, email, phone, vid, notify = args["id"], args["name"], args["email"], args["phone"], args["vendorid"], args["notify"]
+			try:
+				sql = f"""
+						UPDATE {self.tableName} 
+						SET `name` = %s, `email` = %s, `phone` = %s, `vendorid` = %s, `notify` = %s
+						WHERE `id` = %s
+				"""
+				vals = (name,email,phone,vid,notify,id)
+				conn.execute(sql,vals)
+				self.conn.commit()
+				conn.close()
+
+				return True
+			except Exception as e:
+				self.conn.rollback()
+				return error("SERVER_ERROR")
+		return error("SERVER_ERROR")
